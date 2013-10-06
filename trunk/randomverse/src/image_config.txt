@@ -1,0 +1,6 @@
+s bottomEngines.png 4
+s cockpit.png 4
+s midParts.png 4
+s sideEngines.png 4
+s sideGun.png 4
+s topGun.png 4

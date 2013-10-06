@@ -34,10 +34,10 @@ public class ImageLoader {
     /**
      * Creates new image loader and loads images from specified file
      *
-     * @param filename       file name
+     * @param configFilePath       file name
      * @param imageDirectory path to directory that contains images
      */
-    public ImageLoader(String filename, String imageDirectory) {
+    public ImageLoader(String configFilePath, String imageDirectory) {
         if (imageDirectory != null) {
             this.imageDirctory = imageDirectory;
         } else {
@@ -45,7 +45,7 @@ public class ImageLoader {
         }
         initLoader();
         // begin by loading the images specified in fnm
-        loadImagesFile(filename);
+        loadImagesFile(configFilePath);
     }
 
     /**
@@ -83,13 +83,13 @@ public class ImageLoader {
      * <p/>
      * blank lines and comment lines (//) are ignored
      *
-     * @param fnm filename
+     * @param configFilePath path to file with configuration
      */
-    private void loadImagesFile(String fnm) {
-        String imsFNm = imageDirctory + fnm;
+    private void loadImagesFile(String configFilePath) {
+        String imsFNm = imageDirctory + configFilePath;
         System.out.println("Reading file: " + imsFNm);
         try {
-            InputStream in = this.getClass().getResourceAsStream(imsFNm);
+            InputStream in = this.getClass().getResourceAsStream(configFilePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             // BufferedReader br = new BufferedReader( new FileReader(imsFNm));
             String line;

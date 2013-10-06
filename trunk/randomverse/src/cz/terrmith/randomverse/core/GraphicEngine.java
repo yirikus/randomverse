@@ -1,5 +1,7 @@
 package cz.terrmith.randomverse.core;
 
+import cz.terrmith.randomverse.core.image.ImageLoader;
+
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
@@ -17,12 +19,14 @@ public class GraphicEngine {
     private SystemCommand cmd;
     private int width;
     private int height;
+    private ImageLoader iml;
 
-    public GraphicEngine(BufferStrategy bufferStrategy, SystemCommand cmd, int width, int height){
+    public GraphicEngine(BufferStrategy bufferStrategy, SystemCommand cmd, int width, int height, ImageLoader iml){
        this.bufferStrategy = bufferStrategy;
         this.cmd = cmd;
         this.width = width;
         this.height = height;
+        this.iml = iml;
     }
 
     /**
@@ -61,5 +65,9 @@ public class GraphicEngine {
         g2.setColor(Color.darkGray);
         g2.drawString("Randomverse",0,0);
         g2.fillRect(0, 0, width, height);
+
+        //image test
+        //TODO delete
+        g2.drawImage(iml.getImage("topGun",3),null,10,10);
     }
 }
