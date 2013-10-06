@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core;
+package cz.terrmith.randomverse.core.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

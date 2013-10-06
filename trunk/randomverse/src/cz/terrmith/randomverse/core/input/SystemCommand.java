@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core;
+package cz.terrmith.randomverse.core.input;
 
 /**
  * System commands. Adds set of commands to

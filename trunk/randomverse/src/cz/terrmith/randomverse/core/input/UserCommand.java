@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core;
+package cz.terrmith.randomverse.core.input;
 
 /**
  * Set of commands to controll the game
