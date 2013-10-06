@@ -1,7 +1,7 @@
 package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.GameEngine;
-import cz.terrmith.randomverse.core.UserCommand;
+import cz.terrmith.randomverse.core.input.UserCommand;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.sprite.Ship;

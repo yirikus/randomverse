@@ -1,7 +1,7 @@
 package cz.terrmith.randomverse.core.sprite;
 
 /**
- * Sprite layers
+ * SimpleSprite layers
  */
 public enum SpriteLayer {
     BACKGROUND,

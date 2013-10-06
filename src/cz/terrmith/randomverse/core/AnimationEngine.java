@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.core;
 
+import cz.terrmith.randomverse.core.input.SystemCommand;
 import cz.terrmith.randomverse.util.ConverterUtil;
 
 /**

@@ -2,6 +2,8 @@ package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.*;
 import cz.terrmith.randomverse.core.image.ImageLoader;
+import cz.terrmith.randomverse.core.input.InputHandler;
+import cz.terrmith.randomverse.core.input.SystemCommand;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,7 +104,7 @@ public class GameWindow extends JFrame implements Runnable{
 
         //setDisplayMode(Global.SCREEN_X, Global.SCREEN_Y, 32);   // or try 8 bits
         //setDisplayMode(1024, 768, 16);
-        setDisplayMode(1280, 1024, 32);
+        setDisplayMode(800, 600, 32);
 
         // reportCapabilities();
     }
