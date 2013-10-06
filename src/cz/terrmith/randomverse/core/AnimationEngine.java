@@ -51,7 +51,6 @@ public class AnimationEngine {
         beforeTime = System.nanoTime();
 
         while(!cmd.isTerminated()) {
-            System.out.println("animator " + cmd.isTerminated());
             game.update();
             graphics.update();
 

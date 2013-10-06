@@ -1,6 +1,8 @@
 package cz.terrmith.randomverse.core;
 
 import cz.terrmith.randomverse.core.image.ImageLoader;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -14,19 +16,21 @@ import java.awt.image.BufferStrategy;
  */
 public class GraphicEngine {
 
+    private final GameEngine gameEngine;
     private Graphics graphics;
     private BufferStrategy bufferStrategy;
-    private SystemCommand cmd;
-    private int width;
-    private int height;
-    private ImageLoader iml;
+    private final SystemCommand cmd;
+    private final int width;
+    private final int height;
+    private final ImageLoader iml;
 
-    public GraphicEngine(BufferStrategy bufferStrategy, SystemCommand cmd, int width, int height, ImageLoader iml){
+    public GraphicEngine(BufferStrategy bufferStrategy, SystemCommand cmd, int width, int height, ImageLoader iml, GameEngine gameEngine){
        this.bufferStrategy = bufferStrategy;
         this.cmd = cmd;
         this.width = width;
         this.height = height;
         this.iml = iml;
+        this.gameEngine = gameEngine;
     }
 
     /**
@@ -66,8 +70,10 @@ public class GraphicEngine {
         g2.drawString("Randomverse",0,0);
         g2.fillRect(0, 0, width, height);
 
-        //image test
-        //TODO delete
-        g2.drawImage(iml.getImage("topGun",3),null,10,10);
+        // render sprites
+        SpriteCollection sprites = gameEngine.getSpriteCollection();
+        sprites.drawLayer(SpriteLayer.BACKGROUND, g2, iml);
+        sprites.drawLayer(SpriteLayer.NPC, g2, iml);
+        sprites.drawLayer(SpriteLayer.PLAYER, g2, iml);
     }
 }
