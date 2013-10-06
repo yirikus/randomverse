@@ -1,21 +1,16 @@
 package cz.terrmith.randomverse.core;
 
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 3.10.13
- * Time: 2:45
- * To change this template use File | Settings | File Templates.
+ * Game engine interface
  */
-public class GameEngine {
+public interface GameEngine {
 
-    private UserCommand cmd;
+    /**
+     * Updates games status
+     */
+    void update();
 
-    public GameEngine(UserCommand cmd){
-        this.cmd = cmd;
-    }
-
-    public void update(){
-
-    }
+    SpriteCollection getSpriteCollection();
 }

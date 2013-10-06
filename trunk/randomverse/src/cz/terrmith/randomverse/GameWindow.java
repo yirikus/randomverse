@@ -37,8 +37,8 @@ public class GameWindow extends JFrame implements Runnable{
         this.systemCommand = new SystemCommand();
         initFullscreen();
         ImageLoader iml =  new ImageLoader("/image_config.txt","/images/");
-        GraphicEngine graphicEngine = createGraphicEngine(systemCommand, iml);
-        GameEngine gameEngine = new GameEngine(systemCommand);
+        GameEngine gameEngine = new Randomverse(systemCommand);
+        GraphicEngine graphicEngine = createGraphicEngine(systemCommand, iml, gameEngine);
 
         this.animationEngine = new AnimationEngine(systemCommand, graphicEngine, gameEngine);
         hideMouse();
@@ -127,7 +127,7 @@ public class GameWindow extends JFrame implements Runnable{
      *  a bit so that the getBufferStrategy() call will get the
      *  correct details.
      */
-    private GraphicEngine createGraphicEngine(SystemCommand cmd,ImageLoader iml){
+    private GraphicEngine createGraphicEngine(SystemCommand cmd, ImageLoader iml, GameEngine gameEngine){
         try {
             EventQueue.invokeAndWait(
                     new Runnable() {
@@ -143,7 +143,7 @@ public class GameWindow extends JFrame implements Runnable{
             Thread.sleep(500);  // 0.5 sec
         } catch(InterruptedException ex){}
 
-        return new GraphicEngine(getBufferStrategy(), cmd, getBounds().width, getBounds().height, iml);
+        return new GraphicEngine(getBufferStrategy(), cmd, getBounds().width, getBounds().height, iml, gameEngine);
     }
 
     /** attempt to set the display mode to the given width, height, and bit depth
