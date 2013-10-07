@@ -6,7 +6,7 @@ import java.awt.*;
 
 /**
  * Sprite interface
- * Sprite is a moving graphic object that
+ * Sprite is a graphic object that can move and collide with other objects
  * has image representation, position, soundbank, bounding box
  */
 public interface Sprite {
@@ -26,19 +26,28 @@ public interface Sprite {
 
     void setActive(boolean a);
 
-    void setPosition(int x, int y);
+    void setPosition(double x, double y);
 
     void translate(int xDist, int yDist);
 
-    int getXPosn();
+    /**
+     * Returns X position
+     *
+     * @return
+     */
+    double getXPosn();
 
-    int getYPosn();
+    /**
+     * Returns Y position
+     * @return
+     */
+    double getYPosn();
 
-    void setStep(int dx, int dy);
+    void setStep(double dx, double dy);
 
-    int getXStep();
+    double getXStep();
 
-    int getYStep();
+    double getYStep();
 
     Rectangle getBoundingBox();
 
@@ -47,5 +56,17 @@ public interface Sprite {
      */
     void updateSprite();
 
+    /**
+     * Draws sprite
+     * @param g graphics
+     * @param ims image loader
+     */
     void drawSprite(Graphics g, ImageLoader ims);
+
+    /**
+     * Returns true if this sprite collides with given sprite
+     * @param sprite sprite that is tested for collision
+     * @return true if collision occurred
+     */
+    boolean collidesWith(Sprite sprite);
 }

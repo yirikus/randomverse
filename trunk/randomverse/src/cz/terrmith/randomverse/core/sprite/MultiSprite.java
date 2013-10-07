@@ -72,21 +72,23 @@ public class MultiSprite implements Sprite{
     }
 
     @Override
-    public void setPosition(int x, int y) {
+    public void setPosition(double x, double y) {
         for (Tile t : tiles) {
-            int newX = (t.getX() * Tile.DEFAULT_SIZE) + x;
-            int newY = (t.getY() * Tile.DEFAULT_SIZE) + y;
+            double newX = (t.getX() * Tile.DEFAULT_SIZE) + x;
+            double newY = (t.getY() * Tile.DEFAULT_SIZE) + y;
             t.getSprite().setPosition(newX,newY);
         }
     }
 
     @Override
     public void translate(int xDist, int yDist) {
-        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+        for (Tile t : tiles) {
+            t.getSprite().translate(xDist, yDist);
+        }
     }
 
     @Override
-    public int getXPosn() {
+    public double getXPosn() {
         if (!tiles.isEmpty()) {
             return tiles.get(0).getSprite().getXPosn();
         } else {
@@ -95,7 +97,7 @@ public class MultiSprite implements Sprite{
     }
 
     @Override
-    public int getYPosn() {
+    public double getYPosn() {
         if (!tiles.isEmpty()) {
             return tiles.get(0).getSprite().getYPosn();
         } else {
@@ -104,14 +106,14 @@ public class MultiSprite implements Sprite{
     }
 
     @Override
-    public void setStep(int dx, int dy) {
+    public void setStep(double dx, double dy) {
         for (Tile t : tiles) {
             t.getSprite().setStep(dx, dy);
         }
     }
 
     @Override
-    public int getXStep() {
+    public double getXStep() {
         if (!tiles.isEmpty()) {
             return tiles.get(0).getSprite().getXStep();
         } else {
@@ -120,7 +122,7 @@ public class MultiSprite implements Sprite{
     }
 
     @Override
-    public int getYStep() {
+    public double getYStep() {
         if (!tiles.isEmpty()) {
             return tiles.get(0).getSprite().getYStep();
         } else {
@@ -145,5 +147,10 @@ public class MultiSprite implements Sprite{
         for (Tile t : tiles) {
             t.getSprite().drawSprite(g, ims);
         }
+    }
+
+    @Override
+    public boolean collidesWith(Sprite sprite) {
+        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
     }
 }
