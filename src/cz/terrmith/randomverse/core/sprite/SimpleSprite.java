@@ -18,7 +18,7 @@ public class SimpleSprite implements Sprite {
 
     // default dimensions when there is no image
     private static final int SIZE = 12;
-    private final Map<SpriteStatus, ImageLocation> imageForStatus;
+    private Map<SpriteStatus, ImageLocation> imageForStatus;
 
     // image-related
     private int width, height;     // image dimensions
@@ -27,10 +27,10 @@ public class SimpleSprite implements Sprite {
     // a sprite is updated and drawn only when it is active
 
     // protected vars
-    protected int locx, locy;        // location of sprite
-    protected int dx, dy;            // amount to move for each update
+    protected double locx, locy;        // location of sprite
+    protected double dx, dy;            // amount to move for each update
     // sprite status
-    private SpriteStatus status;
+    private SpriteStatus status = SpriteStatus.DEFAULT;;
 
 
     /**
@@ -46,7 +46,14 @@ public class SimpleSprite implements Sprite {
         dx = XSTEP; dy = YSTEP;
 
         this.imageForStatus = imageForStatus;
-        this.status = SpriteStatus.DEFAULT;
+    }
+
+    public Map<SpriteStatus, ImageLocation> getImageForStatus() {
+        return imageForStatus;
+    }
+
+    public void setImageForStatus(Map<SpriteStatus, ImageLocation> imageForStatus) {
+        this.imageForStatus = imageForStatus;
     }
 
     @Override
@@ -71,7 +78,7 @@ public class SimpleSprite implements Sprite {
     }
 
     @Override
-    public void setPosition(int x, int y){
+    public void setPosition(double x, double y){
         locx = x;
         locy = y;
     }
@@ -83,36 +90,36 @@ public class SimpleSprite implements Sprite {
     }
 
     @Override
-    public int getXPosn(){
+    public double getXPosn(){
         return locx;
     }
 
     @Override
-    public int getYPosn(){
+    public double getYPosn(){
         return locy;
     }
 
 
     @Override
-    public void setStep(int dx, int dy){
+    public void setStep(double dx, double dy){
         this.dx = dx;
         this.dy = dy;
     }
 
     @Override
-    public int getXStep(){
+    public double getXStep(){
         return dx;
     }
 
     @Override
-    public int getYStep(){
+    public double getYStep(){
         return dy;
     }
 
 
     @Override
     public Rectangle getBoundingBox() {
-        return  new Rectangle(locx, locy, width, height);
+        return  new Rectangle((int)Math.round(locx), (int)Math.round(locy), width, height);
     }
 
     @Override
@@ -125,10 +132,15 @@ public class SimpleSprite implements Sprite {
 
     @Override
     public void drawSprite(Graphics g, ImageLoader ims) {
-        if (isActive()) {
+        if (isActive() && imageForStatus != null) {
             ImageLocation imageLocation = imageForStatus.get(this.status);
             BufferedImage image = ims.getImage(imageLocation.getName(), imageLocation.getNumber());
-            g.drawImage(image, locx, locy, null);
+            g.drawImage(image, (int)Math.round(locx), (int)Math.round(locy), null);
         }
+    }
+
+    @Override
+    public boolean collidesWith(Sprite sprite) {
+        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
     }
 }

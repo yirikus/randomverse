@@ -3,8 +3,9 @@ package cz.terrmith.randomverse.sprite;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
+import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
+import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +15,10 @@ import java.util.Random;
 /**
  * SimpleSprite of a ship
  */
-public class Ship extends MultiSprite {
+public class Ship extends MultiSprite implements CanAttack {
+
+    private static final int SHOOT_TIMER = 8;
+    private int canShootIn = SHOOT_TIMER;
 
     private static final Map<SpriteStatus, String> imageForStatus;
     static {
@@ -41,8 +45,25 @@ public class Ship extends MultiSprite {
 
         Map<SpriteStatus, ImageLocation> gun = new HashMap<SpriteStatus, ImageLocation>();
         gun.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        addTile(1, 1, new SimpleSprite(-1, 1, 8, 8, gun));
+        addTile(-1, 1, new SimpleSprite(-1, 1, 8, 8, gun));
 
         setPosition(300,300);
+    }
+
+    @Override
+    public void updateSprite() {
+        super.updateSprite();
+        if(canShootIn > 0) {
+            canShootIn--;
+        }
+    }
+
+    @Override
+    public void attack(SpriteCreator spriteCreator) {
+        if(canShootIn == 0) {
+            System.out.println("attacking: " + spriteCreator.toString());
+            spriteCreator.createSprites(this);
+            canShootIn = SHOOT_TIMER;
+        }
     }
 }

@@ -50,15 +50,15 @@ public class InputHandler implements KeyListener {
             ctrl.setInventoryShown(ctrl.isInventoryShown());
 
         //press buttons
-        }else if (keyCode == KeyEvent.VK_W){
+        }else if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP){
             ctrl.setUp(value);
-        }else if (keyCode == KeyEvent.VK_S){
+        }else if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN){
             ctrl.setDown(value);
-        }else if (keyCode == KeyEvent.VK_A){
+        }else if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT){
             ctrl.setLeft(value);
-        }else if (keyCode == KeyEvent.VK_D){
+        }else if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT){
             ctrl.setRight(value);
-        }else if (keyCode == KeyEvent.VK_SPACE){
+        }else if (keyCode == KeyEvent.VK_CONTROL){
             ctrl.setShoot(value);
         }
     }

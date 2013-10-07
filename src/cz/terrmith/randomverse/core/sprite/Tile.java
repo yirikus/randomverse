@@ -10,7 +10,7 @@ public class Tile {
     /**
      * Default tile size
      */
-    public static int DEFAULT_SIZE = 8;
+    public static int DEFAULT_SIZE = 32;
 
     private int x;
     private int y;
