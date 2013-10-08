@@ -1,5 +1,9 @@
 package cz.terrmith.randomverse.core.sprite.abilitiy;
 
+import cz.terrmith.randomverse.core.sprite.Sprite;
+
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: TERRMITh
@@ -7,11 +11,17 @@ package cz.terrmith.randomverse.core.sprite.abilitiy;
  * Time: 0:08
  * To change this template use File | Settings | File Templates.
  */
-public interface DamageDealer {
+public interface DamageDealer extends Sprite {
 
     /**
      * Damage on collision
      * @return
      */
     int getImpactDamage();
+
+	/**
+	 * Deals damage to given destructible sprite
+	 * @param targets target sprites
+	 */
+	void dealDamage(List<Destructible> targets);
 }

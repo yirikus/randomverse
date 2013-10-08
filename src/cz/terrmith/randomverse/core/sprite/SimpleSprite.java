@@ -23,8 +23,8 @@ public class SimpleSprite implements Sprite {
     // image-related
     private int width, height;     // image dimensions
 
+	// a sprite is updated and drawn only when it is active
     private boolean isActive = true;
-    // a sprite is updated and drawn only when it is active
 
     // protected vars
     protected double locx, locy;        // location of sprite
@@ -44,6 +44,8 @@ public class SimpleSprite implements Sprite {
     public SimpleSprite(int x, int y, int w, int h, Map<SpriteStatus, ImageLocation> imageForStatus) {
         locx = x; locy = y;
         dx = XSTEP; dy = YSTEP;
+	    this.width = w;
+	    this.height = h;
 
         this.imageForStatus = imageForStatus;
     }
@@ -141,6 +143,11 @@ public class SimpleSprite implements Sprite {
 
     @Override
     public boolean collidesWith(Sprite sprite) {
-        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+	    if (sprite instanceof MultiSprite) {
+		    MultiSprite multiSprite = (MultiSprite) sprite;
+		    return multiSprite.collidesWith(this);
+	    } else {
+            return this.getBoundingBox().intersects(sprite.getBoundingBox());
+	    }
     }
 }

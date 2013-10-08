@@ -1,7 +1,5 @@
 package cz.terrmith.randomverse.core.image;
 
-import com.sun.javafx.collections.UnmodifiableListSet;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
