@@ -6,7 +6,7 @@ package cz.terrmith.randomverse.core.sprite;
 public enum SpriteLayer {
     BACKGROUND,
     ENVIRONMENT,
-    PARTICLE,
+	PROJECTILE,
     ITEM,
     PLAYER,
     NPC

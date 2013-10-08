@@ -7,12 +7,12 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,7 +37,7 @@ public class SimpleProjectile extends SimpleSprite implements DamageDealer {
      * @param y              y position
      */
     public SimpleProjectile(int x, int y) {
-        super(x, y, 11, 12, null);
+        super(x, y, 11, 22, null);
         setImageForStatus(this.imageForStatus);
     }
 
@@ -45,4 +45,14 @@ public class SimpleProjectile extends SimpleSprite implements DamageDealer {
     public int getImpactDamage() {
         return 10;
     }
+
+	@Override
+	public void dealDamage(List<Destructible> targets) {
+		if(targets != null && !targets.isEmpty()) {
+			System.out.println("target hit!");
+			targets.get(0).reduceHealth(10);
+			setActive(false);
+		}
+
+	}
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class MultiSprite implements Sprite{
 
     private List<Tile> tiles;
-    private boolean active;
+    private boolean active = true;
 
     /**
      * X Position of tile on a [0,0] position
@@ -151,6 +151,11 @@ public class MultiSprite implements Sprite{
 
     @Override
     public boolean collidesWith(Sprite sprite) {
-        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+	    for (Tile t: tiles) {
+			if (t.getSprite().collidesWith(sprite)) {
+				return true;
+			}
+        }
+	    return false;
     }
 }

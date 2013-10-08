@@ -75,7 +75,7 @@ public class GraphicEngine {
         SpriteCollection sprites = gameEngine.getSpriteCollection();
         sprites.drawLayer(SpriteLayer.BACKGROUND, g2, iml);
         sprites.drawLayer(SpriteLayer.NPC, g2, iml);
-        sprites.drawLayer(SpriteLayer.PARTICLE, g2, iml);
+        sprites.drawLayer(SpriteLayer.PROJECTILE, g2, iml);
         sprites.drawLayer(SpriteLayer.PLAYER, g2, iml);
     }
 }

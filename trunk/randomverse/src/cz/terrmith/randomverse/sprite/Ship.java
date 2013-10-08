@@ -5,6 +5,7 @@ import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
 
 import java.util.Collections;
@@ -15,10 +16,11 @@ import java.util.Random;
 /**
  * SimpleSprite of a ship
  */
-public class Ship extends MultiSprite implements CanAttack {
+public class Ship extends MultiSprite implements CanAttack, Destructible {
 
     private static final int SHOOT_TIMER = 8;
     private int canShootIn = SHOOT_TIMER;
+	private int currentHealth;
 
     private static final Map<SpriteStatus, String> imageForStatus;
     static {
@@ -47,7 +49,7 @@ public class Ship extends MultiSprite implements CanAttack {
         gun.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
         addTile(-1, 1, new SimpleSprite(-1, 1, 8, 8, gun));
 
-        setPosition(300,300);
+        setPosition(x, y);
     }
 
     @Override
@@ -66,4 +68,22 @@ public class Ship extends MultiSprite implements CanAttack {
             canShootIn = SHOOT_TIMER;
         }
     }
+
+	@Override
+	public int getTotalHealth() {
+		return 10;
+	}
+
+	@Override
+	public int getCurrentHealth() {
+		return currentHealth;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public void reduceHealth(int amount) {
+		this.currentHealth -= amount;
+		if (this.currentHealth < 1) {
+			setActive(false);
+		}
+	}
 }
