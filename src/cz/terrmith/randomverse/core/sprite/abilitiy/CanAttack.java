@@ -13,4 +13,16 @@ public interface CanAttack extends Sprite{
      * @param spriteCreator
      */
     void attack(SpriteCreator spriteCreator);
+
+	/**
+	 * Sets minimum time (ticks) between each attack.
+	 * Unless sprite waits this amount of time, it can not attack
+	 */
+	void setAttackTimer(int value);
+
+	/**
+	 * Gets minimum time (ticks) between each attack.
+	 * Unless sprite waits this amount of time, it can not attack
+	 */
+	int getAttackTimer();
 }

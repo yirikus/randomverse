@@ -10,8 +10,12 @@ public interface SpriteCreator {
 
     /**
      * Creates sprites. Can make use of direction which caller sprite is heading
-     * @param parent owner of this creator
-     */
-    public void createSprites(Sprite parent);
+     *
+	 * @param x x position of new sprite
+	 * @param y y position of new sprite
+	 * @param dx x direction of new sprite
+	 * @param dy y direction of new sprite
+	 */
+    public void createSprites(double x, double y, int dx, int dy);
 
 }

@@ -4,6 +4,7 @@ import cz.terrmith.randomverse.core.image.ImageLoader;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,6 +51,10 @@ public class MultiSprite implements Sprite{
 
         tiles.add(newTile);
     }
+
+	public List<Tile> getTiles(){
+		return Collections.unmodifiableList(this.tiles);
+	}
 
     @Override
     public int getWidth() {

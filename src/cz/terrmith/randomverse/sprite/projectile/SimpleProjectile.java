@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.sprite;
+package cz.terrmith.randomverse.sprite.projectile;
 
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
@@ -36,7 +36,7 @@ public class SimpleProjectile extends SimpleSprite implements DamageDealer {
      * @param x              x position
      * @param y              y position
      */
-    public SimpleProjectile(int x, int y) {
+    public SimpleProjectile(double x, double y) {
         super(x, y, 11, 22, null);
         setImageForStatus(this.imageForStatus);
     }
