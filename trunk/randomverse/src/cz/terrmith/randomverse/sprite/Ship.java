@@ -4,6 +4,7 @@ import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
@@ -35,19 +36,19 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
         Random random = new Random();
         Map<SpriteStatus, ImageLocation> cockpit = new HashMap<SpriteStatus, ImageLocation>();
         cockpit.put(SpriteStatus.DEFAULT, new ImageLocation("cockpit", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        addTile(0, 0, new SimpleSprite(0, 0, 8, 8, cockpit));
+        addTile(0, 0, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit));
 
         Map<SpriteStatus, ImageLocation> engine = new HashMap<SpriteStatus, ImageLocation>();
         engine.put(SpriteStatus.DEFAULT, new ImageLocation("midParts",(int)(random.nextInt() + System.currentTimeMillis()) % 4));
-        addTile(0, 1, new SimpleSprite(0, 1, 8, 8, engine));
+        addTile(0, 1, new SimpleSprite(0, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, engine));
 
         Map<SpriteStatus, ImageLocation> thruster = new HashMap<SpriteStatus, ImageLocation>();
         thruster.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        addTile(0, 2, new SimpleSprite(0, 2, 8, 8, thruster));
+        addTile(0, 2, new SimpleSprite(0, 2, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, thruster));
 
         Map<SpriteStatus, ImageLocation> gun = new HashMap<SpriteStatus, ImageLocation>();
         gun.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        addTile(-1, 1, new SimpleSprite(-1, 1, 8, 8, gun));
+        addTile(-1, 1, new SimpleSprite(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, gun));
 
         setPosition(x, y);
     }
@@ -63,7 +64,6 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
     @Override
     public void attack(SpriteCreator spriteCreator) {
         if(canShootIn == 0) {
-            System.out.println("attacking: " + spriteCreator.toString());
             spriteCreator.createSprites(this);
             canShootIn = SHOOT_TIMER;
         }
