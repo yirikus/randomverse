@@ -34,6 +34,12 @@ public class Randomverse implements GameEngine {
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(100,100));
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(200,100));
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(300,100));
+	    spriteCollection.put(SpriteLayer.NPC, new Ship(400,100));
+	    spriteCollection.put(SpriteLayer.NPC, new Ship(500,100));
+	    spriteCollection.put(SpriteLayer.NPC, new Ship(600,100));
+	    spriteCollection.put(SpriteLayer.NPC, new Ship(650,100));
+	    spriteCollection.put(SpriteLayer.NPC, new Ship(700,100));
+	    spriteCollection.put(SpriteLayer.NPC, new Ship(750,100));
     }
 
 
@@ -77,6 +83,7 @@ public class Randomverse implements GameEngine {
 		List<Destructible> collidingSprites = new ArrayList<Destructible>();
 		for (Sprite s: getSpriteCollection().getSprites(SpriteLayer.NPC)) {
 			if (s instanceof Destructible && dmgDealer.collidesWith(s)) {
+				System.out.println("collision with: "+ s.getXPosn() + "," + s.getYPosn());
 			   collidingSprites.add((Destructible)s);
 			}
 		}

@@ -165,7 +165,6 @@ public class ImageLoader {
         int loadCount = 0;
 
         // load imd.getPrefix(number) + <i> + postfix, where i = 0 to <number-1>
-        System.out.print("  Adding " + imd.getPrefix() + "/" + imd.getPrefix() + "*" + imd.getExtension() + "... ");
         for (int i = 0; i < imd.getImageCount(); i++) {
             if ((bi = loadImage(imd.getFileName(i))) != null) {
                 loadCount++;
@@ -237,7 +236,6 @@ public class ImageLoader {
         ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
         int loadCount = 0;
 
-        System.out.println("  Adding to " + imd.getGroupName() + "...   ");
         for (int i = 0; i < imd.getImageCount(); i++) {    // load the files
             if ((bi = loadImage(imd.getFileName(i))) != null) {
                 loadCount++;

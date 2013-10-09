@@ -144,7 +144,7 @@ public class MultiSprite implements Sprite{
 
     @Override
     public void drawSprite(Graphics g, ImageLoader ims) {
-        for (Tile t : tiles) {
+	    for (Tile t : tiles) {
             t.getSprite().drawSprite(g, ims);
         }
     }

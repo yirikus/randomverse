@@ -134,7 +134,9 @@ public class SimpleSprite implements Sprite {
 
     @Override
     public void drawSprite(Graphics g, ImageLoader ims) {
-        if (isActive() && imageForStatus != null) {
+	    g.setColor(new Color(0,0,255,150));
+        g.fillRect(getBoundingBox().x, getBoundingBox().y, (int)getBoundingBox().getWidth(), (int)getBoundingBox().getHeight());
+	    if (isActive() && imageForStatus != null) {
             ImageLocation imageLocation = imageForStatus.get(this.status);
             BufferedImage image = ims.getImage(imageLocation.getName(), imageLocation.getNumber());
             g.drawImage(image, (int)Math.round(locx), (int)Math.round(locy), null);
