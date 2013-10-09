@@ -4,7 +4,7 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
-import cz.terrmith.randomverse.sprite.SimpleProjectile;
+import cz.terrmith.randomverse.sprite.projectile.SimpleProjectile;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,10 +22,10 @@ public class SimpleProjectileCreator implements SpriteCreator {
     }
 
     @Override
-    public void createSprites(Sprite parent) {
+    public void createSprites(double x, double y, int dx, int dy) {
 
-        Sprite projectile = new SimpleProjectile((int)Math.round(parent.getXPosn()), (int)Math.round(parent.getYPosn()));
-        projectile.setStep(0, -10);
+        Sprite projectile = new SimpleProjectile(x, y);
+        projectile.setStep(dx * (-10), dy * (-10));
         System.out.println("adding particle to sprite collection:" + spriteCollection);
         spriteCollection.put(SpriteLayer.PROJECTILE,projectile);
     }

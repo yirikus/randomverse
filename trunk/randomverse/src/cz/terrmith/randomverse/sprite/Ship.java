@@ -8,6 +8,7 @@ import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
+import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,8 +20,6 @@ import java.util.Random;
  */
 public class Ship extends MultiSprite implements CanAttack, Destructible {
 
-    private static final int SHOOT_TIMER = 8;
-    private int canShootIn = SHOOT_TIMER;
 	private int currentHealth;
 
     private static final Map<SpriteStatus, String> imageForStatus;
@@ -48,7 +47,7 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
 
         Map<SpriteStatus, ImageLocation> gun = new HashMap<SpriteStatus, ImageLocation>();
         gun.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        addTile(-1, 1, new SimpleSprite(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, gun));
+        addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, gun));
 
         setPosition(x, y);
     }
@@ -56,18 +55,36 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
     @Override
     public void updateSprite() {
         super.updateSprite();
-        if(canShootIn > 0) {
-            canShootIn--;
-        }
     }
 
     @Override
     public void attack(SpriteCreator spriteCreator) {
-        if(canShootIn == 0) {
-            spriteCreator.createSprites(this);
-            canShootIn = SHOOT_TIMER;
+        for (Tile t : this.getTiles()){
+	        System.out.println(t.getSprite());
+	        if (t.getSprite() instanceof CanAttack) {
+		        ((CanAttack) t.getSprite()).attack(spriteCreator);
+	        }
         }
     }
+
+	@Override
+	public void setAttackTimer(int value) {
+		for (Tile t : this.getTiles()){
+			if (t.getSprite() instanceof CanAttack) {
+				((CanAttack) t.getSprite()).setAttackTimer(value);
+			}
+		}
+	}
+
+	@Override
+	public int getAttackTimer() {
+		for (Tile t : this.getTiles()){
+			if (t.getSprite() instanceof CanAttack) {
+				return ((CanAttack) t.getSprite()).getAttackTimer();
+			}
+		}
+		return 0;
+	}
 
 	@Override
 	public int getTotalHealth() {

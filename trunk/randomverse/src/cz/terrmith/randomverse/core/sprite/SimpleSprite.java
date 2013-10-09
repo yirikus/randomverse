@@ -41,7 +41,7 @@ public class SimpleSprite implements Sprite {
      * @param h height
      * @param imageForStatus Map of sprite statuses and images
      */
-    public SimpleSprite(int x, int y, int w, int h, Map<SpriteStatus, ImageLocation> imageForStatus) {
+    public SimpleSprite(double x, double y, int w, int h, Map<SpriteStatus, ImageLocation> imageForStatus) {
         locx = x; locy = y;
         dx = XSTEP; dy = YSTEP;
 	    this.width = w;
