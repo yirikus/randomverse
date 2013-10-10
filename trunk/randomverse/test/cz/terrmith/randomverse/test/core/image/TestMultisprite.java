@@ -29,17 +29,17 @@ public class TestMultisprite {
         multisprite.addTile(tile_10);
 
         multisprite.flipHorizontal();
-        Assert.assertEquals(0,tile00.getX());
-        Assert.assertEquals(0,tile01.getX());
-        Assert.assertEquals(0,tile0_1.getX());
-        Assert.assertEquals(-1,tile10.getX());
-        Assert.assertEquals(1,tile_10.getX());
+        Assert.assertEquals(0,tile00.getTileX());
+        Assert.assertEquals(0,tile01.getTileX());
+        Assert.assertEquals(0,tile0_1.getTileX());
+        Assert.assertEquals(-1,tile10.getTileX());
+        Assert.assertEquals(1,tile_10.getTileX());
 
-        Assert.assertEquals(0,tile00.getY());
-        Assert.assertEquals(1,tile01.getY());
-        Assert.assertEquals(-1,tile0_1.getY());
-        Assert.assertEquals(0,tile10.getY());
-        Assert.assertEquals(0,tile_10.getY());
+        Assert.assertEquals(0,tile00.getTileY());
+        Assert.assertEquals(1,tile01.getTileY());
+        Assert.assertEquals(-1,tile0_1.getTileY());
+        Assert.assertEquals(0,tile10.getTileY());
+        Assert.assertEquals(0,tile_10.getTileY());
 
     }
 
@@ -59,17 +59,17 @@ public class TestMultisprite {
 
         multisprite.flipVertical();
 
-        Assert.assertEquals(0,tile00.getX());
-        Assert.assertEquals(0,tile01.getX());
-        Assert.assertEquals(0,tile0_1.getX());
-        Assert.assertEquals(1,tile10.getX());
-        Assert.assertEquals(-1,tile_10.getX());
+        Assert.assertEquals(0,tile00.getTileX());
+        Assert.assertEquals(0,tile01.getTileX());
+        Assert.assertEquals(0,tile0_1.getTileX());
+        Assert.assertEquals(1,tile10.getTileX());
+        Assert.assertEquals(-1,tile_10.getTileX());
 
-        Assert.assertEquals(0,tile00.getY());
-        Assert.assertEquals(-1,tile01.getY());
-        Assert.assertEquals(1,tile0_1.getY());
-        Assert.assertEquals(0,tile10.getY());
-        Assert.assertEquals(0,tile_10.getY());
+        Assert.assertEquals(0,tile00.getTileY());
+        Assert.assertEquals(-1,tile01.getTileY());
+        Assert.assertEquals(1,tile0_1.getTileY());
+        Assert.assertEquals(0,tile10.getTileY());
+        Assert.assertEquals(0,tile_10.getTileY());
 
     }
 }

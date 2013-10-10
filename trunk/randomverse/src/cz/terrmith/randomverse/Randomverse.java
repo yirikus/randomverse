@@ -7,12 +7,14 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.movement.TopDownMovement;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.creators.SimpleProjectileCreator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Contains global constants
@@ -20,11 +22,15 @@ import java.util.List;
 public class Randomverse implements GameEngine {
 
     public static final String WINDOW_NAME = "Randomverse";
-    public static final int STEP = 3;
+    public static final int STEP = 6;
 
     private final UserCommand command;
     private SpriteCollection spriteCollection;
     private Ship player;
+    private Random random = new Random();
+
+    private int createEnemies = 3;
+    private int killedEnemies = 0;
 
     public Randomverse(UserCommand cmd){
         this.command = cmd;
@@ -32,26 +38,10 @@ public class Randomverse implements GameEngine {
         this.player = new Ship(300,300);
         spriteCollection.put(SpriteLayer.PLAYER, player);
 
-        createEnemy(100,100);
-        Ship enemy = new Ship(200,100);
-        enemy.flipHorizontal();
-        spriteCollection.put(SpriteLayer.NPC, enemy);
-
-        Ship enemy2 = new Ship(300,100);
-       enemy2.flipVertical();
-       enemy2.flipHorizontal();
-        spriteCollection.put(SpriteLayer.NPC, enemy2);
-
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(400,100));
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(500,100));
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(600,100));
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(650,100));
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(700,100));
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(750,100));
     }
 
     private void createEnemy(int x, int y) {
-        Ship enemy = new Ship(x,y);
+        Ship enemy = new Ship(x,y, new TopDownMovement());
        enemy.flipVertical();
         spriteCollection.put(SpriteLayer.NPC, enemy);
     }
@@ -62,16 +52,26 @@ public class Randomverse implements GameEngine {
         updateProjectiles();
 	    updateNpcs();
         updatePlayer();
+        createEnemies();
     }
 
-	private void updateNpcs() {
+    private void createEnemies() {
+        if(createEnemies > 0 && random.nextBoolean()) {
+            createEnemy(100 + random.nextInt(600),-100);
+            createEnemies--;
+        }
+    }
+
+    private void updateNpcs() {
 		Iterator<Sprite> iterator = getSpriteCollection().getSprites(SpriteLayer.NPC).iterator();
 		while (iterator.hasNext()) {
 			Sprite s = iterator.next();
 			if (s.isActive()) {
-				// update
+				s.updateSprite();
 			} else {
 				iterator.remove();
+                createEnemies += ( 1 + killedEnemies%2);
+                killedEnemies++;
 			}
 		}
 	}
