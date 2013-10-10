@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.core.sprite;
 
-import java.awt.*;
+
+import cz.terrmith.randomverse.core.geometry.Position;
 
 /**
  * Data objects that holds a sprite and its position a tile grid
@@ -12,13 +13,19 @@ public class Tile {
      */
     public static int DEFAULT_SIZE = 32;
 
-    private int x;
-    private int y;
+    private int tileX;
+    private int tileY;
     private final Sprite sprite;
 
-    public Tile(int x, int y, Sprite sprite) {
-        this.x = x;
-        this.y = y;
+    /**
+     *
+     * @param tileX tile position in a grid (tileset)
+     * @param tileY tile position in a grid (tileset)
+     * @param sprite sprite on given tile
+     */
+    public Tile(int tileX, int tileY, Sprite sprite) {
+        this.tileX = tileX;
+        this.tileY = tileY;
         this.sprite = sprite;
     }
 
@@ -26,20 +33,38 @@ public class Tile {
         return sprite;
     }
 
-    public int getX() {
-        return x;
+    public int getTileX() {
+        return tileX;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setTileX(int x) {
+        this.tileX = x;
     }
 
-    public int getY() {
-        return y;
+    public int getTileY() {
+        return tileY;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setTileY(int y) {
+        this.tileY = y;
+    }
+
+    public void setSpritePosition(Position p){
+        double newX = (getTileX() * Tile.DEFAULT_SIZE) + p.getX();
+        double newY = (getTileY() * Tile.DEFAULT_SIZE) + p.getY();
+        getSprite().setPosition(newX, newY);
+    }
+
+    /**
+     * Returns position of sprite on [0,0] from reference tile
+     * @param t tile from which [0,0] sprite position will be computed
+     */
+    public static Position getZeroSpritePosition(Tile t){
+        Position p = new Position(t.getSprite().getXPosn(),
+                                  t.getSprite().getYPosn());
+
+        return new Position(p.getX() - (t.getTileX() * Tile.DEFAULT_SIZE),
+                            p.getY() - (t.getTileY() * Tile.DEFAULT_SIZE));
     }
 
     /**
@@ -51,7 +76,12 @@ public class Tile {
         if(tile == null) {
             return false;
         }
-        return this.getX() == tile.getX()
-            && this.getY() == tile.getY();
+        return this.getTileX() == tile.getTileX()
+            && this.getTileY() == tile.getTileY();
+    }
+
+    @Override
+    public String toString() {
+        return "[" + tileX + "," + tileY + "]" + "[" + getSprite().getXPosn() + "," + getSprite().getYPosn() + "]";
     }
 }

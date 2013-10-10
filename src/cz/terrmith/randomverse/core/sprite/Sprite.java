@@ -28,7 +28,7 @@ public interface Sprite {
 
     void setPosition(double x, double y);
 
-    void translate(int xDist, int yDist);
+    void translate(double xDist, double yDist);
 
     /**
      * Returns X position

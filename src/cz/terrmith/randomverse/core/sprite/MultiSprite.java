@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.core.sprite;
 
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 
 import java.awt.*;
@@ -36,7 +37,7 @@ public class MultiSprite implements Sprite{
     public void addTile(Tile newTile) {
         for (Tile t : tiles) {
             if (t.samePositionAs(newTile)) {
-                throw new IllegalArgumentException("Trying to put a tile on a postion that is already taken: [" + newTile.getX() + ", " + newTile.getY() + "]");
+                throw new IllegalArgumentException("Trying to put a tile on a postion that is already taken: [" + newTile.getTileX() + ", " + newTile.getTileY() + "]");
             }
         }
 
@@ -83,14 +84,13 @@ public class MultiSprite implements Sprite{
     @Override
     public void setPosition(double x, double y) {
         for (Tile t : tiles) {
-            double newX = (t.getX() * Tile.DEFAULT_SIZE) + x;
-            double newY = (t.getY() * Tile.DEFAULT_SIZE) + y;
-            t.getSprite().setPosition(newX,newY);
+            t.setSpritePosition(new Position(x,y));
+            System.out.println(t);
         }
     }
 
     @Override
-    public void translate(int xDist, int yDist) {
+    public void translate(double xDist, double yDist) {
         for (Tile t : tiles) {
             t.getSprite().translate(xDist, yDist);
         }
@@ -99,7 +99,7 @@ public class MultiSprite implements Sprite{
     @Override
     public double getXPosn() {
         if (!tiles.isEmpty()) {
-            return tiles.get(0).getSprite().getXPosn();
+            return Tile.getZeroSpritePosition(tiles.get(0)).getX();
         } else {
             return 0;
         }
@@ -108,7 +108,7 @@ public class MultiSprite implements Sprite{
     @Override
     public double getYPosn() {
         if (!tiles.isEmpty()) {
-            return tiles.get(0).getSprite().getYPosn();
+            return Tile.getZeroSpritePosition(tiles.get(0)).getY();
         } else {
             return 0;
         }
@@ -175,16 +175,16 @@ public class MultiSprite implements Sprite{
 
         // find boundaries
         for (Tile t : tiles) {
-            maxWidth = Math.max(maxWidth,t.getX());
-            minWidth = Math.min(minWidth, t.getX());
+            maxWidth = Math.max(maxWidth,t.getTileX());
+            minWidth = Math.min(minWidth, t.getTileX());
 
         }
         //flip
         for (Tile t : tiles) {
             //normalize
-            int nX = t.getX() - minWidth;
+            int nX = t.getTileX() - minWidth;
             //compute flipped value
-            t.setX(maxWidth - nX);
+            t.setTileX(maxWidth - nX);
             //assign
             t.getSprite().flipHorizontal();
         }
@@ -197,17 +197,18 @@ public class MultiSprite implements Sprite{
         int minHeight = 0;
 
         for (Tile t : tiles) {
-            maxHeight = Math.max(maxHeight,t.getY());
-            minHeight = Math.min(minHeight,t.getY());
+            maxHeight = Math.max(maxHeight,t.getTileY());
+            minHeight = Math.min(minHeight,t.getTileY());
         }
         for (Tile t : tiles) {
             //normalize
-            int nY = t.getY() - minHeight;
+            int nY = t.getTileY() - minHeight;
             //compute flipped value
-            t.setY(maxHeight - nY);
+            t.setTileY(maxHeight - nY);
             //assign
             t.getSprite().flipVertical();
         }
+       System.out.println("flip V");
         setPosition(getXPosn(), getYPosn());
     }
 }

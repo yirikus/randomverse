@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.sprite;
 
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
@@ -8,6 +9,7 @@ import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
+import cz.terrmith.randomverse.core.sprite.movement.MovementPattern;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.util.Collections;
@@ -21,6 +23,7 @@ import java.util.Random;
 public class Ship extends MultiSprite implements CanAttack, Destructible {
 
 	private int currentHealth;
+    private MovementPattern ai;
 
     private static final Map<SpriteStatus, String> imageForStatus;
     static {
@@ -28,9 +31,14 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
         aMap.put(SpriteStatus.DEFAULT, "midParts");
         imageForStatus = Collections.unmodifiableMap(aMap);
     }
-
     public Ship(int x, int y) {
+        this(x,y,null);
+    }
+
+    public Ship(int x, int y,MovementPattern ai) {
         super(x, y);
+
+        this.ai = ai;
 
         Random random = new Random();
         Map<SpriteStatus, ImageLocation> cockpit = new HashMap<SpriteStatus, ImageLocation>();
@@ -54,6 +62,13 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
 
     @Override
     public void updateSprite() {
+        if (ai != null) {
+            Position currentPos = new Position(getXPosn(), getYPosn());
+            Position nextPosition = ai.nextPosition(currentPos, 3);
+            System.out.println(currentPos + "->" + nextPosition);
+            setPosition(nextPosition.getX(), nextPosition.getY());
+        }
+
         super.updateSprite();
     }
 

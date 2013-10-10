@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.core.sprite;
 
+import cz.terrmith.randomverse.Debug;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 
@@ -12,10 +13,6 @@ import java.util.Map;
  * has image representation, position, soundbank, bounding box
  */
 public class SimpleSprite implements Sprite {
-    // default step sizes (how far to move in each update)
-    private static final int XSTEP = 5;
-    private static final int YSTEP = 5;
-
     // default dimensions when there is no image
     private static final int SIZE = 12;
     private Map<SpriteStatus, ImageLocation> imageForStatus;
@@ -45,7 +42,7 @@ public class SimpleSprite implements Sprite {
      */
     public SimpleSprite(double x, double y, int w, int h, Map<SpriteStatus, ImageLocation> imageForStatus) {
         locx = x; locy = y;
-        dx = XSTEP; dy = YSTEP;
+        dx = 0; dy = 0;
 	    this.width = w;
 	    this.height = h;
 
@@ -88,7 +85,7 @@ public class SimpleSprite implements Sprite {
     }
 
     @Override
-    public void translate(int xDist, int yDist){
+    public void translate(double xDist, double yDist){
         locx += xDist;
         locy += yDist;
     }
@@ -136,8 +133,10 @@ public class SimpleSprite implements Sprite {
 
     @Override
     public void drawSprite(Graphics g, ImageLoader ims) {
-	    g.setColor(new Color(0,0,255,150));
-        g.fillRect(getBoundingBox().x, getBoundingBox().y, (int)getBoundingBox().getWidth(), (int)getBoundingBox().getHeight());
+	    if(Debug.DEBUG_COLLISIONS) {
+            g.setColor(new Color(0,0,255,150));
+            g.fillRect(getBoundingBox().x, getBoundingBox().y, (int)getBoundingBox().getWidth(), (int)getBoundingBox().getHeight());
+        }
 	    if (isActive() && imageForStatus != null) {
             ImageLocation imageLocation = imageForStatus.get(this.status);
             BufferedImage image = ims.getImage(imageLocation.getName(), imageLocation.getNumber());
