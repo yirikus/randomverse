@@ -31,15 +31,29 @@ public class Randomverse implements GameEngine {
         this.spriteCollection = new SpriteCollection();
         this.player = new Ship(300,300);
         spriteCollection.put(SpriteLayer.PLAYER, player);
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(100,100));
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(200,100));
-	    spriteCollection.put(SpriteLayer.NPC, new Ship(300,100));
+
+        createEnemy(100,100);
+        Ship enemy = new Ship(200,100);
+        enemy.flipHorizontal();
+        spriteCollection.put(SpriteLayer.NPC, enemy);
+
+        Ship enemy2 = new Ship(300,100);
+       enemy2.flipVertical();
+       enemy2.flipHorizontal();
+        spriteCollection.put(SpriteLayer.NPC, enemy2);
+
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(400,100));
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(500,100));
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(600,100));
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(650,100));
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(700,100));
 	    spriteCollection.put(SpriteLayer.NPC, new Ship(750,100));
+    }
+
+    private void createEnemy(int x, int y) {
+        Ship enemy = new Ship(x,y);
+       enemy.flipVertical();
+        spriteCollection.put(SpriteLayer.NPC, enemy);
     }
 
 

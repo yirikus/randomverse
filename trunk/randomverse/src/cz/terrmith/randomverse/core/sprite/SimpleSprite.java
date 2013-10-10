@@ -31,6 +31,8 @@ public class SimpleSprite implements Sprite {
     protected double dx, dy;            // amount to move for each update
     // sprite status
     private SpriteStatus status = SpriteStatus.DEFAULT;;
+    private boolean yFlip = false;
+    private boolean xFlip = false;
 
 
     /**
@@ -139,7 +141,34 @@ public class SimpleSprite implements Sprite {
 	    if (isActive() && imageForStatus != null) {
             ImageLocation imageLocation = imageForStatus.get(this.status);
             BufferedImage image = ims.getImage(imageLocation.getName(), imageLocation.getNumber());
-            g.drawImage(image, (int)Math.round(locx), (int)Math.round(locy), null);
+            int imageX = (int)Math.round(locx);
+            int imageY = (int)Math.round(locy);
+            if (this.yFlip && this.xFlip) {
+                /*
+                    2 - -
+                    - - -
+                    - - 1
+                 */
+                g.drawImage(image, imageX + width, imageY + height,  imageX, imageY, 0, 0, width, height, null);
+            } else if (this.yFlip) {
+                /*
+                    - - 2
+                    - - -
+                    1 - -
+                 */
+                g.drawImage(image, imageX, imageY + height,  imageX + width, imageY, 0, 0, width, height, null);
+            } else if (this.xFlip) {
+                /*
+                    - - 1
+                    - - -
+                    2 - -
+                 */
+                g.drawImage(image, imageX + width,  imageY, imageX, imageY + height, 0, 0, width, height, null);
+
+            } else {
+                //image is not flipped
+                g.drawImage(image, imageX, imageY, null);
+            }
         }
     }
 
@@ -151,5 +180,15 @@ public class SimpleSprite implements Sprite {
 	    } else {
             return this.getBoundingBox().intersects(sprite.getBoundingBox());
 	    }
+    }
+
+    @Override
+    public void flipHorizontal() {
+        this.xFlip = !xFlip;
+    }
+
+    @Override
+    public void flipVertical() {
+        this.yFlip = !yFlip;
     }
 }
