@@ -33,6 +33,16 @@ public class MultiSprite implements Sprite{
         this.tiles = new ArrayList<Tile>();
     }
 
+    public void addTile(Tile newTile) {
+        for (Tile t : tiles) {
+            if (t.samePositionAs(newTile)) {
+                throw new IllegalArgumentException("Trying to put a tile on a postion that is already taken: [" + newTile.getX() + ", " + newTile.getY() + "]");
+            }
+        }
+
+        tiles.add(newTile);
+    }
+
     /**
      * Adds sprite to a grid,
      * throws exception if on desired position already is a sprite
@@ -43,13 +53,7 @@ public class MultiSprite implements Sprite{
      */
     public void addTile(int x, int y, Sprite sprite){
         Tile newTile = new Tile(x, y, sprite);
-        for (Tile t : tiles) {
-            if (t.samePositionAs(newTile)) {
-                throw new IllegalArgumentException("Trying to put a tile on a postion that is already taken: [" + x + ", " + y + "]");
-            }
-        }
-
-        tiles.add(newTile);
+        addTile(newTile);
     }
 
 	public List<Tile> getTiles(){
@@ -162,5 +166,48 @@ public class MultiSprite implements Sprite{
 			}
         }
 	    return false;
+    }
+
+    @Override
+    public void flipHorizontal() {
+        int maxWidth = 0;
+        int minWidth = 0;
+
+        // find boundaries
+        for (Tile t : tiles) {
+            maxWidth = Math.max(maxWidth,t.getX());
+            minWidth = Math.min(minWidth, t.getX());
+
+        }
+        //flip
+        for (Tile t : tiles) {
+            //normalize
+            int nX = t.getX() - minWidth;
+            //compute flipped value
+            t.setX(maxWidth - nX);
+            //assign
+            t.getSprite().flipHorizontal();
+        }
+        setPosition(getXPosn(), getYPosn());
+    }
+
+    @Override
+    public void flipVertical() {
+        int maxHeight = 0;
+        int minHeight = 0;
+
+        for (Tile t : tiles) {
+            maxHeight = Math.max(maxHeight,t.getY());
+            minHeight = Math.min(minHeight,t.getY());
+        }
+        for (Tile t : tiles) {
+            //normalize
+            int nY = t.getY() - minHeight;
+            //compute flipped value
+            t.setY(maxHeight - nY);
+            //assign
+            t.getSprite().flipVertical();
+        }
+        setPosition(getXPosn(), getYPosn());
     }
 }

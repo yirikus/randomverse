@@ -69,4 +69,14 @@ public interface Sprite {
      * @return true if collision occurred
      */
     boolean collidesWith(Sprite sprite);
+
+    /**
+     * Flips sprite horizontally
+     */
+    void flipHorizontal();
+
+    /**
+     * Flips sprite vertically
+     */
+    void flipVertical();
 }
