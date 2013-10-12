@@ -42,6 +42,7 @@ public class MultiSprite implements Sprite{
         }
 
         tiles.add(newTile);
+        setPosition(this.locX, this.locY);
     }
 
     /**

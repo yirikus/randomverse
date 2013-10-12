@@ -1,16 +1,11 @@
 package cz.terrmith.randomverse.sprite.projectile;
 
-import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
-import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 

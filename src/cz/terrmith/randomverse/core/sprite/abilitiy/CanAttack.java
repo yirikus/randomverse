@@ -10,9 +10,8 @@ public interface CanAttack extends Sprite{
 
     /**
      * Primary purpose of an attack is to create sprites that deal damage on impact
-     * @param spriteCreator
      */
-    void attack(SpriteCreator spriteCreator);
+    void attack();
 
 	/**
 	 * Sets minimum time (ticks) between each attack.

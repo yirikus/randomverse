@@ -1,7 +1,9 @@
-package cz.terrmith.randomverse.core.sprite.movement;
+package cz.terrmith.randomverse.core.ai.movement;
 
 
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.sprite.Sprite;
+import cz.terrmith.randomverse.sprite.Ship;
 
 /**
  * Represents movement pattern in which  enemy moves
@@ -15,5 +17,4 @@ public interface MovementPattern {
      * @return
      */
     Position nextPosition(Position position, int speed);
-
 }
