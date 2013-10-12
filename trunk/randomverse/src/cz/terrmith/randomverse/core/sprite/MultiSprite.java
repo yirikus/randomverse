@@ -64,12 +64,33 @@ public class MultiSprite implements Sprite{
 
     @Override
     public int getWidth() {
-        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+        int maxHeight = 0;
+        int minHeight = 0;
+
+        // find boundaries
+        for (Tile t : tiles) {
+            maxHeight = Math.max(maxHeight, t.getTileY());
+            minHeight = Math.min(minHeight, t.getTileY());
+        }
+        int widthInTiles = Math.abs(maxHeight) + Math.abs(minHeight) + (maxHeight  > 0 && minHeight < 0 ? 1 : 0);
+
+        return widthInTiles * Tile.DEFAULT_SIZE;
     }
 
     @Override
     public int getHeight() {
-        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+        int maxWidth = 0;
+        int minWidth = 0;
+
+        // find boundaries
+        for (Tile t : tiles) {
+            maxWidth = Math.max(maxWidth,t.getTileX());
+            minWidth = Math.min(minWidth, t.getTileX());
+
+        }
+        int widthInTiles = Math.abs(maxWidth) + Math.abs(minWidth) + (maxWidth  > 0 && minWidth < 0 ? 1 : 0);
+
+        return widthInTiles * Tile.DEFAULT_SIZE;
     }
 
     @Override

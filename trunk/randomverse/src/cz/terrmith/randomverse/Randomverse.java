@@ -1,9 +1,6 @@
 package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.GameEngine;
-import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
-import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
-import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
 import cz.terrmith.randomverse.core.input.UserCommand;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
@@ -13,6 +10,7 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
+import cz.terrmith.randomverse.world.LevelOne;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,6 +26,7 @@ public class Randomverse implements GameEngine {
     public static final int STEP = 6;
 
     private final UserCommand command;
+    private final LevelOne world;
     private SpriteCollection spriteCollection;
     private Ship player;
     private Random random = new Random();
@@ -40,6 +39,7 @@ public class Randomverse implements GameEngine {
         this.spriteCollection = new SpriteCollection();
         createPlayer();
         spriteCollection.put(SpriteLayer.PLAYER, player);
+        this.world = new LevelOne(this.spriteCollection);
 
     }
 
@@ -51,35 +51,16 @@ public class Randomverse implements GameEngine {
         player.addTile(1, 1, flippedGun);
     }
 
-    private void createEnemy(int x, int y) {
-        ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
-        Ship enemy = new Ship(x,y, ai);
-        if (random.nextBoolean()) {
-            enemy.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection));
-        }
-        if (random.nextBoolean()) {
-            SimpleGun flippedGun = new SimpleGun(1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection);
-            flippedGun.flipHorizontal();
-            enemy.addTile(1, 1, flippedGun);
-        }
-        enemy.flipVertical();
-        spriteCollection.put(SpriteLayer.NPC, enemy);
-    }
-
-
     @Override
     public void update() {
         updateProjectiles();
 	    updateNpcs();
         updatePlayer();
-        createEnemies();
+        updateWorld();
     }
 
-    private void createEnemies() {
-        if(createEnemies > 0 && random.nextBoolean()) {
-            createEnemy(100 + random.nextInt(600),-100);
-            createEnemies--;
-        }
+    private void updateWorld() {
+        world.update();
     }
 
     private void updateNpcs() {
@@ -90,8 +71,6 @@ public class Randomverse implements GameEngine {
 				s.updateSprite();
 			} else {
 				iterator.remove();
-                createEnemies += ( 1 + killedEnemies%2);
-                killedEnemies++;
 			}
 		}
 	}
