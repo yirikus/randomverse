@@ -1,15 +1,18 @@
 package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.GameEngine;
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
+import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
 import cz.terrmith.randomverse.core.input.UserCommand;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.core.sprite.movement.TopDownMovement;
+import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
 import cz.terrmith.randomverse.sprite.Ship;
-import cz.terrmith.randomverse.sprite.creators.SimpleProjectileCreator;
+import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,14 +38,31 @@ public class Randomverse implements GameEngine {
     public Randomverse(UserCommand cmd){
         this.command = cmd;
         this.spriteCollection = new SpriteCollection();
-        this.player = new Ship(300,300);
+        createPlayer();
         spriteCollection.put(SpriteLayer.PLAYER, player);
 
     }
 
+    private void createPlayer() {
+        this.player = new Ship(300,300,spriteCollection);
+        player.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection));
+        SimpleGun flippedGun = new SimpleGun(1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection);
+        flippedGun.flipHorizontal();
+        player.addTile(1, 1, flippedGun);
+    }
+
     private void createEnemy(int x, int y) {
-        Ship enemy = new Ship(x,y, new TopDownMovement());
-       enemy.flipVertical();
+        ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
+        Ship enemy = new Ship(x,y, ai,spriteCollection);
+        if (random.nextBoolean()) {
+            enemy.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection));
+        }
+        if (random.nextBoolean()) {
+            SimpleGun flippedGun = new SimpleGun(1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection);
+            flippedGun.flipHorizontal();
+            enemy.addTile(1, 1, flippedGun);
+        }
+        enemy.flipVertical();
         spriteCollection.put(SpriteLayer.NPC, enemy);
     }
 
@@ -121,7 +141,7 @@ public class Randomverse implements GameEngine {
         }
 
         if (command.isShoot()) {
-            player.attack(new SimpleProjectileCreator(getSpriteCollection()));
+            player.attack();
         }
 
         player.setStep(dx, dy);

@@ -6,6 +6,7 @@ import cz.terrmith.randomverse.core.image.ImageLocation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,8 +46,11 @@ public class SimpleSprite implements Sprite {
         dx = 0; dy = 0;
 	    this.width = w;
 	    this.height = h;
-
-        this.imageForStatus = imageForStatus;
+        if (imageForStatus != null) {
+            this.imageForStatus = imageForStatus;
+        } else {
+            this.imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
+        }
     }
 
     public Map<SpriteStatus, ImageLocation> getImageForStatus() {

@@ -1,15 +1,10 @@
 package cz.terrmith.randomverse.sprite;
 
-import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.MultiSprite;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
-import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.*;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.core.sprite.abilitiy.SpriteCreator;
-import cz.terrmith.randomverse.core.sprite.movement.MovementPattern;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.util.Collections;
@@ -18,12 +13,13 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * SimpleSprite of a ship
+ * Ship is a sprite that moves and uses it's parts to use abilities like an attack
+ * can be player or npc controlled
  */
 public class Ship extends MultiSprite implements CanAttack, Destructible {
 
 	private int currentHealth;
-    private MovementPattern ai;
+    private ArtificialIntelligence ai;
 
     private static final Map<SpriteStatus, String> imageForStatus;
     static {
@@ -31,11 +27,17 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
         aMap.put(SpriteStatus.DEFAULT, "midParts");
         imageForStatus = Collections.unmodifiableMap(aMap);
     }
-    public Ship(int x, int y) {
-        this(x,y,null);
+    public Ship(int x, int y,SpriteCollection spriteCollection) {
+        this(x,y,null,spriteCollection);
     }
 
-    public Ship(int x, int y,MovementPattern ai) {
+    /**
+     * Constructor
+     * @param x  intial x position
+     * @param y initial y position
+     * @param ai null if player controlled, otherwise ai has to be provided
+     */
+    public Ship(int x, int y, ArtificialIntelligence ai, SpriteCollection spriteCollection) {
         super(x, y);
 
         this.ai = ai;
@@ -53,31 +55,32 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
         thruster.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
         addTile(0, 2, new SimpleSprite(0, 2, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, thruster));
 
-        Map<SpriteStatus, ImageLocation> gun = new HashMap<SpriteStatus, ImageLocation>();
-        gun.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, gun));
-
         setPosition(x, y);
     }
 
     @Override
     public void updateSprite() {
+        // destroy if sprite moved out of active zone
+        if (getYPosn() > 2000 || getYPosn() < -1000 ||
+            getXPosn() > 3000 || getXPosn() < -1000) {
+            setActive(false);
+            return;
+        }
+
+        //if AI is present use it
         if (ai != null) {
-            Position currentPos = new Position(getXPosn(), getYPosn());
-            Position nextPosition = ai.nextPosition(currentPos, 3);
-            System.out.println(currentPos + "->" + nextPosition);
-            setPosition(nextPosition.getX(), nextPosition.getY());
+            ai.update(this);
         }
 
         super.updateSprite();
     }
 
     @Override
-    public void attack(SpriteCreator spriteCreator) {
+    public void attack() {
         for (Tile t : this.getTiles()){
 	        System.out.println(t.getSprite());
 	        if (t.getSprite() instanceof CanAttack) {
-		        ((CanAttack) t.getSprite()).attack(spriteCreator);
+		        ((CanAttack) t.getSprite()).attack();
 	        }
         }
     }
