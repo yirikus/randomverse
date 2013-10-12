@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public class SimpleSprite implements Sprite {
     // default dimensions when there is no image
-    private static final int SIZE = 12;
     private Map<SpriteStatus, ImageLocation> imageForStatus;
 
     // image-related
@@ -25,8 +24,8 @@ public class SimpleSprite implements Sprite {
     private boolean isActive = true;
 
     // protected vars
-    protected double locx, locy;        // location of sprite
-    protected double dx, dy;            // amount to move for each update
+    private double locx, locy;        // location of sprite
+    private double dx, dy;            // amount to move for each update
     // sprite status
     private SpriteStatus status = SpriteStatus.DEFAULT;;
     private boolean yFlip = false;

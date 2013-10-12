@@ -3,21 +3,18 @@ package cz.terrmith.randomverse.core.sprite.creator;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.creator.SpriteCreator;
 import cz.terrmith.randomverse.sprite.projectile.SimpleProjectile;
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 8.10.13
- * Time: 0:02
- * To change this template use File | Settings | File Templates.
+ * Sprite creator that creates projectiles
+ * created projectiles move in a specified direction and speed
+ *
  */
 public class SimpleProjectileCreator implements SpriteCreator {
 
     private final SpriteCollection spriteCollection;
-    int horizontalFlip = 1;
-    int verticalFlip = 1;
+    private int horizontalFlip = 1;
+    private int verticalFlip = 1;
 
 
     public SimpleProjectileCreator(SpriteCollection spriteCollection) {

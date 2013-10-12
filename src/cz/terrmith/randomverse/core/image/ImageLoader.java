@@ -1,14 +1,16 @@
 package cz.terrmith.randomverse.core.image;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ImageLoader from Killer Game Development book
@@ -20,12 +22,12 @@ public class ImageLoader {
 
     /* The key is the filename prefix, the object (value)
        is an ArrayList of BufferedImages */
-    private Map<String, ArrayList<BufferedImage>> images;
+    private Map<String, List<BufferedImage>> images;
 
     /* The key is the 'g' <name> string, the object is an
      ArrayList of filename prefixes for the group. This is used to
      access a group image by its 'g' name and filename. */
-    private HashMap<String, ArrayList<String>> gNames;
+    private Map<String, List<String>> gNames;
 
 
     private GraphicsConfiguration gc;
@@ -65,8 +67,8 @@ public class ImageLoader {
 
     private void initLoader() {
 
-        images = new HashMap<String, ArrayList<BufferedImage>>();
-        gNames = new HashMap<String, ArrayList<String>>();
+        images = new HashMap<String, List<BufferedImage>>();
+        gNames = new HashMap<String, List<String>>();
 
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         gc = ge.getDefaultScreenDevice().getDefaultConfiguration();
@@ -265,7 +267,7 @@ public class ImageLoader {
      * @return image
      */
     public BufferedImage getImage(String name) {
-        ArrayList<BufferedImage> imsList = images.get(name);
+        List<BufferedImage> imsList = images.get(name);
         if (imsList == null) {
             System.out.println("No image(s) stored under " + name);
             return null;
@@ -285,7 +287,7 @@ public class ImageLoader {
      * @return image
      */
     public BufferedImage getImage(String name, int posn) {
-        ArrayList<BufferedImage> imsList = images.get(name);
+        List<BufferedImage> imsList = images.get(name);
         if (imsList == null) {
             System.out.println("No image(s) stored under " + name);
             return null;
@@ -312,7 +314,7 @@ public class ImageLoader {
      * @return image
      */
     public BufferedImage getImage(String name, String fnmPrefix) {
-        ArrayList<BufferedImage> imsList = images.get(name);
+        List<BufferedImage> imsList = images.get(name);
         if (imsList == null) {
             System.out.println("No image(s) stored under " + name);
             return null;
@@ -377,7 +379,7 @@ public class ImageLoader {
      * @return
      */
     public boolean isLoaded(String name) {
-        ArrayList<BufferedImage> imsList = images.get(name);
+        List<BufferedImage> imsList = images.get(name);
         if (imsList == null) {
             return false;
         }

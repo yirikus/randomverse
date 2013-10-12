@@ -7,16 +7,16 @@ public class UserCommand {
     /**
      * User commands
      */
-    protected boolean previousPressed;
-    protected boolean inventoryShown;
-    protected boolean up;
-    protected boolean down;
-    protected boolean left;
-    protected boolean right;
-    protected boolean shoot;
-    protected boolean bomb;
-    protected boolean shield;
-    protected boolean special;
+    private boolean previousPressed;
+    private boolean inventoryShown;
+    private boolean up;
+    private boolean down;
+    private boolean left;
+    private boolean right;
+    private boolean shoot;
+    private boolean bomb;
+    private boolean shield;
+    private boolean special;
 
     public void setPreviousScreen(boolean previousPressed) {
         this.previousPressed = previousPressed;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.regex.Pattern;
 
 /**
  * String that represents and image
@@ -16,10 +15,10 @@ import java.util.regex.Pattern;
  */
 public class ImageDescription {
 
-    private final ImageType type;
+    private ImageType type;
     private List<String> fileNames;
     private String groupName;
-    private final int imageCount;
+    private int imageCount;
 
     /**
      * Creates new image description by given line
@@ -32,44 +31,60 @@ public class ImageDescription {
 
         String stringType = tokens.nextToken();
         if ("o".equals(stringType)) {
-            this.type = ImageType.SINGLE_IMAGE;
-            if (tokenCount != 2) {
-                throw new IllegalArgumentException("Malformed line, expected o <fnm>, but was: " + line);
-            }
-            this.fileNames.add(tokens.nextToken());
-            this.imageCount = fileNames.size();
+            initO(line, tokens, tokenCount);
         } else if ("n".equals(stringType)) {
-            this.type = ImageType.NUMBERED_IMAGES;
-            if (tokenCount != 3) {
-                throw new IllegalArgumentException("Malformed line, expected n <fnm*.ext> <number>, but was: " + line);
-            }
-
-            String fileName = tokens.nextToken();
-            int imageCount = Integer.parseInt(tokens.nextToken());
-            for(int i = 0; i < imageCount; i++) {
-                fileNames.add(fileName.replace("*", String.valueOf(i)));
-            }
-            this.imageCount = fileNames.size();
+            initN(line, tokens, tokenCount);
         } else if ("s".equals(stringType)) {
-            this.type = ImageType.IMAGE_STRIP;
-            if (tokenCount != 3) {
-                throw new IllegalArgumentException("Malformed line, expected s <fnm> <number>, but was: " + line);
-            }
-            this.fileNames.add(tokens.nextToken());
-            this.imageCount = Integer.parseInt(tokens.nextToken());
+            initS(line, tokens, tokenCount);
         } else if ("g".equals(stringType)) {
-            this.type = ImageType.IMAGE_GROUP;
-            if (tokenCount < 3) {
-                throw new IllegalArgumentException("Malformed line, expected g <name> <fnm> [ <fnm> ]*, but was: " + line);
-            }
-            this.groupName = tokens.nextToken();
-            while(tokens.countTokens() > 0){
-                fileNames.add(tokens.nextToken());
-            }
-            this.imageCount = fileNames.size();
+            initG(line, tokens, tokenCount);
         } else {
             throw new IllegalArgumentException("Unknown image type, must be one of 'o', 'n', 's', 'g', but was: " + stringType);
         }
+    }
+
+    private void initG(String line, StringTokenizer tokens, int tokenCount) {
+        this.type = ImageType.IMAGE_GROUP;
+        if (tokenCount < 3) {
+            throw new IllegalArgumentException("Malformed line, expected g <name> <fnm> [ <fnm> ]*, but was: " + line);
+        }
+        this.groupName = tokens.nextToken();
+        while(tokens.countTokens() > 0){
+            fileNames.add(tokens.nextToken());
+        }
+        this.imageCount = fileNames.size();
+    }
+
+    private void initS(String line, StringTokenizer tokens, int tokenCount) {
+        this.type = ImageType.IMAGE_STRIP;
+        if (tokenCount != 3) {
+            throw new IllegalArgumentException("Malformed line, expected s <fnm> <number>, but was: " + line);
+        }
+        this.fileNames.add(tokens.nextToken());
+        this.imageCount = Integer.parseInt(tokens.nextToken());
+    }
+
+    private void initN(String line, StringTokenizer tokens, int tokenCount) {
+        this.type = ImageType.NUMBERED_IMAGES;
+        if (tokenCount != 3) {
+            throw new IllegalArgumentException("Malformed line, expected n <fnm*.ext> <number>, but was: " + line);
+        }
+
+        String fileName = tokens.nextToken();
+        int imageCount = Integer.parseInt(tokens.nextToken());
+        for(int i = 0; i < imageCount; i++) {
+            fileNames.add(fileName.replace("*", String.valueOf(i)));
+        }
+        this.imageCount = fileNames.size();
+    }
+
+    private void initO(String line, StringTokenizer tokens, int tokenCount) {
+        this.type = ImageType.SINGLE_IMAGE;
+        if (tokenCount != 2) {
+            throw new IllegalArgumentException("Malformed line, expected o <fnm>, but was: " + line);
+        }
+        this.fileNames.add(tokens.nextToken());
+        this.imageCount = fileNames.size();
     }
 
     public static ImageDescription singleImage() {

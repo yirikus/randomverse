@@ -1,8 +1,5 @@
 package cz.terrmith.randomverse.core.sprite.creator;
 
-import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-
 /**
  * SpriteCreator can create another sprite (e.g. projectile)
  */

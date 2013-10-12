@@ -2,12 +2,13 @@ package cz.terrmith.randomverse.sprite;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.*;
+import cz.terrmith.randomverse.core.sprite.MultiSprite;
+import cz.terrmith.randomverse.core.sprite.SimpleSprite;
+import cz.terrmith.randomverse.core.sprite.SpriteStatus;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -21,14 +22,8 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
 	private int currentHealth;
     private ArtificialIntelligence ai;
 
-    private static final Map<SpriteStatus, String> imageForStatus;
-    static {
-        Map<SpriteStatus, String> aMap = new HashMap<SpriteStatus, String>();
-        aMap.put(SpriteStatus.DEFAULT, "midParts");
-        imageForStatus = Collections.unmodifiableMap(aMap);
-    }
-    public Ship(int x, int y,SpriteCollection spriteCollection) {
-        this(x,y,null,spriteCollection);
+    public Ship(int x, int y) {
+        this(x,y,null);
     }
 
     /**
@@ -37,7 +32,7 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
      * @param y initial y position
      * @param ai null if player controlled, otherwise ai has to be provided
      */
-    public Ship(int x, int y, ArtificialIntelligence ai, SpriteCollection spriteCollection) {
+    public Ship(int x, int y, ArtificialIntelligence ai) {
         super(x, y);
 
         this.ai = ai;

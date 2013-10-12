@@ -43,10 +43,11 @@ public class GraphicEngine {
             graphics = bufferStrategy.getDrawGraphics();
             gameRender(graphics);
             graphics.dispose();
-            if (!bufferStrategy.contentsLost())
+            if (!bufferStrategy.contentsLost()) {
                 bufferStrategy.show();
-            else
+            } else {
                 System.out.println("Contents Lost");
+            }
             // Sync the display on some systems.
             // (on Linux, this fixes event queue problems)
             Toolkit.getDefaultToolkit().sync();
