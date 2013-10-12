@@ -3,6 +3,7 @@ package cz.terrmith.randomverse;
 import cz.terrmith.randomverse.core.GameEngine;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
+import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
 import cz.terrmith.randomverse.core.input.UserCommand;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
@@ -10,7 +11,6 @@ import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
@@ -44,7 +44,7 @@ public class Randomverse implements GameEngine {
     }
 
     private void createPlayer() {
-        this.player = new Ship(300,300,spriteCollection);
+        this.player = new Ship(300,300);
         player.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection));
         SimpleGun flippedGun = new SimpleGun(1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection);
         flippedGun.flipHorizontal();
@@ -53,7 +53,7 @@ public class Randomverse implements GameEngine {
 
     private void createEnemy(int x, int y) {
         ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
-        Ship enemy = new Ship(x,y, ai,spriteCollection);
+        Ship enemy = new Ship(x,y, ai);
         if (random.nextBoolean()) {
             enemy.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection));
         }

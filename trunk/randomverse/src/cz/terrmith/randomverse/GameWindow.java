@@ -1,6 +1,8 @@
 package cz.terrmith.randomverse;
 
-import cz.terrmith.randomverse.core.*;
+import cz.terrmith.randomverse.core.AnimationEngine;
+import cz.terrmith.randomverse.core.GameEngine;
+import cz.terrmith.randomverse.core.GraphicEngine;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.InputHandler;
 import cz.terrmith.randomverse.core.input.SystemCommand;
@@ -116,7 +118,7 @@ public class GameWindow extends JFrame implements Runnable{
         DisplayMode displayMode = graphicsDevice.getDisplayMode();
         System.out.println("Current Display Mode: (" +
                 displayMode.getWidth() + "," + displayMode.getHeight() + "," +
-                displayMode.getBitDepth() + "," + displayMode.getRefreshRate() + ")  " );
+                displayMode.getBitDepth() + "," + displayMode.getRefreshRate() + ")  ");
     }
 
     /** Switch on page flipping: NUM_BUFFERS == 2 so
@@ -187,9 +189,12 @@ public class GameWindow extends JFrame implements Runnable{
         //showModes(modes);
 
         for(int i = 0; i < modes.length; i++) {
-            if (width == modes[i].getWidth() && height == modes[i].getHeight() &&
-                    bitDepth == modes[i].getBitDepth())
+            if (width == modes[i].getWidth()
+                    && height == modes[i].getHeight()
+                    && bitDepth == modes[i].getBitDepth()) {
+
                 return true;
+            }
         }
         return false;
     }
