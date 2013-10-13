@@ -77,4 +77,10 @@ public class SpriteCollection {
    public Boundary getBoundary(SpriteLayer layer) {
     return layerBoundaries.get(layer);
    }
+
+    public void clear(){
+        for (Map.Entry<SpriteLayer, List<Sprite>> entry : sprites.entrySet()) {
+            entry.setValue(new ArrayList<Sprite>());
+        }
+    }
 }

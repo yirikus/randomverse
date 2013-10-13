@@ -1,7 +1,7 @@
 package cz.terrmith.randomverse.core;
 
 import cz.terrmith.randomverse.core.image.ImageLoader;
-import cz.terrmith.randomverse.core.input.SystemCommand;
+import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 
@@ -20,12 +20,12 @@ public class GraphicEngine {
     private final GameEngine gameEngine;
     private Graphics graphics;
     private BufferStrategy bufferStrategy;
-    private final SystemCommand cmd;
+    private final Command cmd;
     private final int width;
     private final int height;
     private final ImageLoader iml;
 
-    public GraphicEngine(BufferStrategy bufferStrategy, SystemCommand cmd, int width, int height, ImageLoader iml, GameEngine gameEngine){
+    public GraphicEngine(BufferStrategy bufferStrategy, Command cmd, int width, int height, ImageLoader iml, GameEngine gameEngine){
        this.bufferStrategy = bufferStrategy;
         this.cmd = cmd;
         this.width = width;

@@ -1,6 +1,6 @@
 package cz.terrmith.randomverse.core;
 
-import cz.terrmith.randomverse.core.input.SystemCommand;
+import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.util.ConverterUtil;
 
 /**
@@ -30,10 +30,10 @@ public class AnimationEngine {
     private long period;
     // used to stop the animation thread
    // private volatile boolean running = false;
-    private SystemCommand cmd;
+    private Command cmd;
 
 
-    public AnimationEngine(SystemCommand cmd, GraphicEngine graphics, GameEngine game){
+    public AnimationEngine(Command cmd, GraphicEngine graphics, GameEngine game){
         this.cmd = cmd;
         this.game = game;
         this.graphics = graphics;

@@ -39,7 +39,7 @@ public class SimpleProjectile extends SimpleSprite implements DamageDealer {
     public SimpleProjectile(double x, double y, Damage.DamageType damageType) {
         super(x, y, 11, 22, null);
         setImageForStatus(this.imageForStatus);
-        this.damage = new Damage(1,damageType);
+        this.damage = new Damage(3,damageType);
     }
 
     @Override

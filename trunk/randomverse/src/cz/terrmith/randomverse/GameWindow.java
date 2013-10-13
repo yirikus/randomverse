@@ -4,8 +4,8 @@ import cz.terrmith.randomverse.core.AnimationEngine;
 import cz.terrmith.randomverse.core.GameEngine;
 import cz.terrmith.randomverse.core.GraphicEngine;
 import cz.terrmith.randomverse.core.image.ImageLoader;
+import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.input.InputHandler;
-import cz.terrmith.randomverse.core.input.SystemCommand;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,13 +35,13 @@ public class GameWindow extends JFrame implements Runnable{
 
     private AnimationEngine animationEngine;
     private Thread animator;
-    private SystemCommand systemCommand;
+    private Command systemCommand;
     /**
      * Constructor - creates new game window in a fullscreen mode
      */
     public GameWindow(){
         super(Randomverse.WINDOW_NAME); // window name
-        this.systemCommand = new SystemCommand();
+        this.systemCommand = new Command();
         initFullscreen();
         ImageLoader iml =  new ImageLoader("/image_config.txt","/images/");
         GameEngine gameEngine = new Randomverse(systemCommand, SCREEN_W, SCREEN_H);
@@ -138,7 +138,7 @@ public class GameWindow extends JFrame implements Runnable{
      *  a bit so that the getBufferStrategy() call will get the
      *  correct details.
      */
-    private GraphicEngine createGraphicEngine(SystemCommand cmd, ImageLoader iml, GameEngine gameEngine){
+    private GraphicEngine createGraphicEngine(Command cmd, ImageLoader iml, GameEngine gameEngine){
         try {
             EventQueue.invokeAndWait(
                     new Runnable() {
