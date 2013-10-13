@@ -3,7 +3,8 @@ package cz.terrmith.randomverse;
 import cz.terrmith.randomverse.core.GameEngine;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
-import cz.terrmith.randomverse.core.input.UserCommand;
+import cz.terrmith.randomverse.core.input.Command;
+import cz.terrmith.randomverse.core.menu.Menu;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
@@ -11,6 +12,7 @@ import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 import cz.terrmith.randomverse.world.LevelOne;
@@ -28,24 +30,27 @@ public class Randomverse implements GameEngine {
     public static final String WINDOW_NAME = "Randomverse";
     public static final int STEP = 6;
 
-    private final UserCommand command;
+    private final Command command;
     private int screenWidth;
     private int screenHeight;
-    private final LevelOne world;
+    private World world;
     private SpriteCollection spriteCollection;
     private Ship player;
+    private enum GameMode {MAIN_MENU,GAME}
+    private GameMode gameMode = GameMode.MAIN_MENU;
+    private Menu menu;
 
-    public Randomverse(UserCommand cmd, int screenWidth, int screenHeight) {
+    public Randomverse(Command cmd, int screenWidth, int screenHeight) {
         this.command = cmd;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         Boundary screenBoundary = new Boundary(0, screenWidth, 0, screenHeight);
         Boundary extendedBoundary = new Boundary(-screenWidth, 2 * screenWidth, -screenHeight, 2 * screenHeight);
         this.spriteCollection = new SpriteCollection(screenBoundary, extendedBoundary);
-        createPlayer();
-        spriteCollection.put(SpriteLayer.PLAYER, player);
-        this.world = new LevelOne(this.spriteCollection);
-
+        this.menu = new Menu(new Position(100,100));
+        menu.addItem("start");
+        menu.addItem("options");
+        menu.addItem("exit");
     }
 
     private void createPlayer() {
@@ -58,10 +63,22 @@ public class Randomverse implements GameEngine {
 
     @Override
     public void update() {
-        updateProjectiles();
-        updateNpcs();
-        updatePlayer();
-        updateWorld();
+        switch(gameMode) {
+            case MAIN_MENU:
+                updateMenu();
+                break;
+            case GAME:
+                if (Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
+                    spriteCollection.clear();
+                   gameMode = GameMode.MAIN_MENU;
+                } else {
+                    updateProjectiles();
+                    updateNpcs();
+                    updatePlayer();
+                    updateWorld();
+                }
+                break;
+        }
     }
 
     private void updateWorld() {
@@ -151,23 +168,44 @@ public class Randomverse implements GameEngine {
         return collidingSprites;
     }
 
+    public void updateMenu(){
+        if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
+            menu.selectPrevious();
+            command.setUp(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getDown())) {
+            menu.selectNext();
+            command.setDown(false);
+        } else if (Command.State.PRESSED.equals(command.getShoot())) {
+            if (menu.getSelected().equals("start")) {
+                gameMode = GameMode.GAME;
+                createPlayer();
+                spriteCollection.put(SpriteLayer.PLAYER, player);
+                this.world = new LevelOne(this.spriteCollection);
+            } else if (menu.getSelected().equals("options")) {
+
+            } if (menu.getSelected().equals("exit")) {
+                command.setTerminated(true);
+            }
+        }
+    }
+
     private void updatePlayer() {
         int dx = 0;
         int dy = 0;
-        if (command.isUp()) {
+        if (Command.State.PRESSED.equals(command.getUp())) {
             dy -= STEP;
         }
-        if (command.isDown()) {
+        if (Command.State.PRESSED.equals(command.getDown())) {
             dy += STEP;
         }
-        if (command.isLeft()) {
+        if (Command.State.PRESSED.equals(command.getLeft())) {
             dx -= STEP;
         }
-        if (command.isRight()) {
+        if (Command.State.PRESSED.equals(command.getRight())) {
             dx += STEP;
         }
 
-        if (command.isShoot()) {
+        if (Command.State.PRESSED.equals(command.getShoot())) {
             player.attack();
         }
 
@@ -183,10 +221,17 @@ public class Randomverse implements GameEngine {
 
     @Override
     public void drawGUI(Graphics2D g2) {
-        Font font = new Font("system",Font.BOLD,12);
-        g2.setFont(font);
-        g2.setColor(Color.WHITE);
-        g2.drawString(player.getCurrentHealth() + "/" + player.getTotalHealth(), 10, screenHeight -50);
+        switch(gameMode) {
+            case GAME:
+                Font font = new Font("system",Font.BOLD,12);
+                g2.setFont(font);
+                g2.setColor(Color.WHITE);
+                g2.drawString(player.getCurrentHealth() + "/" + player.getTotalHealth(), 10, screenHeight -50);
+                break;
+            case MAIN_MENU:
+                menu.drawMenu(g2);
+                break;
+        }
     }
 
 

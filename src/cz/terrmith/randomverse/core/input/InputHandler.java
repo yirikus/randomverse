@@ -16,9 +16,9 @@ import java.awt.event.KeyListener;
  */
 public class InputHandler implements KeyListener {
 
-    private final SystemCommand ctrl;
+    private final Command ctrl;
 
-    public InputHandler(SystemCommand ctrl){
+    public InputHandler(Command ctrl){
         this.ctrl = ctrl;
     }
 
@@ -43,11 +43,9 @@ public class InputHandler implements KeyListener {
     private void processCommand(int keyCode, boolean value){
        //toggle buttons
         if ((keyCode == KeyEvent.VK_ESCAPE) && value){
-            ctrl.setPreviousScreen(value);
-            ctrl.setTerminated(value);
-            System.out.println("terminate set to: " + value);
+            ctrl.setPrevious(value);
         }else if (keyCode == KeyEvent.VK_Q && value){
-            ctrl.setInventoryShown(ctrl.isInventoryShown());
+            ctrl.setInventory(value);
 
         //press buttons
         }else if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP){
