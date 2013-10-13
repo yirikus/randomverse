@@ -68,9 +68,11 @@ public class Randomverse implements GameEngine {
                 updateMenu();
                 break;
             case GAME:
-                if (Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
+                if (Command.State.PRESSED.equals(command.getPrevious())
+                  || Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
                     spriteCollection.clear();
-                   gameMode = GameMode.MAIN_MENU;
+                    gameMode = GameMode.MAIN_MENU;
+                    command.clear();
                 } else {
                     updateProjectiles();
                     updateNpcs();
@@ -170,14 +172,17 @@ public class Randomverse implements GameEngine {
 
     public void updateMenu(){
         if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
+            System.out.println("select prev: "+ command.getUp());
             menu.selectPrevious();
             command.setUp(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getDown())) {
+            System.out.println("select next:" + command.getDown());
             menu.selectNext();
             command.setDown(false);
-        } else if (Command.State.PRESSED.equals(command.getShoot())) {
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getShoot())) {
             if (menu.getSelected().equals("start")) {
                 gameMode = GameMode.GAME;
+                command.clear();
                 createPlayer();
                 spriteCollection.put(SpriteLayer.PLAYER, player);
                 this.world = new LevelOne(this.spriteCollection);
@@ -192,20 +197,25 @@ public class Randomverse implements GameEngine {
     private void updatePlayer() {
         int dx = 0;
         int dy = 0;
-        if (Command.State.PRESSED.equals(command.getUp())) {
+        if (Command.State.RELEASED_PRESSED.equals(command.getUp())
+            || Command.State.PRESSED.equals(command.getUp())) {
             dy -= STEP;
         }
-        if (Command.State.PRESSED.equals(command.getDown())) {
+        if (Command.State.RELEASED_PRESSED.equals(command.getDown())
+                || Command.State.PRESSED.equals(command.getDown())) {
             dy += STEP;
         }
-        if (Command.State.PRESSED.equals(command.getLeft())) {
+        if (Command.State.RELEASED_PRESSED.equals(command.getLeft())
+            || Command.State.PRESSED.equals(command.getLeft())) {
             dx -= STEP;
         }
-        if (Command.State.PRESSED.equals(command.getRight())) {
+        if (Command.State.RELEASED_PRESSED.equals(command.getRight())
+            || Command.State.PRESSED.equals(command.getRight())) {
             dx += STEP;
         }
 
-        if (Command.State.PRESSED.equals(command.getShoot())) {
+        if (Command.State.RELEASED_PRESSED.equals(command.getShoot())
+            || Command.State.PRESSED.equals(command.getShoot())) {
             player.attack();
         }
 

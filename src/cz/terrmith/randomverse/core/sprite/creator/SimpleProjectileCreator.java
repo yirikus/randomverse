@@ -32,7 +32,6 @@ public class SimpleProjectileCreator implements SpriteCreator {
         Sprite projectile = new SimpleProjectile(x, y, this.damageType);
         projectile.translate(horizontalFlip * dx * distanceFromOrigin, verticalFlip * dy * distanceFromOrigin);
         projectile.setStep(horizontalFlip * dx * (speed), verticalFlip * dy * (speed));
-        System.out.println("adding particle to sprite collection:" + spriteCollection);
         spriteCollection.put(SpriteLayer.PROJECTILE,projectile);
     }
 

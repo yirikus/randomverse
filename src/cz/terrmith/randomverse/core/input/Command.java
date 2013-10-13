@@ -42,6 +42,7 @@ public class Command {
     }
 
     public void setPause(boolean pause) {
+        System.out.println("pause");
         this.pause = pause;
     }
 
@@ -50,6 +51,7 @@ public class Command {
     }
 
     public void setPrevious(boolean previous) {
+        System.out.println("prev");
         this.previous = changeState(this.previous,previous);
     }
 
@@ -58,6 +60,7 @@ public class Command {
     }
 
     public void setInventory(boolean inventory) {
+        System.out.println("inv");
         this.inventory = changeState(this.inventory,inventory);
     }
 
@@ -66,6 +69,7 @@ public class Command {
     }
 
     public void setUp(boolean up) {
+        System.out.println("up");
         this.up = changeState(this.up,up);
     }
 
@@ -74,6 +78,7 @@ public class Command {
     }
 
     public void setDown(boolean down) {
+        System.out.println("down");
         this.down = changeState(this.down,down);
     }
 
@@ -82,6 +87,7 @@ public class Command {
     }
 
     public void setLeft(boolean left) {
+        System.out.println("left");
         this.left = changeState(this.left,left);
     }
 
@@ -90,6 +96,7 @@ public class Command {
     }
 
     public void setRight(boolean right) {
+        System.out.println("right");
         this.right = changeState(this.right,right);
     }
 
@@ -98,6 +105,7 @@ public class Command {
     }
 
     public void setShoot(boolean shoot) {
+        System.out.println("shoot");
         this.shoot = changeState(this.shoot,shoot);
     }
 
@@ -106,6 +114,7 @@ public class Command {
     }
 
     public void setBomb(boolean bomb) {
+        System.out.println("bomb");
         this.bomb = changeState(this.bomb,bomb);
     }
 
@@ -114,6 +123,7 @@ public class Command {
     }
 
     public void setShield(boolean shield) {
+        System.out.println("shield");
         this.shield = changeState(this.shield,shield);
     }
 
@@ -125,30 +135,52 @@ public class Command {
         this.special = changeState(this.special,special);
     }
 
+    public void clear() {
+        this.previous = State.RELEASED;
+        this.inventory = State.RELEASED;
+        this.up = State.RELEASED;
+        this.down = State.RELEASED;
+        this.left = State.RELEASED;
+        this.right = State.RELEASED;
+        this.shoot = State.RELEASED;
+        this.bomb = State.RELEASED;
+        this.shield = State.RELEASED;
+        this.special = State.RELEASED;
+    }
+
     private Command.State changeState(Command.State currentState, boolean pressed){
+
         switch(currentState){
             case PRESSED:
                 if (pressed) {
+                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
                     return Command.State.PRESSED;
                 } else {
+                    System.out.println("change state " + currentState + " -> PRESSED_RELEASED (" + pressed + ")");
                     return State.PRESSED_RELEASED;
                 }
             case PRESSED_RELEASED:
                 if (pressed) {
+                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
                     return State.PRESSED;
                 } else {
+                    System.out.println("change state " + currentState + " -> RELEASED (" + pressed + ")");
                     return State.RELEASED;
                 }
             case RELEASED:
                 if (pressed) {
+                    System.out.println("change state " + currentState + " -> RELEASED_PRESSED (" + pressed + ")");
                     return Command.State.RELEASED_PRESSED;
                 } else {
+                    System.out.println("change state " + currentState + " -> RELEASED (" + pressed + ")");
                     return State.RELEASED;
                 }
             case RELEASED_PRESSED:
                 if (pressed) {
+                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
                     return Command.State.PRESSED;
                 } else {
+                    System.out.println("change state " + currentState + " -> PRESSED_RELEASED (" + pressed + ")");
                     return State.PRESSED_RELEASED;
                 }
         }
