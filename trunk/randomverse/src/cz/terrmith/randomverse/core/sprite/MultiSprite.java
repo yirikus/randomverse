@@ -63,7 +63,7 @@ public class MultiSprite implements Sprite{
 	}
 
     @Override
-    public int getWidth() {
+    public int getHeight() {
         int maxHeight = 0;
         int minHeight = 0;
 
@@ -72,13 +72,13 @@ public class MultiSprite implements Sprite{
             maxHeight = Math.max(maxHeight, t.getTileY());
             minHeight = Math.min(minHeight, t.getTileY());
         }
-        int widthInTiles = Math.abs(maxHeight) + Math.abs(minHeight) + (maxHeight  > 0 && minHeight < 0 ? 1 : 0);
+        int widthInTiles = Math.abs(maxHeight) + Math.abs(minHeight) + (maxHeight  >= 0 && minHeight <= 0 ? 1 : 0);
 
         return widthInTiles * Tile.DEFAULT_SIZE;
     }
 
     @Override
-    public int getHeight() {
+    public int getWidth() {
         int maxWidth = 0;
         int minWidth = 0;
 
@@ -88,7 +88,7 @@ public class MultiSprite implements Sprite{
             minWidth = Math.min(minWidth, t.getTileX());
 
         }
-        int widthInTiles = Math.abs(maxWidth) + Math.abs(minWidth) + (maxWidth  > 0 && minWidth < 0 ? 1 : 0);
+        int widthInTiles = Math.abs(maxWidth) + Math.abs(minWidth) + (maxWidth  >= 0 && minWidth <= 0 ? 1 : 0);
 
         return widthInTiles * Tile.DEFAULT_SIZE;
     }
@@ -107,7 +107,6 @@ public class MultiSprite implements Sprite{
     public void setPosition(double x, double y) {
         for (Tile t : tiles) {
             t.setSpritePosition(new Position(x,y));
-            System.out.println(t);
         }
     }
 

@@ -5,6 +5,7 @@ import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.creator.SimpleProjectileCreator;
 import cz.terrmith.randomverse.core.sprite.creator.SpriteCreator;
 
@@ -28,9 +29,9 @@ public class SimpleGun extends SimpleSprite implements CanAttack {
 	 * @param w width
 	 * @param h height
 	 */
-	public SimpleGun(int x, int y, int w, int h, SpriteCollection spriteCollection) {
+	public SimpleGun(int x, int y, int w, int h, SpriteCollection spriteCollection, Damage.DamageType damageType) {
 		super(x, y, w, h, null);
-        this.spriteCreator = new SimpleProjectileCreator(spriteCollection);
+        this.spriteCreator = new SimpleProjectileCreator(spriteCollection, damageType);
         Map<SpriteStatus, ImageLocation> gun = new HashMap<SpriteStatus, ImageLocation>();
         this.getImageForStatus().put(SpriteStatus.DEFAULT, new ImageLocation("sideGun",0));
     }

@@ -9,6 +9,7 @@ public interface Destructible extends Sprite {
 	int getTotalHealth();
 	int getCurrentHealth();
 
+
 	/**
 	 * Reduces health by given amount
 	 * @param amount

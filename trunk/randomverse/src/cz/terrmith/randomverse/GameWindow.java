@@ -20,6 +20,9 @@ import java.awt.image.MemoryImageSource;
  */
 public class GameWindow extends JFrame implements Runnable{
 
+    public static final int SCREEN_W = 800;
+    public static final int SCREEN_H = 600;
+    public static final int SCREEN_BIT_DEPTH = 32;
     private int pWidth, pHeight;     // panel dimensions
 
     private static final int NUM_BUFFERS = 2;    // used for page flipping
@@ -41,7 +44,7 @@ public class GameWindow extends JFrame implements Runnable{
         this.systemCommand = new SystemCommand();
         initFullscreen();
         ImageLoader iml =  new ImageLoader("/image_config.txt","/images/");
-        GameEngine gameEngine = new Randomverse(systemCommand);
+        GameEngine gameEngine = new Randomverse(systemCommand, SCREEN_W, SCREEN_H);
         GraphicEngine graphicEngine = createGraphicEngine(systemCommand, iml, gameEngine);
 
         this.animationEngine = new AnimationEngine(systemCommand, graphicEngine, gameEngine);
@@ -59,14 +62,18 @@ public class GameWindow extends JFrame implements Runnable{
      * @param args
      */
     public static void main(String args[]){
-        new GameWindow();
+        try{
+            new GameWindow();
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**
      * initialise and start the thread
      */
-    private void start()
-    {
+    private void start() {
         if (animator == null || systemCommand.isTerminated()) {
             animator = new Thread(this);
             animator.start();
@@ -106,7 +113,7 @@ public class GameWindow extends JFrame implements Runnable{
 
         //setDisplayMode(Global.SCREEN_X, Global.SCREEN_Y, 32);   // or try 8 bits
         //setDisplayMode(1024, 768, 16);
-        setDisplayMode(800, 600, 32);
+        setDisplayMode(SCREEN_W, SCREEN_H, SCREEN_BIT_DEPTH);
 
         // reportCapabilities();
     }

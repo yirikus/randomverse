@@ -17,7 +17,7 @@ public interface DamageDealer extends Sprite {
      * Damage on collision
      * @return
      */
-    int getImpactDamage();
+    Damage getDamage();
 
 	/**
 	 * Deals damage to given destructible sprite
