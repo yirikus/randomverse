@@ -10,6 +10,7 @@ import java.awt.*;
  * has image representation, position, soundbank, bounding box
  */
 public interface Sprite {
+
     /**
      * Width of the sprite's image
      * @return

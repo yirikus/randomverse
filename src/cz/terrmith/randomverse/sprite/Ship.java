@@ -20,6 +20,7 @@ import java.util.Random;
 public class Ship extends MultiSprite implements CanAttack, Destructible {
 
 	private int currentHealth;
+    private int totalHealth;
     private ArtificialIntelligence ai;
 
     public Ship(int x, int y) {
@@ -35,6 +36,8 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
     public Ship(int x, int y, ArtificialIntelligence ai) {
         super(x, y);
 
+        this.totalHealth = 10;
+        this.currentHealth = this.totalHealth;
         this.ai = ai;
 
         Random random = new Random();
@@ -55,13 +58,6 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
 
     @Override
     public void updateSprite() {
-        // destroy if sprite moved out of active zone
-        if (getYPosn() > 2000 || getYPosn() < -1000 ||
-            getXPosn() > 3000 || getXPosn() < -1000) {
-            setActive(false);
-            return;
-        }
-
         //if AI is present use it
         if (ai != null) {
             ai.update(this);
@@ -73,7 +69,6 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
     @Override
     public void attack() {
         for (Tile t : this.getTiles()){
-	        System.out.println(t.getSprite());
 	        if (t.getSprite() instanceof CanAttack) {
 		        ((CanAttack) t.getSprite()).attack();
 	        }

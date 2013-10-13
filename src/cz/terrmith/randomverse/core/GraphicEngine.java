@@ -78,5 +78,7 @@ public class GraphicEngine {
         sprites.drawLayer(SpriteLayer.NPC, g2, iml);
         sprites.drawLayer(SpriteLayer.PROJECTILE, g2, iml);
         sprites.drawLayer(SpriteLayer.PLAYER, g2, iml);
+
+        gameEngine.drawGUI(g2);
     }
 }
