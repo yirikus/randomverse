@@ -36,7 +36,7 @@ public class Randomverse implements GameEngine {
     private World world;
     private SpriteCollection spriteCollection;
     private Ship player;
-    private enum GameMode {MAIN_MENU,GAME}
+    private enum GameMode {MAIN_MENU, GAME, INVENTORY}
     private GameMode gameMode = GameMode.MAIN_MENU;
     private Menu menu;
 
@@ -51,6 +51,8 @@ public class Randomverse implements GameEngine {
         menu.addItem("start");
         menu.addItem("options");
         menu.addItem("exit");
+
+
     }
 
     private void createPlayer() {
@@ -67,12 +69,26 @@ public class Randomverse implements GameEngine {
             case MAIN_MENU:
                 updateMenu();
                 break;
+            case INVENTORY:
+                if (Command.State.PRESSED.equals(command.getInventory())
+                    || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
+
+                    gameMode = GameMode.GAME;
+                    command.setInventory(false);
+                    world.setPaused(false);
+                }
+            break;
             case GAME:
                 if (Command.State.PRESSED.equals(command.getPrevious())
                   || Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
                     spriteCollection.clear();
                     gameMode = GameMode.MAIN_MENU;
                     command.clear();
+                } else  if (Command.State.PRESSED.equals(command.getInventory())
+                        || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
+                    gameMode = GameMode.INVENTORY;
+                    command.setInventory(false);
+                    world.setPaused(true);
                 } else {
                     updateProjectiles();
                     updateNpcs();
@@ -240,6 +256,10 @@ public class Randomverse implements GameEngine {
                 break;
             case MAIN_MENU:
                 menu.drawMenu(g2);
+                break;
+            case INVENTORY:
+                g2.setColor(new Color(0,255,0));
+                g2.fillRect(100,100,500,500);
                 break;
         }
     }

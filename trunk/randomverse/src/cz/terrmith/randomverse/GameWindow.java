@@ -41,6 +41,7 @@ public class GameWindow extends JFrame implements Runnable{
      */
     public GameWindow(){
         super(Randomverse.WINDOW_NAME); // window name
+        this.setAlwaysOnTop(true);
         this.systemCommand = new Command();
         initFullscreen();
         ImageLoader iml =  new ImageLoader("/image_config.txt","/images/");

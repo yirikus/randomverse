@@ -58,6 +58,11 @@ public class InputHandler implements KeyListener {
             ctrl.setRight(value);
         }else if (keyCode == KeyEvent.VK_CONTROL){
             ctrl.setShoot(value);
+        } else if ((keyCode == KeyEvent.VK_PRINTSCREEN || keyCode == KeyEvent.VK_P) && value) {
+            System.out.println("screenshot " + value + ", keyCode: " + keyCode);
+            ctrl.setScreenshot(value);
         }
+
+
     }
 }
