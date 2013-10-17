@@ -13,6 +13,8 @@ public abstract class World {
     private long period;
     private long updateCount = 0;
     private SpriteCollection spriteCollection;
+    private boolean paused;
+    private long pausedTime;
 
     /**
      *
@@ -29,7 +31,7 @@ public abstract class World {
      * updates sprite collection if enough time was waited
      */
     public void update() {
-        if ((period * updateCount) < (System.currentTimeMillis() - startTime)) {
+        if (!paused && (period * updateCount) < (System.currentTimeMillis() - startTime)) {
             updateCount++;
             createSprites();
         }
@@ -46,5 +48,18 @@ public abstract class World {
 
     public SpriteCollection getSpriteCollection() {
         return spriteCollection;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+        if (paused) {
+            this.pausedTime = System.currentTimeMillis();
+        } else {
+            this.startTime += (System.currentTimeMillis() - pausedTime);
+        }
     }
 }

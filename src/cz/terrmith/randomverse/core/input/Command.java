@@ -19,6 +19,7 @@ public class Command {
     private State bomb = State.RELEASED;
     private State shield = State.RELEASED;
     private State special = State.RELEASED;
+    private boolean screenshot;
 
     public Command() {
     }
@@ -133,6 +134,14 @@ public class Command {
 
     public void setSpecial(boolean special) {
         this.special = changeState(this.special,special);
+    }
+
+    public boolean isScreenshot() {
+        return screenshot;
+    }
+
+    public void setScreenshot(boolean screenshot) {
+        this.screenshot = screenshot;
     }
 
     public void clear() {

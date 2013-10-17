@@ -5,8 +5,12 @@ import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,6 +46,10 @@ public class GraphicEngine {
         try {
             graphics = bufferStrategy.getDrawGraphics();
             gameRender(graphics);
+            if(cmd.isScreenshot()){
+                saveScreenshot();
+                cmd.setScreenshot(false);
+            }
             graphics.dispose();
             if (!bufferStrategy.contentsLost()) {
                 bufferStrategy.show();
@@ -56,6 +64,21 @@ public class GraphicEngine {
             cmd.setTerminated(true);
         }
     }  // end of screenUpdate()
+
+    private void saveScreenshot() {
+            try {
+                System.out.println("saving screenshot "+System.currentTimeMillis());
+                // retrieve image  \
+                BufferedImage bufferedImage = new BufferedImage(width,height,BufferedImage.TYPE_4BYTE_ABGR);
+                Graphics g = bufferedImage.createGraphics();
+                gameRender(g);
+                File outputfile = new File("C:/saved_" + System.currentTimeMillis() + ".png");
+                ImageIO.write(bufferedImage, "png", outputfile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+    }
 
     /**
      * Render images
