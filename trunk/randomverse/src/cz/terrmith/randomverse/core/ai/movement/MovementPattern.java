@@ -4,7 +4,7 @@ package cz.terrmith.randomverse.core.ai.movement;
 import cz.terrmith.randomverse.core.geometry.Position;
 
 /**
- * Represents movement pattern in which  enemy moves
+ * Immutable class that represents movement pattern in which  enemy moves
  */
 public interface MovementPattern {
 

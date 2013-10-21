@@ -3,24 +3,34 @@ package cz.terrmith.randomverse;
 import cz.terrmith.randomverse.core.GameEngine;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.image.ImageLoader;
+import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.menu.Menu;
+import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
+import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.world.World;
+import cz.terrmith.randomverse.inventory.ShipModificationScreen;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 import cz.terrmith.randomverse.world.LevelOne;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Contains global constants
@@ -31,6 +41,7 @@ public class Randomverse implements GameEngine {
     public static final int STEP = 6;
 
     private final Command command;
+    private ShipModificationScreen inventory = null;
     private int screenWidth;
     private int screenHeight;
     private World world;
@@ -51,8 +62,6 @@ public class Randomverse implements GameEngine {
         menu.addItem("start");
         menu.addItem("options");
         menu.addItem("exit");
-
-
     }
 
     private void createPlayer() {
@@ -61,6 +70,19 @@ public class Randomverse implements GameEngine {
         SimpleGun flippedGun = new SimpleGun(1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection, Damage.DamageType.NPC);
         flippedGun.flipHorizontal();
         player.addTile(1, 1, flippedGun);
+
+        Random random = new Random();
+        Map<SpriteStatus, ImageLocation> cockpit = new HashMap<SpriteStatus, ImageLocation>();
+        cockpit.put(SpriteStatus.DEFAULT, new ImageLocation("cockpit", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
+        player.addTile(0, 0, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit));
+
+        Map<SpriteStatus, ImageLocation> engine = new HashMap<SpriteStatus, ImageLocation>();
+        engine.put(SpriteStatus.DEFAULT, new ImageLocation("midParts",(int)(random.nextInt() + System.currentTimeMillis()) % 4));
+        player.addTile(0, 1, new SimpleSprite(0, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, engine));
+
+        Map<SpriteStatus, ImageLocation> thruster = new HashMap<SpriteStatus, ImageLocation>();
+        thruster.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
+        player.addTile(0, 2, new SimpleSprite(0, 2, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, thruster));
     }
 
     @Override
@@ -70,6 +92,7 @@ public class Randomverse implements GameEngine {
                 updateMenu();
                 break;
             case INVENTORY:
+                updateInventory();
                 if (Command.State.PRESSED.equals(command.getInventory())
                     || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
 
@@ -87,6 +110,7 @@ public class Randomverse implements GameEngine {
                 } else  if (Command.State.PRESSED.equals(command.getInventory())
                         || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
                     gameMode = GameMode.INVENTORY;
+                    inventory = new ShipModificationScreen(player);
                     command.setInventory(false);
                     world.setPaused(true);
                 } else {
@@ -96,6 +120,25 @@ public class Randomverse implements GameEngine {
                     updateWorld();
                 }
                 break;
+        }
+    }
+
+    private void updateInventory() {
+        if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
+            inventory.moveUp();
+            command.setUp(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getDown())) {
+            inventory.moveDown();
+            command.setDown(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getLeft())) {
+            inventory.moveLeft();
+            command.setLeft(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getRight())) {
+            inventory.moveRight();
+            command.setRight(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getShoot())) {
+            inventory.select();
+            command.setShoot(false);
         }
     }
 
@@ -246,7 +289,7 @@ public class Randomverse implements GameEngine {
     }
 
     @Override
-    public void drawGUI(Graphics2D g2) {
+    public void drawGUI(Graphics2D g2, ImageLoader iml) {
         switch(gameMode) {
             case GAME:
                 Font font = new Font("system",Font.BOLD,12);
@@ -258,8 +301,7 @@ public class Randomverse implements GameEngine {
                 menu.drawMenu(g2);
                 break;
             case INVENTORY:
-                g2.setColor(new Color(0,255,0));
-                g2.fillRect(100,100,500,500);
+                inventory.drawScreen(g2, iml);
                 break;
         }
     }

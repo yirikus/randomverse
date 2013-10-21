@@ -1,8 +1,9 @@
 package cz.terrmith.randomverse.core;
 
+import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 
 /**
  * Game engine interface
@@ -16,5 +17,5 @@ public interface GameEngine {
 
     SpriteCollection getSpriteCollection();
 
-    void drawGUI(Graphics2D g2);
+    void drawGUI(Graphics2D g2, ImageLoader iml);
 }

@@ -2,7 +2,8 @@ package cz.terrmith.randomverse.inventory;
 
 import cz.terrmith.randomverse.core.geometry.Position;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,41 +15,73 @@ import java.awt.*;
 public class GridMenu {
    private int rows;
    private int columns;
+    private int cellSize;
     private Position position;
+    /**
+     * Selected cell
+     */
     private int x = 0;
    private int y = 0;
 
-    public GridMenu(int rows, int columns, Position position) {
+    public GridMenu(int rows, int columns, int cellSize, Position position) {
         this.rows = rows;
         this.columns = columns;
+        this.cellSize = cellSize;
         this.position = position;
     }
 
     public void selectRight() {
-        if(y < (columns - 1)) {
-            y++;
-        }
-    }
-
-    public void selectLeft() {
-        if(y > 0) {
-            y--;
-        }
-    }
-
-    public void selectBelow() {
-        if(x < (rows - 1)) {
+        if(x < (columns - 1)) {
             x++;
         }
     }
 
-    public void selectAbove() {
+    public void selectLeft() {
         if(x > 0) {
             x--;
         }
     }
 
-    public void drawMenu(Graphics g) {
+    public void selectBelow() {
+        if(y < (rows - 1)) {
+            y++;
+        }
+    }
 
+    public void selectAbove() {
+        if(y > 0) {
+            y--;
+        }
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void drawMenu(Graphics g) {
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++) {
+                g.setColor(Color.white);
+                g.drawRect((int)position.getX() + i * cellSize,
+                           (int)position.getY() + j * cellSize,
+                           cellSize,cellSize);
+            }
+        }
+        g.setColor(Color.green);
+        g.drawRect((int)position.getX() + x * cellSize,
+                (int)position.getY() + y * cellSize,
+                cellSize,cellSize);
     }
 }
