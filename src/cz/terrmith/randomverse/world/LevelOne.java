@@ -31,7 +31,7 @@ public class LevelOne extends World {
             @Override
             protected Sprite createEnemy(int x, int y) {
                 ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
-                Ship enemy = new Ship(x,y, ai);
+                Ship enemy = new Ship(x,y,null,ai);
                 if (random.nextBoolean()) {
                     enemy.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, getSpriteCollection(), Damage.DamageType.PLAYER));
                 }

@@ -3,7 +3,8 @@ package cz.terrmith.randomverse.core.sprite;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,10 +29,29 @@ public class MultiSprite implements Sprite{
     /**
      * Creates empty multisprites, tiles are expected to be added by calling provided methods
      */
-    public MultiSprite(int x, int y){
+    public MultiSprite(int x, int y, List<Tile> tiles){
         this.locX = x;
         this.locY = y;
-        this.tiles = new ArrayList<Tile>();
+        if (tiles == null) {
+            this.tiles = new ArrayList<Tile>();
+        } else {
+            this.tiles = tiles;
+        }
+    }
+
+    /**
+     * Creates empty multisprites, tiles are expected to be added by calling provided methods
+     */
+    public MultiSprite(int x, int y){
+        this(x, y, null);
+    }
+
+    /**
+     * Copy constructor
+     * @param sprite
+     */
+    public MultiSprite(MultiSprite sprite) {
+        this((int)sprite.getXPosn(), (int)sprite.getYPosn(), Tile.cloneTiles(sprite.getTiles()));
     }
 
     public void addTile(Tile newTile) {
@@ -53,7 +73,7 @@ public class MultiSprite implements Sprite{
      * @param y
      * @param sprite
      */
-    public void addTile(int x, int y, Sprite sprite){
+    public void addTile(int x, int y, SimpleSprite sprite){
         Tile newTile = new Tile(x, y, sprite);
         addTile(newTile);
     }

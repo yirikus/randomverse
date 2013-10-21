@@ -3,6 +3,9 @@ package cz.terrmith.randomverse.core.sprite;
 
 import cz.terrmith.randomverse.core.geometry.Position;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Data objects that holds a sprite and its position a tile grid
  */
@@ -15,7 +18,7 @@ public class Tile {
 
     private int tileX;
     private int tileY;
-    private final Sprite sprite;
+    private final SimpleSprite sprite;
 
     /**
      *
@@ -23,13 +26,31 @@ public class Tile {
      * @param tileY tile position in a grid (tileset)
      * @param sprite sprite on given tile
      */
-    public Tile(int tileX, int tileY, Sprite sprite) {
+    public Tile(int tileX, int tileY, SimpleSprite sprite) {
         this.tileX = tileX;
         this.tileY = tileY;
         this.sprite = sprite;
     }
 
-    public Sprite getSprite() {
+    public Tile(Tile tile) {
+        this(tile.getTileX(), tile.getTileY(), new SimpleSprite(tile.getSprite()));
+    }
+
+    /**
+     * Returns new List with cloned tiles (new objects are created, each list points to different references)
+     * @param tiles
+     * @return
+     */
+    public static List<Tile> cloneTiles(List<Tile> tiles){
+        List<Tile> newTiles = new ArrayList<Tile>();
+        for(Tile t : tiles){
+            newTiles.add(new Tile(t));
+        }
+
+        return newTiles;
+    }
+
+    public SimpleSprite getSprite() {
         return sprite;
     }
 

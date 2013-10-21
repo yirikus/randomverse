@@ -6,7 +6,10 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -102,6 +105,6 @@ public class GraphicEngine {
         sprites.drawLayer(SpriteLayer.PROJECTILE, g2, iml);
         sprites.drawLayer(SpriteLayer.PLAYER, g2, iml);
 
-        gameEngine.drawGUI(g2);
+        gameEngine.drawGUI(g2, iml);
     }
 }

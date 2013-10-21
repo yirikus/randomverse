@@ -4,7 +4,9 @@ import cz.terrmith.randomverse.Debug;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,13 @@ public class SimpleSprite implements Sprite {
     private boolean yFlip = false;
     private boolean xFlip = false;
 
+    /**
+     * Copy constructor
+     * @param sprite
+     */
+    public SimpleSprite(SimpleSprite sprite) {
+        this(sprite.getXPosn(), sprite.getYPosn(), sprite.getWidth(), sprite.getHeight(), sprite.getImageForStatus());
+    }
 
     /**
      * Creates sprite wtih initial position x, y and size w, h

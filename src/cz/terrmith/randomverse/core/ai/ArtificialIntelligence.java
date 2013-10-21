@@ -7,7 +7,7 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 
 /**
- * This class contains all behavioral patterns of an npc
+ * Immutable class that contains all behavioral patterns of an npc
  */
 public class ArtificialIntelligence implements MovementPattern, AttackPattern{
 
@@ -28,17 +28,10 @@ public class ArtificialIntelligence implements MovementPattern, AttackPattern{
         return movementPattern;
     }
 
-    public void setMovementPattern(MovementPattern movementPattern) {
-        this.movementPattern = movementPattern;
-    }
-
     public AttackPattern getAttackPattern() {
         return attackPattern;
     }
 
-    public void setAttackPattern(AttackPattern attackPattern) {
-        this.attackPattern = attackPattern;
-    }
 
     @Override
     public boolean shouldAttack() {
@@ -50,7 +43,7 @@ public class ArtificialIntelligence implements MovementPattern, AttackPattern{
         return movementPattern.nextPosition(position,speed);
     }
 
-    public void update(Sprite sprite){
+    public void updateSprite(Sprite sprite){
         updateMovement(sprite);
         if (sprite instanceof CanAttack) {
             updateAttack((CanAttack)sprite);
