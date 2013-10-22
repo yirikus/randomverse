@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -53,7 +54,10 @@ public class MultiSprite implements Sprite{
     public MultiSprite(MultiSprite sprite) {
         this((int)sprite.getXPosn(), (int)sprite.getYPosn(), Tile.cloneTiles(sprite.getTiles()));
     }
-
+	/**
+	 * Adds sprite to a grid,
+	 * throws exception if on desired position already is a sprite
+	 */
     public void addTile(Tile newTile) {
         for (Tile t : tiles) {
             if (t.samePositionAs(newTile)) {
@@ -69,14 +73,31 @@ public class MultiSprite implements Sprite{
      * Adds sprite to a grid,
      * throws exception if on desired position already is a sprite
      *
-     * @param x
-     * @param y
-     * @param sprite
+     * @param x tile x
+     * @param y tile y
+     * @param sprite tile sprite
      */
     public void addTile(int x, int y, SimpleSprite sprite){
         Tile newTile = new Tile(x, y, sprite);
         addTile(newTile);
     }
+
+	/**
+	 * Removes tile on given grid coordinates
+	 * @param x tile x
+	 * @param y tile y
+	 */
+	public void removeTile(int x, int y) {
+		Iterator<Tile> it = tiles.iterator();
+		while (it.hasNext()) {
+			Tile t = it.next();
+			if (t.getTileY() == y && t.getTileX() == x) {
+				it.remove();
+				// there can not be two tiles on the same position
+				break;
+			}
+		}
+	}
 
 	public List<Tile> getTiles(){
 		return Collections.unmodifiableList(this.tiles);

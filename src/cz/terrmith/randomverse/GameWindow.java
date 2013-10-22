@@ -86,7 +86,11 @@ public class GameWindow extends JFrame implements Runnable{
      */
     public void run(){
         //start infinite loop
-        animationEngine.start();
+	    try {
+            animationEngine.start();
+	    } catch (Exception e) {
+		    e.printStackTrace();
+	    }
         // finish off if loop terminates
         finishOff();
     }

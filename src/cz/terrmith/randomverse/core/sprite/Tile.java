@@ -88,6 +88,23 @@ public class Tile {
                             p.getY() - (t.getTileY() * Tile.DEFAULT_SIZE));
     }
 
+	/**
+	 * Returns tile with given cell coordinates or null
+	 * @param tiles list of tiles to search
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return
+	 */
+	public static Tile findTile(List<Tile> tiles, int x, int y) {
+		for (Tile t : tiles) {
+			if (t.getTileX() == x && t.getTileY() == y) {
+				return t;
+			}
+		}
+
+		return null;
+	}
+
     /**
      * Returns true if this tile has same position as given tile
      * @param tile
