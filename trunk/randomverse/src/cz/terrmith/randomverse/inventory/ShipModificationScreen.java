@@ -25,7 +25,8 @@ import java.util.Map;
  */
 public class ShipModificationScreen {
 
-    private Ship player;
+	private static final int PARTS_PER_ROW = 4;
+	private Ship player;
     private int shipX = 0;
     private int shipY = 0;
 
@@ -35,11 +36,11 @@ public class ShipModificationScreen {
     private enum Mode{SHIP, PART}
     private Mode mode = Mode.SHIP;
 
-    private List<Sprite> parts;
+    private List<SimpleSprite> parts;
 
     public ShipModificationScreen(Ship player) {
         this.player = new Ship(player);
-        this.parts = new ArrayList<Sprite>();
+        this.parts = new ArrayList<SimpleSprite>();
         fillParts();
 
     }
@@ -164,8 +165,13 @@ public class ShipModificationScreen {
                break;
            case PART:
                mode = Mode.SHIP;
-               partX = 0;
-               partY = 0;
+	           // change/add ship part
+	           player.removeTile(shipX, shipY);
+	           SimpleSprite sprite = new SimpleSprite(parts.get(partX + partY * PARTS_PER_ROW));
+	           player.addTile(shipX, shipY, sprite);
+
+	           partX = 0;
+	           partY = 0;
                break;
        }
     }
@@ -186,7 +192,6 @@ public class ShipModificationScreen {
         int initY = 300;
         int column = 0;
         int row = 0;
-        int partsPerRow = 16;
 
         for (Sprite s : parts) {
             s.setPosition(initX + column * s.getWidth(), initY + row * s.getHeight());
@@ -200,7 +205,7 @@ public class ShipModificationScreen {
             }
 
             column++;
-             if(column == partsPerRow) {
+             if(column == PARTS_PER_ROW) {
                 column = 0;
                 row++;
             }
