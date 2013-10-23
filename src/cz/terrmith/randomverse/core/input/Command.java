@@ -15,10 +15,10 @@ public class Command {
     private State down = State.RELEASED;
     private State left = State.RELEASED;
     private State right = State.RELEASED;
-    private State shoot = State.RELEASED;
-    private State bomb = State.RELEASED;
-    private State shield = State.RELEASED;
-    private State special = State.RELEASED;
+    private State action1 = State.RELEASED;
+    private State action2 = State.RELEASED;
+    private State action3 = State.RELEASED;
+    private State action4 = State.RELEASED;
     private boolean screenshot;
 
     public Command() {
@@ -101,39 +101,39 @@ public class Command {
         this.right = changeState(this.right,right);
     }
 
-    public State getShoot() {
-        return shoot;
+    public State getAction1() {
+        return action1;
     }
 
-    public void setShoot(boolean shoot) {
-        System.out.println("shoot");
-        this.shoot = changeState(this.shoot,shoot);
+    public void setAction1(boolean action1) {
+        System.out.println("action1");
+        this.action1 = changeState(this.action1, action1);
     }
 
-    public State getBomb() {
-        return bomb;
+    public State getAction2() {
+        return action2;
     }
 
-    public void setBomb(boolean bomb) {
-        System.out.println("bomb");
-        this.bomb = changeState(this.bomb,bomb);
+    public void setAction2(boolean action2) {
+        System.out.println("action2");
+        this.action2 = changeState(this.action2, action2);
     }
 
-    public State getShield() {
-        return shield;
+    public State getAction3() {
+        return action3;
     }
 
-    public void setShield(boolean shield) {
-        System.out.println("shield");
-        this.shield = changeState(this.shield,shield);
+    public void setAction3(boolean action3) {
+        System.out.println("action3");
+        this.action3 = changeState(this.action3, action3);
     }
 
-    public State getSpecial() {
-        return special;
+    public State getAction4() {
+        return action4;
     }
 
-    public void setSpecial(boolean special) {
-        this.special = changeState(this.special,special);
+    public void setAction4(boolean action4) {
+        this.action4 = changeState(this.action4, action4);
     }
 
     public boolean isScreenshot() {
@@ -151,10 +151,10 @@ public class Command {
         this.down = State.RELEASED;
         this.left = State.RELEASED;
         this.right = State.RELEASED;
-        this.shoot = State.RELEASED;
-        this.bomb = State.RELEASED;
-        this.shield = State.RELEASED;
-        this.special = State.RELEASED;
+        this.action1 = State.RELEASED;
+        this.action2 = State.RELEASED;
+        this.action3 = State.RELEASED;
+        this.action4 = State.RELEASED;
     }
 
     private Command.State changeState(Command.State currentState, boolean pressed){

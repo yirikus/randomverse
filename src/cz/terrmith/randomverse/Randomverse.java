@@ -2,6 +2,7 @@ package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.GameEngine;
 import cz.terrmith.randomverse.core.geometry.Boundary;
+import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
@@ -136,9 +137,18 @@ public class Randomverse implements GameEngine {
         } else if (Command.State.PRESSED_RELEASED.equals(command.getRight())) {
             inventory.moveRight();
             command.setRight(false);
-        } else if (Command.State.PRESSED_RELEASED.equals(command.getShoot())) {
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
             inventory.select();
-            command.setShoot(false);
+            command.setAction1(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getAction2())) {
+            inventory.clear();
+            command.setAction2(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getAction3())) {
+            inventory.flip(Plane.HORIZONTAL);
+            command.setAction3(false);
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getAction4())) {
+            inventory.flip(Plane.VERTICAL);
+            command.setAction4(false);
         }
     }
 
@@ -238,7 +248,7 @@ public class Randomverse implements GameEngine {
             System.out.println("select next:" + command.getDown());
             menu.selectNext();
             command.setDown(false);
-        } else if (Command.State.PRESSED_RELEASED.equals(command.getShoot())) {
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
             if (menu.getSelected().equals("start")) {
                 gameMode = GameMode.GAME;
                 command.clear();
@@ -273,8 +283,8 @@ public class Randomverse implements GameEngine {
             dx += STEP;
         }
 
-        if (Command.State.RELEASED_PRESSED.equals(command.getShoot())
-            || Command.State.PRESSED.equals(command.getShoot())) {
+        if (Command.State.RELEASED_PRESSED.equals(command.getAction1())
+            || Command.State.PRESSED.equals(command.getAction1())) {
             player.attack();
         }
 
@@ -298,9 +308,17 @@ public class Randomverse implements GameEngine {
                 g2.drawString(player.getCurrentHealth() + "/" + player.getTotalHealth(), 10, screenHeight -50);
                 break;
             case MAIN_MENU:
+                // clear the background
+                g2.setColor(Color.darkGray);
+                g2.fillRect(0, 0, 800, 600);
+
                 menu.drawMenu(g2);
                 break;
             case INVENTORY:
+                // clear the background
+                g2.setColor(Color.darkGray);
+                g2.fillRect(0, 0, 800, 600);
+
                 inventory.drawScreen(g2, iml);
                 break;
         }

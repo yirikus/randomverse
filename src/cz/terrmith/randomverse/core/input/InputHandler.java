@@ -48,16 +48,22 @@ public class InputHandler implements KeyListener {
             ctrl.setInventory(value);
 
         //press buttons
-        }else if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP){
+        }else if (keyCode == KeyEvent.VK_UP){
             ctrl.setUp(value);
-        }else if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN){
+        }else if (keyCode == KeyEvent.VK_DOWN){
             ctrl.setDown(value);
-        }else if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT){
+        }else if (keyCode == KeyEvent.VK_LEFT){
             ctrl.setLeft(value);
-        }else if (keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT){
+        }else if (keyCode == KeyEvent.VK_RIGHT){
             ctrl.setRight(value);
         }else if (keyCode == KeyEvent.VK_CONTROL){
-            ctrl.setShoot(value);
+            ctrl.setAction1(value);
+        }else if (keyCode == KeyEvent.VK_SPACE){
+            ctrl.setAction2(value);
+        }else if (keyCode == KeyEvent.VK_A){
+            ctrl.setAction3(value);
+        }else if (keyCode == KeyEvent.VK_S){
+            ctrl.setAction4(value);
         } else if ((keyCode == KeyEvent.VK_PRINTSCREEN || keyCode == KeyEvent.VK_P) && value) {
             System.out.println("screenshot " + value + ", keyCode: " + keyCode);
             ctrl.setScreenshot(value);
