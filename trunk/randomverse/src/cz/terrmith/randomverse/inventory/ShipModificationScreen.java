@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.inventory;
 
+import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
@@ -26,7 +27,8 @@ import java.util.Map;
 public class ShipModificationScreen {
 
 	private static final int PARTS_PER_ROW = 4;
-	private Ship player;
+    private final Ship playerRef;
+    private final Ship ship;
     private int shipX = 0;
     private int shipY = 0;
 
@@ -39,7 +41,8 @@ public class ShipModificationScreen {
     private List<SimpleSprite> parts;
 
     public ShipModificationScreen(Ship player) {
-        this.player = new Ship(player);
+        this.ship = new Ship(player);
+        this.playerRef = player;
         this.parts = new ArrayList<SimpleSprite>();
         fillParts();
 
@@ -165,10 +168,15 @@ public class ShipModificationScreen {
                break;
            case PART:
                mode = Mode.SHIP;
-	           // change/add ship part
-	           player.removeTile(shipX, shipY);
+	           // change/add ship part to local copy
+	           ship.removeTile(shipX, shipY);
 	           SimpleSprite sprite = new SimpleSprite(parts.get(partX + partY * PARTS_PER_ROW));
-	           player.addTile(shipX, shipY, sprite);
+               ship.addTile(shipX, shipY, sprite);
+
+               // change/add ship part to player reference
+               playerRef.removeTile(shipX, shipY);
+               SimpleSprite sprite2 = new SimpleSprite(parts.get(partX + partY * PARTS_PER_ROW));
+               playerRef.addTile(shipX, shipY, sprite2);
 
 	           partX = 0;
 	           partY = 0;
@@ -176,15 +184,59 @@ public class ShipModificationScreen {
        }
     }
 
+    public void clear() {
+        switch (mode) {
+            case SHIP:
+                // change/add ship part to local copy
+                ship.removeTile(shipX, shipY);
+                // change/add ship part to player reference
+                playerRef.removeTile(shipX, shipY);
+                break;
+            case PART:
+                mode = Mode.SHIP;
+                partX = 0;
+                partY = 0;
+                break;
+        }
+    }
+
+    public void flip(Plane plane) {
+        switch (mode) {
+            case SHIP:
+                flip(ship, plane);
+                flip(playerRef, plane);
+                break;
+            case PART:
+                break;
+        }
+
+    }
+
+
+    private void flip(Ship ship, Plane plane) {
+        Tile tile = Tile.findTile(ship.getTiles(), shipX, shipY);
+        if (tile != null) {
+            switch (plane) {
+                case HORIZONTAL:
+                    tile.getSprite().flipHorizontal();
+                    break;
+                case VERTICAL:
+                    tile.getSprite().flipVertical();
+                    break;
+            }
+        }
+    }
+
+
     public void drawScreen(Graphics g, ImageLoader iml) {
-        //translate player
-        player.setPosition(100, 100);
-        for (Tile t : player.getTiles()) {
+        //translate ship
+        ship.setPosition(100, 100);
+        for (Tile t : ship.getTiles()) {
             t.getSprite().drawSprite(g,iml);
         }
         g.setColor(Color.GREEN);
-        g.drawRect( (int)player.getXPosn() + this.shipX * Tile.DEFAULT_SIZE,
-                    (int)player.getXPosn() + this.shipY * Tile.DEFAULT_SIZE,
+        g.drawRect( (int) ship.getXPosn() + this.shipX * Tile.DEFAULT_SIZE,
+                    (int) ship.getXPosn() + this.shipY * Tile.DEFAULT_SIZE,
                     Tile.DEFAULT_SIZE,
                     Tile.DEFAULT_SIZE);
 

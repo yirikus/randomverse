@@ -39,6 +39,13 @@ public class SimpleSprite implements Sprite {
      */
     public SimpleSprite(SimpleSprite sprite) {
         this(sprite.getXPosn(), sprite.getYPosn(), sprite.getWidth(), sprite.getHeight(), sprite.getImageForStatus());
+        if (sprite.isFlippedHorizontally()) {
+            flipHorizontal();
+        }
+
+        if (sprite.isFlippedVertically()) {
+            flipVertical();
+        }
     }
 
     /**
@@ -198,8 +205,16 @@ public class SimpleSprite implements Sprite {
         this.xFlip = !xFlip;
     }
 
+    public boolean isFlippedHorizontally() {
+        return this.xFlip;
+    }
+
     @Override
     public void flipVertical() {
         this.yFlip = !yFlip;
+    }
+
+    public boolean isFlippedVertically() {
+        return this.yFlip;
     }
 }

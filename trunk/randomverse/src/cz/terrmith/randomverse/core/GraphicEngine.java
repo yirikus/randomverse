@@ -94,8 +94,7 @@ public class GraphicEngine {
              RenderingHints.VALUE_ANTIALIAS_ON);
 */
         // clear the background
-        g2.setColor(Color.darkGray);
-        g2.drawString("Randomverse",0,0);
+        g2.setColor(Color.black);
         g2.fillRect(0, 0, width, height);
 
         // render sprites
