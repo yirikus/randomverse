@@ -1,7 +1,7 @@
 package cz.terrmith.randomverse.core.sprite.creator;
 
 /**
- * SpriteCreator can create another sprite (e.g. projectile)
+ * SpriteCreator can create another sprite (e.g. projectile) on given spot that will travel in a given direction
  */
 public interface SpriteCreator {
 

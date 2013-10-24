@@ -111,7 +111,7 @@ public class Randomverse implements GameEngine {
                 } else  if (Command.State.PRESSED.equals(command.getInventory())
                         || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
                     gameMode = GameMode.INVENTORY;
-                    inventory = new ShipModificationScreen(player);
+                    inventory = new ShipModificationScreen(player, spriteCollection);
                     command.setInventory(false);
                     world.setPaused(true);
                 } else {
