@@ -25,7 +25,6 @@ import java.io.IOException;
 public class GraphicEngine {
 
     private final GameEngine gameEngine;
-    private Graphics graphics;
     private BufferStrategy bufferStrategy;
     private final Command cmd;
     private final int width;
@@ -47,7 +46,7 @@ public class GraphicEngine {
     public void update(){
         // use active rendering
         try {
-            graphics = bufferStrategy.getDrawGraphics();
+            Graphics graphics = bufferStrategy.getDrawGraphics();
             gameRender(graphics);
             if(cmd.isScreenshot()){
                 saveScreenshot();

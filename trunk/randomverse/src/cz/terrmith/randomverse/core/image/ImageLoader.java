@@ -1,13 +1,17 @@
 package cz.terrmith.randomverse.core.image;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +149,7 @@ public class ImageLoader {
 
         BufferedImage bi = loadImage(fnm);
         if (bi != null) {
-            ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
+            List<BufferedImage> imsList = new ArrayList<BufferedImage>();
             imsList.add(bi);
             images.put(name, imsList);
             System.out.println("  Stored " + name + "/" + fnm);
@@ -163,7 +167,7 @@ public class ImageLoader {
      */
     private int loadNumImages(ImageDescription imd) {
         BufferedImage bi;
-        ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
+        List<BufferedImage> imsList = new ArrayList<BufferedImage>();
         int loadCount = 0;
 
         // load imd.getPrefix(number) + <i> + postfix, where i = 0 to <number-1>
@@ -203,23 +207,16 @@ public class ImageLoader {
             return 0;
         }
 
-        ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
-        int loadCount = 0;
-        System.out.print("  Adding " + name + "/" + imd.getFileName() + "... ");
-        for (int i = 0; i < strip.length; i++) {
-            loadCount++;
-            imsList.add(strip[i]);
-            System.out.print(i + " ");
-        }
-        System.out.println();
+        List<BufferedImage> imsList = Arrays.asList(strip);
+        System.out.println("  Adding " + name + "/" + imd.getFileName() + "... 0 - " + strip.length);
 
-        if (loadCount == 0) {
+        if (imsList.isEmpty()) {
             System.out.println("No images loaded for " + name);
         } else {
             images.put(name, imsList);
         }
 
-        return loadCount;
+        return imsList.size();
     }
 
     /**
@@ -234,8 +231,8 @@ public class ImageLoader {
         }
 
         BufferedImage bi;
-        ArrayList<String> nms = new ArrayList<String>();
-        ArrayList<BufferedImage> imsList = new ArrayList<BufferedImage>();
+        List<String> nms = new ArrayList<String>();
+        List<BufferedImage> imsList = new ArrayList<BufferedImage>();
         int loadCount = 0;
 
         for (int i = 0; i < imd.getImageCount(); i++) {    // load the files
@@ -336,7 +333,7 @@ public class ImageLoader {
      * @return Return its position in the list, or -1.
      */
     private int getGroupPosition(String name, String fnmPrefix) {
-        ArrayList<String> groupNames = (ArrayList<String>) gNames.get(name);
+        List<String> groupNames = (ArrayList<String>) gNames.get(name);
         if (groupNames == null) {
             System.out.println("No group names for " + name);
             return -1;
@@ -361,8 +358,8 @@ public class ImageLoader {
      * @param name requested image name
      * @return return all the BufferedImages for the given name
      */
-    public ArrayList<BufferedImage> getImages(String name) {
-        ArrayList<BufferedImage> imsList = (ArrayList<BufferedImage>) images.get(name);
+    public List<BufferedImage> getImages(String name) {
+        List<BufferedImage> imsList = (ArrayList<BufferedImage>) images.get(name);
         if (imsList == null) {
             System.out.println("No image(s) stored under " + name);
             return null;
@@ -393,7 +390,7 @@ public class ImageLoader {
      * @return
      */
     public int numImages(String name) {
-        ArrayList<BufferedImage> imsList = (ArrayList<BufferedImage>) images.get(name);
+        List<BufferedImage> imsList = (ArrayList<BufferedImage>) images.get(name);
         if (imsList == null) {
             System.out.println("No image(s) stored under " + name);
             return 0;
