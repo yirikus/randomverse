@@ -7,7 +7,6 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +18,7 @@ import java.util.Map;
  * Time: 0:06
  * To change this template use File | Settings | File Templates.
  */
-public class SimpleProjectile extends SimpleSprite implements DamageDealer {
-
-    private static final Map<SpriteStatus, ImageLocation> imageForStatus;
-    static {
-        Map<SpriteStatus, ImageLocation> aMap = new HashMap<SpriteStatus, ImageLocation>();
-        aMap.put(SpriteStatus.DEFAULT, new ImageLocation("shots",0));
-        imageForStatus = Collections.unmodifiableMap(aMap);
-    }
+public class Projectile extends SimpleSprite implements DamageDealer {
 
     private Damage damage;
 
@@ -36,10 +28,14 @@ public class SimpleProjectile extends SimpleSprite implements DamageDealer {
      * @param x              x position
      * @param y              y position
      */
-    public SimpleProjectile(double x, double y, Damage.DamageType damageType) {
+    public Projectile(double x, double y, Damage damage) {
         super(x, y, 11, 22, null);
-        setImageForStatus(this.imageForStatus);
-        this.damage = new Damage(3,damageType);
+
+        Map<SpriteStatus, ImageLocation> aMap = new HashMap<SpriteStatus, ImageLocation>();
+        aMap.put(SpriteStatus.DEFAULT, new ImageLocation("shots",damage.getAmount()%4));
+        setImageForStatus(aMap);
+
+        this.damage = damage;
     }
 
     @Override
@@ -50,7 +46,6 @@ public class SimpleProjectile extends SimpleSprite implements DamageDealer {
 	@Override
 	public void dealDamage(List<Destructible> targets) {
 		if(targets != null && !targets.isEmpty()) {
-			System.out.println("target hit!");
 			targets.get(0).reduceHealth(getDamage().getAmount());
 			setActive(false);
 		}

@@ -4,4 +4,4 @@ s midParts.png 4
 s sideEngines.png 4
 s sideGun.png 4
 s topGun.png 4
-o shots.png
+s shots.png 8

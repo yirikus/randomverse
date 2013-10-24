@@ -3,25 +3,24 @@ package cz.terrmith.randomverse.core.sprite.creator;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
-import cz.terrmith.randomverse.sprite.projectile.SimpleProjectile;
+import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 
 /**
  * Sprite creator that creates projectiles
  * created projectiles move in a specified direction and speed
  *
  */
-public class SimpleProjectileCreator implements SpriteCreator {
+public class ProjectileCreator implements SpriteCreator {
 
     private final SpriteCollection spriteCollection;
-    private Damage.DamageType damageType;
+    private SpriteFactory projectileFactory;
     private int horizontalFlip = 1;
     private int verticalFlip = 1;
 
 
-    public SimpleProjectileCreator(SpriteCollection spriteCollection, Damage.DamageType damageType) {
+    public ProjectileCreator(SpriteCollection spriteCollection, SpriteFactory projectileFactory) {
         this.spriteCollection = spriteCollection;
-        this.damageType = damageType;
+        this.projectileFactory = projectileFactory;
     }
 
     @Override
@@ -29,7 +28,7 @@ public class SimpleProjectileCreator implements SpriteCreator {
         if(dx > 1 || dx < -1 || dy > 1 || dy < -1) {
             throw new IllegalArgumentException("distance x,y must be in interval [-1,1], but was: [" + dx + ", " + dy +"]");
         }
-        Sprite projectile = new SimpleProjectile(x, y, this.damageType);
+        Sprite projectile = projectileFactory.newSprite((int)x, (int)y); //new Projectile(x, y, this.damageType);
         projectile.translate(horizontalFlip * dx * distanceFromOrigin, verticalFlip * dy * distanceFromOrigin);
         projectile.setStep(horizontalFlip * dx * (speed), verticalFlip * dy * (speed));
         spriteCollection.put(SpriteLayer.PROJECTILE,projectile);

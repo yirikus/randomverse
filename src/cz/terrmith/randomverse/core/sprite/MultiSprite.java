@@ -78,6 +78,9 @@ public class MultiSprite implements Sprite{
      * @param sprite tile sprite
      */
     public void addTile(int x, int y, SimpleSprite sprite){
+        if (sprite == null)  {
+            throw new IllegalArgumentException("Tile must have a sprite");
+        }
         Tile newTile = new Tile(x, y, sprite);
         addTile(newTile);
     }

@@ -2,19 +2,17 @@ package cz.terrmith.randomverse.inventory;
 
 import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.image.ImageLoader;
-import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.sprite.Ship;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -29,6 +27,7 @@ public class ShipModificationScreen {
 	private static final int PARTS_PER_ROW = 4;
     private final Ship playerRef;
     private final Ship ship;
+    private final ShipPartFactory factory;
     private int shipX = 0;
     private int shipY = 0;
 
@@ -40,67 +39,15 @@ public class ShipModificationScreen {
 
     private List<SimpleSprite> parts;
 
-    public ShipModificationScreen(Ship player) {
+    public ShipModificationScreen(Ship player, SpriteCollection spriteCollection) {
         this.ship = new Ship(player);
         this.playerRef = player;
         this.parts = new ArrayList<SimpleSprite>();
-        fillParts();
-
+        factory = new ShipPartFactory(spriteCollection, Damage.DamageType.NPC);
+        parts.addAll(factory.createAll());
     }
 
-    private void fillParts() {
-        Map<SpriteStatus, ImageLocation> cockpit0 = new HashMap<SpriteStatus, ImageLocation>();
-        cockpit0.put(SpriteStatus.DEFAULT, new ImageLocation("cockpit", 0));
-        Map<SpriteStatus, ImageLocation> cockpit1 = new HashMap<SpriteStatus, ImageLocation>();
-        cockpit1.put(SpriteStatus.DEFAULT, new ImageLocation("cockpit", 1));
-        Map<SpriteStatus, ImageLocation> cockpit2 = new HashMap<SpriteStatus, ImageLocation>();
-        cockpit2.put(SpriteStatus.DEFAULT, new ImageLocation("cockpit", 2));
-        Map<SpriteStatus, ImageLocation> cockpit3 = new HashMap<SpriteStatus, ImageLocation>();
-        cockpit3.put(SpriteStatus.DEFAULT, new ImageLocation("cockpit", 3));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit0));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit1));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit2));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit3));
 
-        Map<SpriteStatus, ImageLocation> midParts0 = new HashMap<SpriteStatus, ImageLocation>();
-        midParts0.put(SpriteStatus.DEFAULT, new ImageLocation("midParts", 0));
-        Map<SpriteStatus, ImageLocation> midParts1 = new HashMap<SpriteStatus, ImageLocation>();
-        midParts1.put(SpriteStatus.DEFAULT, new ImageLocation("midParts", 1));
-        Map<SpriteStatus, ImageLocation> midParts2 = new HashMap<SpriteStatus, ImageLocation>();
-        midParts2.put(SpriteStatus.DEFAULT, new ImageLocation("midParts", 2));
-        Map<SpriteStatus, ImageLocation> midParts3 = new HashMap<SpriteStatus, ImageLocation>();
-        midParts3.put(SpriteStatus.DEFAULT, new ImageLocation("midParts", 3));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, midParts0));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, midParts1));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, midParts2));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, midParts3));
-
-        Map<SpriteStatus, ImageLocation> bottomEngines0 = new HashMap<SpriteStatus, ImageLocation>();
-        bottomEngines0.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", 0));
-        Map<SpriteStatus, ImageLocation> bottomEngines1 = new HashMap<SpriteStatus, ImageLocation>();
-        bottomEngines1.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", 1));
-        Map<SpriteStatus, ImageLocation> bottomEngines2 = new HashMap<SpriteStatus, ImageLocation>();
-        bottomEngines2.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", 2));
-        Map<SpriteStatus, ImageLocation> bottomEngines3 = new HashMap<SpriteStatus, ImageLocation>();
-        bottomEngines3.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", 3));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, bottomEngines0));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, bottomEngines1));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, bottomEngines2));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, bottomEngines3));
-
-        Map<SpriteStatus, ImageLocation> sideGun0 = new HashMap<SpriteStatus, ImageLocation>();
-        sideGun0.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", 0));
-        Map<SpriteStatus, ImageLocation> sideGun1 = new HashMap<SpriteStatus, ImageLocation>();
-        sideGun1.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", 1));
-        Map<SpriteStatus, ImageLocation> sideGun2 = new HashMap<SpriteStatus, ImageLocation>();
-        sideGun2.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", 2));
-        Map<SpriteStatus, ImageLocation> sideGun3 = new HashMap<SpriteStatus, ImageLocation>();
-        sideGun3.put(SpriteStatus.DEFAULT, new ImageLocation("sideGun", 3));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, sideGun0));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, sideGun1));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, sideGun2));
-        parts.add(new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, sideGun3));
-    }
 
     /**
      * Move selector left
@@ -170,12 +117,12 @@ public class ShipModificationScreen {
                mode = Mode.SHIP;
 	           // change/add ship part to local copy
 	           ship.removeTile(shipX, shipY);
-	           SimpleSprite sprite = new SimpleSprite(parts.get(partX + partY * PARTS_PER_ROW));
+	           SimpleSprite sprite = factory.create(partX + partY * PARTS_PER_ROW);
                ship.addTile(shipX, shipY, sprite);
 
                // change/add ship part to player reference
                playerRef.removeTile(shipX, shipY);
-               SimpleSprite sprite2 = new SimpleSprite(parts.get(partX + partY * PARTS_PER_ROW));
+               SimpleSprite sprite2 = factory.create(partX + partY * PARTS_PER_ROW);
                playerRef.addTile(shipX, shipY, sprite2);
 
 	           partX = 0;

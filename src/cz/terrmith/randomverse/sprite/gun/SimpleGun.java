@@ -4,13 +4,12 @@ import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
-import cz.terrmith.randomverse.core.sprite.creator.SimpleProjectileCreator;
+import cz.terrmith.randomverse.core.sprite.creator.ProjectileCreator;
 import cz.terrmith.randomverse.core.sprite.creator.SpriteCreator;
-
-import java.util.HashMap;
-import java.util.Map;
+import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
 
 /**
  * @author jiri.kus
@@ -31,9 +30,30 @@ public class SimpleGun extends SimpleSprite implements CanAttack {
 	 */
 	public SimpleGun(int x, int y, int w, int h, SpriteCollection spriteCollection, Damage.DamageType damageType) {
 		super(x, y, w, h, null);
-        this.spriteCreator = new SimpleProjectileCreator(spriteCollection, damageType);
-        Map<SpriteStatus, ImageLocation> gun = new HashMap<SpriteStatus, ImageLocation>();
+        this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(new Damage(1,damageType)));
         this.getImageForStatus().put(SpriteStatus.DEFAULT, new ImageLocation("sideGun",0));
+    }
+
+    /**
+     * Convenience contructor with x = 0, y = 0, w,h = Tile.DEFAULT_SIZE
+     * with default projectile
+     *
+     */
+    public SimpleGun(SpriteCollection spriteCollection,Damage.DamageType damageType) {
+        super(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null);
+        this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(new Damage(1,damageType)));
+        this.getImageForStatus().put(SpriteStatus.DEFAULT, new ImageLocation("sideGun",0));
+    }
+
+    /**
+     * Convenience contructor with x = 0, y = 0, w,h = Tile.DEFAULT_SIZE
+     * @param rateOfFire how long to wait before next attack
+     */
+    public SimpleGun(SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation) {
+        super(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null);
+        this.shootTimer = rateOfFire;
+        this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(damage));
+        this.getImageForStatus().put(SpriteStatus.DEFAULT, imageLocation);
     }
 
 	@Override
