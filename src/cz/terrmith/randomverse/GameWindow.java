@@ -7,8 +7,16 @@ import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.input.InputHandler;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import java.awt.Cursor;
+import java.awt.DisplayMode;
+import java.awt.EventQueue;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.image.MemoryImageSource;
 
 /**
@@ -221,8 +229,9 @@ public class GameWindow extends JFrame implements Runnable{
                     modes[i].getHeight() + "," +
                     modes[i].getBitDepth() + "," +
                     modes[i].getRefreshRate() + ")  " );
-            if ((i+1)%4 == 0)
+            if ((i+1)%4 == 0){
                 System.out.println();
+            }
         }
         System.out.println();
     }
@@ -262,8 +271,9 @@ public class GameWindow extends JFrame implements Runnable{
      */
     private void restoreScreen(){
         Window window = graphicsDevice.getFullScreenWindow();
-        if (window != null)
+        if (window != null) {
             window.dispose();
+        }
         graphicsDevice.setFullScreenWindow(null);
     } // end of restoreScreen()
 

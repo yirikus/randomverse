@@ -7,5 +7,5 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
  */
 public interface SpriteFactory {
 
-   public Sprite newSprite(int x, int y);
+   Sprite newSprite(int x, int y);
 }

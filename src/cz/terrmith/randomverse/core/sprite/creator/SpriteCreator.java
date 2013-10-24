@@ -20,10 +20,10 @@ public interface SpriteCreator {
     /**
      * flips direction of an attack horizontally
      */
-    public void flipHorizontal();
+    void flipHorizontal();
 
     /**
      * flips direction of an attack horizontally
      */
-    public void flipVertical();
+    void flipVertical();
 }

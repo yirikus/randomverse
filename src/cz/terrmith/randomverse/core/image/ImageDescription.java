@@ -71,8 +71,8 @@ public class ImageDescription {
         }
 
         String fileName = tokens.nextToken();
-        int imageCount = Integer.parseInt(tokens.nextToken());
-        for(int i = 0; i < imageCount; i++) {
+        int imagesToLoad = Integer.parseInt(tokens.nextToken());
+        for(int i = 0; i < imagesToLoad; i++) {
             fileNames.add(fileName.replace("*", String.valueOf(i)));
         }
         this.imageCount = fileNames.size();
