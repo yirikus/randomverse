@@ -8,7 +8,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -158,46 +160,51 @@ public class SimpleSprite implements Sprite {
         }
 	    if (isActive() && imageForStatus != null) {
             ImageLocation imageLocation = imageForStatus.get(this.status);
-            BufferedImage image = ims.getImage(imageLocation.getName(), imageLocation.getNumber());
-            int imageX = (int)Math.round(locx);
-            int imageY = (int)Math.round(locy);
-            if (this.yFlip && this.xFlip) {
-                /*
-                    2 - -
-                    - - -
-                    - - 1
-                 */
-                g.drawImage(image, imageX + width, imageY + height,  imageX, imageY, 0, 0, width, height, null);
-            } else if (this.yFlip) {
-                /*
-                    - - 2
-                    - - -
-                    1 - -
-                 */
-                g.drawImage(image, imageX, imageY + height,  imageX + width, imageY, 0, 0, width, height, null);
-            } else if (this.xFlip) {
-                /*
-                    - - 1
-                    - - -
-                    2 - -
-                 */
-                g.drawImage(image, imageX + width,  imageY, imageX, imageY + height, 0, 0, width, height, null);
+		    if (imageLocation != null) {
+	            BufferedImage image = ims.getImage(imageLocation.getName(), imageLocation.getNumber());
+	            int imageX = (int)Math.round(locx);
+	            int imageY = (int)Math.round(locy);
+	            if (this.yFlip && this.xFlip) {
+	                /*
+	                    2 - -
+	                    - - -
+	                    - - 1
+	                 */
+	                g.drawImage(image, imageX + width, imageY + height,  imageX, imageY, 0, 0, width, height, null);
+	            } else if (this.yFlip) {
+	                /*
+	                    - - 2
+	                    - - -
+	                    1 - -
+	                 */
+	                g.drawImage(image, imageX, imageY + height,  imageX + width, imageY, 0, 0, width, height, null);
+	            } else if (this.xFlip) {
+	                /*
+	                    - - 1
+	                    - - -
+	                    2 - -
+	                 */
+	                g.drawImage(image, imageX + width,  imageY, imageX, imageY + height, 0, 0, width, height, null);
 
-            } else {
-                //image is not flipped
-                g.drawImage(image, imageX, imageY, null);
-            }
+	            } else {
+	                //image is not flipped
+	                g.drawImage(image, imageX, imageY, null);
+	            }
+		    }
         }
     }
 
     @Override
-    public boolean collidesWith(Sprite sprite) {
+    public List<Sprite> collidesWith(Sprite sprite) {
 	    if (sprite instanceof MultiSprite) {
 		    MultiSprite multiSprite = (MultiSprite) sprite;
 		    return multiSprite.collidesWith(this);
-	    } else {
-            return this.getBoundingBox().intersects(sprite.getBoundingBox());
+	    } else if (!SpriteStatus.DEAD.equals(getStatus()) && this.getBoundingBox().intersects(sprite.getBoundingBox())){
+		    List<Sprite> ret = new ArrayList<Sprite>();
+		    ret.add(this);
+            return ret;
 	    }
+	    return new ArrayList<Sprite>();
     }
 
     @Override
@@ -217,4 +224,12 @@ public class SimpleSprite implements Sprite {
     public boolean isFlippedVertically() {
         return this.yFlip;
     }
+
+	public SpriteStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(SpriteStatus status) {
+		this.status = status;
+	}
 }

@@ -14,11 +14,13 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.abilitiy.CollisionTester;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.inventory.ShipModificationScreen;
+import cz.terrmith.randomverse.inventory.ShipPartFactory;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 import cz.terrmith.randomverse.world.LevelOne;
@@ -42,7 +44,8 @@ public class Randomverse implements GameEngine {
     public static final int STEP = 6;
 
     private final Command command;
-    private ShipModificationScreen inventory = null;
+	private final CollisionTester collisionTester;
+	private ShipModificationScreen inventory = null;
     private int screenWidth;
     private int screenHeight;
     private World world;
@@ -59,6 +62,7 @@ public class Randomverse implements GameEngine {
         Boundary screenBoundary = new Boundary(0, screenWidth, 0, screenHeight);
         Boundary extendedBoundary = new Boundary(-screenWidth, 2 * screenWidth, -screenHeight, 2 * screenHeight);
         this.spriteCollection = new SpriteCollection(screenBoundary, extendedBoundary);
+	    this.collisionTester = new CollisionTester(this.spriteCollection);
         this.menu = new Menu(new Position(100,100));
         menu.addItem("start");
         menu.addItem("options");
@@ -67,23 +71,17 @@ public class Randomverse implements GameEngine {
 
     private void createPlayer() {
         this.player = new Ship(300, 300);
-        player.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection, Damage.DamageType.NPC));
-        SimpleGun flippedGun = new SimpleGun(1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, spriteCollection, Damage.DamageType.NPC);
-        flippedGun.flipHorizontal();
-        player.addTile(1, 1, flippedGun);
+	    ShipPartFactory factory = new ShipPartFactory(getSpriteCollection(), Damage.DamageType.NPC);
 
-        Random random = new Random();
-        Map<SpriteStatus, ImageLocation> cockpit = new HashMap<SpriteStatus, ImageLocation>();
-        cockpit.put(SpriteStatus.DEFAULT, new ImageLocation("cockpit", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        player.addTile(0, 0, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit));
+	    player.addTile(-1, 1, factory.create(ShipPartFactory.Item.GUN_1.ordinal()));
+	    SimpleSprite gun2 = factory.create(ShipPartFactory.Item.GUN_1.ordinal());
+	    gun2.flipHorizontal();
+	    player.addTile(1, 1, gun2);
 
-        Map<SpriteStatus, ImageLocation> engine = new HashMap<SpriteStatus, ImageLocation>();
-        engine.put(SpriteStatus.DEFAULT, new ImageLocation("midParts",(int)(random.nextInt() + System.currentTimeMillis()) % 4));
-        player.addTile(0, 1, new SimpleSprite(0, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, engine));
+	    player.addTile(0, 0, factory.create(ShipPartFactory.Item.COCKPIT_1.ordinal()));
+	    player.addTile(0, 1, factory.create(ShipPartFactory.Item.MID_1.ordinal()));
+	    player.addTile(0, 2, factory.create(ShipPartFactory.Item.ENGINE_1.ordinal()));
 
-        Map<SpriteStatus, ImageLocation> thruster = new HashMap<SpriteStatus, ImageLocation>();
-        thruster.put(SpriteStatus.DEFAULT, new ImageLocation("bottomEngines", (int) (random.nextInt() + System.currentTimeMillis()) % 4));
-        player.addTile(0, 2, new SimpleSprite(0, 2, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, thruster));
     }
 
     @Override
@@ -213,30 +211,12 @@ public class Randomverse implements GameEngine {
         if (Damage.DamageType.NPC.equals(dmgDealer.getDamage().getType())
                 || Damage.DamageType.BOTH.equals(dmgDealer.getDamage().getType())) {
 
-            collidingSprites = findCollisions(dmgDealer, SpriteLayer.NPC);
+            collidingSprites = collisionTester.findCollisions(dmgDealer, SpriteLayer.NPC);
             // player collision
         } else {
-            collidingSprites = findCollisions(dmgDealer, SpriteLayer.PLAYER);
+            collidingSprites = collisionTester.findCollisions(dmgDealer, SpriteLayer.PLAYER);
         }
         dmgDealer.dealDamage(collidingSprites);
-    }
-
-    /**
-     * Returns all sprites from given layer that collide with given damage dealer
-     *
-     * @param dmgDealer   damage dealer
-     * @param spriteLayer layer of sprites
-     * @return
-     */
-    private List<Destructible> findCollisions(DamageDealer dmgDealer, SpriteLayer spriteLayer) {
-        List<Destructible> collidingSprites = new ArrayList<Destructible>();
-        for (Sprite s : getSpriteCollection().getSprites(spriteLayer)) {
-            if (s instanceof Destructible && dmgDealer.collidesWith(s)) {
-                System.out.println("collision with: " + s.getXPosn() + "," + s.getYPosn());
-                collidingSprites.add((Destructible) s);
-            }
-        }
-        return collidingSprites;
     }
 
     public void updateMenu(){
