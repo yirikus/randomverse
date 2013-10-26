@@ -3,15 +3,20 @@ package cz.terrmith.randomverse.world;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
 import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
+import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteFormationFactory;
+import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.sprite.Ship;
+import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -33,13 +38,19 @@ public class LevelOne extends World {
                 ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
                 Ship enemy = new Ship(x,y,null,ai);
                 if (random.nextBoolean()) {
-                    enemy.addTile(-1, 1, new SimpleGun(-1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, getSpriteCollection(), Damage.DamageType.PLAYER));
+                    enemy.addTile(-1, 1, new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1));
                 }
                 if (random.nextBoolean()) {
-                    SimpleGun flippedGun = new SimpleGun(1, 1, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, getSpriteCollection(), Damage.DamageType.PLAYER);
+                    SimpleGun flippedGun = new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1);
                     flippedGun.flipHorizontal();
                     enemy.addTile(1, 1, flippedGun);
                 }
+
+	            Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
+	            imageForStatus.put(SpriteStatus.DEFAULT, new ImageLocation("midParts",random.nextInt(4)));
+	            ShipPart body = new ShipPart(1, imageForStatus);
+	            enemy.addTile(0, 1, body);
+
                 enemy.flipVertical();
                 return enemy;
             }

@@ -2,7 +2,10 @@ package cz.terrmith.randomverse.core.sprite;
 
 import cz.terrmith.randomverse.core.image.ImageLoader;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.List;
+
 
 /**
  * Sprite interface
@@ -65,11 +68,13 @@ public interface Sprite {
     void drawSprite(Graphics g, ImageLoader ims);
 
     /**
-     * Returns true if this sprite collides with given sprite
+     * Tests if this sprite collides with given sprite and
+     * returns all sprites parts that collide with given sprite or itself if its single part
+     *
      * @param sprite sprite that is tested for collision
-     * @return true if collision occurred
+     * @return sprite collection or empty collection if no colliding sprite was found
      */
-    boolean collidesWith(Sprite sprite);
+    List<Sprite> collidesWith(Sprite sprite);
 
     /**
      * Flips sprite horizontally
@@ -80,4 +85,16 @@ public interface Sprite {
      * Flips sprite vertically
      */
     void flipVertical();
+
+	/**
+	 * Returns sprite status
+	 * @return
+	 */
+	SpriteStatus getStatus();
+
+	/**
+	 * Sets sprite status
+	 * @param status
+	 */
+	void setStatus(SpriteStatus status);
 }

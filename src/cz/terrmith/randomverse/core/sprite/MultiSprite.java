@@ -26,8 +26,9 @@ public class MultiSprite implements Sprite{
      * Y Position of tile on a [0,0] position
      */
     private int locY;
+	private SpriteStatus status = SpriteStatus.DEFAULT;
 
-    /**
+	/**
      * Creates empty multisprites, tiles are expected to be added by calling provided methods
      */
     public MultiSprite(int x, int y, List<Tile> tiles){
@@ -223,15 +224,17 @@ public class MultiSprite implements Sprite{
         }
     }
 
-    @Override
-    public boolean collidesWith(Sprite sprite) {
-	    for (Tile t: tiles) {
-			if (t.getSprite().collidesWith(sprite)) {
-				return true;
+	@Override
+	public List<Sprite> collidesWith(Sprite sprite) {
+		List<Sprite> collidingSprites = new ArrayList<Sprite>();
+		for (Tile t: tiles) {
+			Sprite s = t.getSprite();
+			if (!s.collidesWith(sprite).isEmpty() && !SpriteStatus.DEAD.equals(s.getStatus())) {
+				collidingSprites.add(s);
 			}
-        }
-	    return false;
-    }
+		}
+		return collidingSprites;
+	}
 
     @Override
     public void flipHorizontal() {
@@ -276,4 +279,12 @@ public class MultiSprite implements Sprite{
        System.out.println("flip V");
         setPosition(getXPosn(), getYPosn());
     }
+
+	public SpriteStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(SpriteStatus status) {
+		this.status = status;
+	}
 }

@@ -6,6 +6,7 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
+import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.util.ArrayList;
@@ -25,6 +26,14 @@ public class ShipPartFactory {
 
     private SpriteCollection spriteCollection;
     private Damage.DamageType damageType;
+
+	public enum Item{
+		GUN_1, GUN_2, GUN_3, GUN_4,
+		COCKPIT_1,COCKPIT_2,COCKPIT_3,COCKPIT_4,
+		MID_1, MID_2, MID_3, MID_4,
+		ENGINE_1, ENGINE_2, ENGINE_3, ENGINE_4,;
+
+	}
 
     public ShipPartFactory(SpriteCollection spriteCollection, Damage.DamageType damageType) {
         this.spriteCollection = spriteCollection;
@@ -52,10 +61,10 @@ public class ShipPartFactory {
     public SimpleSprite create(int i) {
         switch (i) {
             //SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation
-            case 0: return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0));
-            case 1: return new SimpleGun(spriteCollection,8,new Damage(2, damageType),new ImageLocation("sideGun",1));
-            case 2: return new SimpleGun(spriteCollection,7,new Damage(2, damageType),new ImageLocation("sideGun",2));
-            case 3: return new SimpleGun(spriteCollection,6,new Damage(1, damageType),new ImageLocation("sideGun",3));
+            case 0: return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1);
+            case 1: return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1);
+            case 2: return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1);
+            case 3: return new SimpleGun(spriteCollection,12,new Damage(4, damageType),new ImageLocation("sideGun",3),1);
             case 4: return createSprite(new ImageLocation("cockpit",0));
             case 5: return createSprite(new ImageLocation("cockpit",1));
             case 6: return createSprite(new ImageLocation("cockpit",2));
@@ -74,8 +83,8 @@ public class ShipPartFactory {
     }
 
     public SimpleSprite createSprite(ImageLocation image){
-        Map<SpriteStatus, ImageLocation> cockpit0 = new HashMap<SpriteStatus, ImageLocation>();
-        cockpit0.put(SpriteStatus.DEFAULT, image);
-        return new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, cockpit0);
+        Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
+        imageForStatus.put(SpriteStatus.DEFAULT, image);
+        return new ShipPart(1, imageForStatus);
     }
 }
