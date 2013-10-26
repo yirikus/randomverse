@@ -6,30 +6,34 @@ import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 7.10.13
- * Time: 23:17
- * To change this template use File | Settings | File Templates.
+ * Ship part
+ * Can have extentions point - other ship parts can be connected to these extension points
+ * Must be connected to core (ship tile [0,0]) or they are destroyed
  */
 public class ShipPart extends SimpleSprite implements Destructible{
 
 	private int totalHealth;
 	private int currentHealth;
+	private boolean connectedToCore;
+	private Set<ExtensionPoint> extensions;
 
 	public ShipPart(ShipPart sprite) {
 		super(sprite);
 		this.totalHealth = sprite.getTotalHealth();
 		this.currentHealth = sprite.getTotalHealth();
+		this.extensions = new HashSet<ExtensionPoint>(sprite.getExtensions());
 	}
 
-	public ShipPart(int totalHealth, Map<SpriteStatus, ImageLocation> imageForStatus) {
+	public ShipPart(int totalHealth, Map<SpriteStatus, ImageLocation> imageForStatus, Set<ExtensionPoint> extensions) {
 		super(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, imageForStatus);
 		this.totalHealth = totalHealth;
 		this.currentHealth = totalHealth;
+		this.extensions = extensions;
 	}
 
 	@Override
@@ -47,6 +51,53 @@ public class ShipPart extends SimpleSprite implements Destructible{
 		this.currentHealth -= amount;
 		if (this.currentHealth < 1) {
 			this.setStatus(SpriteStatus.DEAD);
+		}
+	}
+
+	public Set<ExtensionPoint> getExtensions() {
+		return extensions;
+	}
+
+	@Override
+	public void updateSprite() {
+		if(!connectedToCore){
+			reduceHealth(getCurrentHealth());
+		} else {
+			super.updateSprite();
+		}
+	}
+
+	public boolean isConnectedToCore() {
+		return connectedToCore;
+	}
+
+	public void setConnectedToCore(boolean connectedToCore) {
+		this.connectedToCore = connectedToCore;
+	}
+
+	@Override
+	public void flipVertical() {
+		super.flipVertical();
+		boolean removedTop = extensions.remove(ExtensionPoint.TOP);
+		boolean removedBottom = extensions.remove(ExtensionPoint.BOTTOM);
+		if (removedBottom) {
+			extensions.add(ExtensionPoint.TOP);
+		}
+		if (removedTop) {
+			extensions.add(ExtensionPoint.BOTTOM);
+		}
+	}
+
+	@Override
+	public void flipHorizontal() {
+		super.flipHorizontal();
+		boolean removedLeft = extensions.remove(ExtensionPoint.LEFT);
+		boolean removedRight = extensions.remove(ExtensionPoint.RIGHT);
+		if (removedLeft) {
+			extensions.add(ExtensionPoint.RIGHT);
+		}
+		if (removedRight) {
+			extensions.add(ExtensionPoint.LEFT);
 		}
 	}
 }

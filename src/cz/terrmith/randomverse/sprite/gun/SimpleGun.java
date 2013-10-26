@@ -1,17 +1,18 @@
 package cz.terrmith.randomverse.sprite.gun;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
-import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.creator.ProjectileCreator;
 import cz.terrmith.randomverse.core.sprite.creator.SpriteCreator;
+import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
+
+import java.util.HashSet;
 
 /**
  * @author jiri.kus
@@ -28,7 +29,8 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	 * @param totalHealth total health
 	 */
 	public SimpleGun(int totalHealth, SpriteCollection spriteCollection, Damage.DamageType damageType) {
-		super(totalHealth, null);
+		super(totalHealth, null, new HashSet<ExtensionPoint>());
+		this.getExtensions().add(ExtensionPoint.RIGHT);
         this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(new Damage(1,damageType)));
         this.getImageForStatus().put(SpriteStatus.DEFAULT, new ImageLocation("sideGun",0));
     }
@@ -39,8 +41,9 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
      *
      */
     public SimpleGun(SpriteCollection spriteCollection,Damage.DamageType damageType, int totalHealth) {
-        super(totalHealth, null);
-        this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(new Damage(1,damageType)));
+        super(totalHealth, null, new HashSet<ExtensionPoint>());
+	    this.getExtensions().add(ExtensionPoint.RIGHT);
+	    this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(new Damage(1,damageType)));
         this.getImageForStatus().put(SpriteStatus.DEFAULT, new ImageLocation("sideGun",0));
     }
 
@@ -49,8 +52,9 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
      * @param rateOfFire how long to wait before next attack
      */
     public SimpleGun(SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation, int totalHealth) {
-        super(totalHealth, null);
-        this.shootTimer = rateOfFire;
+        super(totalHealth, null, new HashSet<ExtensionPoint>());
+	    this.getExtensions().add(ExtensionPoint.RIGHT);
+	    this.shootTimer = rateOfFire;
         this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(damage));
         this.getImageForStatus().put(SpriteStatus.DEFAULT, imageLocation);
     }

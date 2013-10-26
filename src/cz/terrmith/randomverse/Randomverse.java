@@ -73,14 +73,14 @@ public class Randomverse implements GameEngine {
         this.player = new Ship(300, 300);
 	    ShipPartFactory factory = new ShipPartFactory(getSpriteCollection(), Damage.DamageType.NPC);
 
-	    player.addTile(-1, 1, factory.create(ShipPartFactory.Item.GUN_1.ordinal()));
+	    player.addTile(-1, 0, factory.create(ShipPartFactory.Item.GUN_1.ordinal()));
 	    SimpleSprite gun2 = factory.create(ShipPartFactory.Item.GUN_1.ordinal());
 	    gun2.flipHorizontal();
-	    player.addTile(1, 1, gun2);
+	    player.addTile(1, 0, gun2);
 
-	    player.addTile(0, 0, factory.create(ShipPartFactory.Item.COCKPIT_1.ordinal()));
-	    player.addTile(0, 1, factory.create(ShipPartFactory.Item.MID_1.ordinal()));
-	    player.addTile(0, 2, factory.create(ShipPartFactory.Item.ENGINE_1.ordinal()));
+	    player.addTile(0, -1, factory.create(ShipPartFactory.Item.COCKPIT_1.ordinal()));
+	    player.addTile(0, 0, factory.create(ShipPartFactory.Item.MID_1.ordinal()));
+	    player.addTile(0, 1, factory.create(ShipPartFactory.Item.ENGINE_1.ordinal()));
 
     }
 
