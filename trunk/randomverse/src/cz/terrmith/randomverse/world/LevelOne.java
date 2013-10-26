@@ -11,13 +11,16 @@ import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.world.World;
+import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,7 +51,12 @@ public class LevelOne extends World {
 
 	            Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
 	            imageForStatus.put(SpriteStatus.DEFAULT, new ImageLocation("midParts",random.nextInt(4)));
-	            ShipPart body = new ShipPart(1, imageForStatus);
+	            Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
+	            extensions.add(ExtensionPoint.LEFT);
+	            extensions.add(ExtensionPoint.RIGHT);
+	            extensions.add(ExtensionPoint.TOP);
+	            extensions.add(ExtensionPoint.BOTTOM);
+	            ShipPart body = new ShipPart(1, imageForStatus, extensions);
 	            enemy.addTile(0, 1, body);
 
                 enemy.flipVertical();

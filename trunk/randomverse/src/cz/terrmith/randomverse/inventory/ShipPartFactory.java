@@ -4,16 +4,18 @@ import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
-import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
+import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -65,26 +67,50 @@ public class ShipPartFactory {
             case 1: return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1);
             case 2: return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1);
             case 3: return new SimpleGun(spriteCollection,12,new Damage(4, damageType),new ImageLocation("sideGun",3),1);
-            case 4: return createSprite(new ImageLocation("cockpit",0));
-            case 5: return createSprite(new ImageLocation("cockpit",1));
-            case 6: return createSprite(new ImageLocation("cockpit",2));
-            case 7: return createSprite(new ImageLocation("cockpit",3));
-            case 8: return createSprite(new ImageLocation("midParts",0));
-            case 9: return createSprite(new ImageLocation("midParts",1));
-            case 10: return createSprite(new ImageLocation("midParts",2));
-            case 11: return createSprite(new ImageLocation("midParts",3));
-            case 12: return createSprite(new ImageLocation("bottomEngines",0));
-            case 13: return createSprite(new ImageLocation("bottomEngines",1));
-            case 14: return createSprite(new ImageLocation("bottomEngines",2));
-            case 15: return createSprite(new ImageLocation("bottomEngines",3));
+            case 4: return createCockpit(new ImageLocation("cockpit",0));
+            case 5: return createCockpit(new ImageLocation("cockpit",1));
+            case 6: return createCockpit(new ImageLocation("cockpit",2));
+            case 7: return createCockpit(new ImageLocation("cockpit",3));
+            case 8: return createMidPart(new ImageLocation("midParts",0));
+            case 9: return createMidPart(new ImageLocation("midParts",1));
+            case 10: return createMidPart(new ImageLocation("midParts",2));
+            case 11: return createMidPart(new ImageLocation("midParts",3));
+            case 12: return createBottomEngine(new ImageLocation("bottomEngines",0));
+            case 13: return createBottomEngine(new ImageLocation("bottomEngines",1));
+            case 14: return createBottomEngine(new ImageLocation("bottomEngines",2));
+            case 15: return createBottomEngine(new ImageLocation("bottomEngines",3));
         }
 
         return null;
     }
 
-    public SimpleSprite createSprite(ImageLocation image){
+    public SimpleSprite createSprite(ImageLocation image, Set<ExtensionPoint> extensions){
         Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
         imageForStatus.put(SpriteStatus.DEFAULT, image);
-        return new ShipPart(1, imageForStatus);
+	    return new ShipPart(1, imageForStatus, extensions);
     }
+
+	public SimpleSprite createCockpit(ImageLocation image) {
+		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
+		extensions.add(ExtensionPoint.BOTTOM);
+		return createSprite(image, extensions);
+	}
+
+	public SimpleSprite createMidPart(ImageLocation image) {
+		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
+		extensions.add(ExtensionPoint.BOTTOM);
+		extensions.add(ExtensionPoint.LEFT);
+		extensions.add(ExtensionPoint.RIGHT);
+		extensions.add(ExtensionPoint.TOP);
+		return createSprite(image, extensions);
+	}
+
+	public SimpleSprite createBottomEngine(ImageLocation image) {
+		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
+		extensions.add(ExtensionPoint.TOP);
+		return createSprite(image, extensions);
+	}
+
+
+
 }

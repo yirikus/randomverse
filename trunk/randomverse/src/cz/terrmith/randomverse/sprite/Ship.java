@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.sprite;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
+import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
@@ -12,10 +13,8 @@ import java.util.List;
  * Ship is a sprite that moves and uses it's parts to use abilities like an attack
  * can be player or npc controlled
  */
-public class Ship extends MultiSprite implements CanAttack, Destructible {
+public class Ship extends MultiSprite implements CanAttack, Destructible{
 
-	private int currentHealth;
-    private int totalHealth;
     private ArtificialIntelligence ai;
 
     public Ship(int x, int y) {
@@ -40,21 +39,60 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
      */
     public Ship(int x, int y, List<Tile> tiles, ArtificialIntelligence ai) {
         super(x, y, tiles);
-        this.totalHealth = 10;
-        this.currentHealth = this.totalHealth;
         this.ai = ai;
 
         setPosition(x, y);
     }
 
+	/**
+	 * Sets sprite at given tile and all adjacent tiles
+	 * as connected to core
+	 *
+	 * @param tile
+	 */
+	private void setConnectionToCore(Tile tile) {
+		ShipPart part = (ShipPart) tile.getSprite();
+		if (SpriteStatus.DEAD.equals(part.getStatus())) {
+			return;
+		}
+		part.setConnectedToCore(true);
+		for (Tile t : getTiles()) {
+			boolean top = part.getExtensions().contains(ExtensionPoint.TOP) && t.getTileX() == tile.getTileX() && t.getTileY() == tile.getTileY() - 1;
+			boolean bottom = part.getExtensions().contains(ExtensionPoint.BOTTOM) &&  t.getTileX() == tile.getTileX() && t.getTileY() == tile.getTileY() + 1;
+			boolean left = part.getExtensions().contains(ExtensionPoint.LEFT) && t.getTileX() == tile.getTileX() - 1 && t.getTileY() == tile.getTileY();
+			boolean right = part.getExtensions().contains(ExtensionPoint.RIGHT) && t.getTileX() == tile.getTileX() + 1&& t.getTileY() == tile.getTileY();
+			//top
+			if ( !(((ShipPart)t.getSprite()).isConnectedToCore()) && (top || bottom || left || right)) {
+				setConnectionToCore(t);
+			}
+		}
+	}
+
     @Override
     public void updateSprite() {
+	    Tile core = Tile.findTile(getTiles(),0,0);
+
+	    //set all as disconnected
+	    for (Tile t : getTiles()) {
+		    if (t.getSprite() instanceof ShipPart) {
+			    ((ShipPart)t.getSprite()).setConnectedToCore(false);
+		    }
+	    }
+
+	    // find connected
+	    setConnectionToCore(core);
+
         //if AI is present use it
         if (ai != null) {
             ai.updateSprite(this);
         }
 
         super.updateSprite();
+
+	    if(SpriteStatus.DEAD.equals(core.getSprite().getStatus())) {
+		    setActive(false);
+		    return;
+	    }
     }
 
     @Override
@@ -87,23 +125,20 @@ public class Ship extends MultiSprite implements CanAttack, Destructible {
 
 	@Override
 	public int getTotalHealth() {
-		return 10;
+		return ((Destructible)Tile.findTile(getTiles(),0,0).getSprite()).getTotalHealth();
 	}
 
     public ArtificialIntelligence getAi() {
         return ai;
     }
 
-    @Override
+	@Override
 	public int getCurrentHealth() {
-		return currentHealth;  //To change body of implemented methods use File | Settings | File Templates.
+		return ((Destructible)Tile.findTile(getTiles(),0,0).getSprite()).getCurrentHealth();
 	}
 
 	@Override
 	public void reduceHealth(int amount) {
-		this.currentHealth -= amount;
-		if (this.currentHealth < 1) {
-			setActive(false);
-		}
+		throw new IllegalStateException("Can not reduce health directly");
 	}
 }
