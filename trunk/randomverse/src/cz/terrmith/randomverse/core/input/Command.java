@@ -5,7 +5,15 @@ package cz.terrmith.randomverse.core.input;
  */
 public class Command {
 
-    public enum State {PRESSED, RELEASED, PRESSED_RELEASED, RELEASED_PRESSED}
+	public boolean isAnyKey() {
+		return anyKey;
+	}
+
+	public void setAnyKey(boolean anyKey) {
+		this.anyKey = anyKey;
+	}
+
+	public enum State {PRESSED, RELEASED, PRESSED_RELEASED, RELEASED_PRESSED}
     /**
      * User commands
      */
@@ -20,6 +28,7 @@ public class Command {
     private State action3 = State.RELEASED;
     private State action4 = State.RELEASED;
     private boolean screenshot;
+	private boolean anyKey;
 
     public Command() {
     }

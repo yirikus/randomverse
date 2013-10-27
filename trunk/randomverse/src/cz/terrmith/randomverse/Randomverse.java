@@ -1,6 +1,8 @@
 package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.GameEngine;
+import cz.terrmith.randomverse.core.dialog.Dialog;
+import cz.terrmith.randomverse.core.dialog.DialogCallback;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.geometry.Position;
@@ -27,6 +29,7 @@ import cz.terrmith.randomverse.world.LevelOne;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +41,7 @@ import java.util.Random;
 /**
  * Contains global constants
  */
-public class Randomverse implements GameEngine {
+public class Randomverse extends GameEngine {
 
     public static final String WINDOW_NAME = "Randomverse";
     public static final int STEP = 6;
@@ -101,11 +104,22 @@ public class Randomverse implements GameEngine {
                 }
             break;
             case GAME:
+
                 if (Command.State.PRESSED.equals(command.getPrevious())
                   || Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
-                    spriteCollection.clear();
                     gameMode = GameMode.MAIN_MENU;
                     command.clear();
+                } else if (!player.isActive()) {
+	               // add modal game over dialog
+	                DialogCallback callback = new DialogCallback() {
+		                @Override
+		                public void onClose() {
+			                gameMode = GameMode.MAIN_MENU;
+		                }
+	                };
+	                Dialog dialog = new Dialog("GAME OVER",200,200,400,200,callback);
+	                showDialog(dialog);
+	                command.clear();
                 } else  if (Command.State.PRESSED.equals(command.getInventory())
                         || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
                     gameMode = GameMode.INVENTORY;
@@ -122,7 +136,19 @@ public class Randomverse implements GameEngine {
         }
     }
 
-    private void updateInventory() {
+	@Override
+	public void pause() {
+		super.pause();
+		world.setPaused(true);
+	}
+
+	@Override
+	public void unpause() {
+		super.unpause();
+		world.setPaused(false);
+	}
+
+	private void updateInventory() {
         if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
             inventory.moveUp();
             command.setUp(false);
@@ -231,10 +257,20 @@ public class Randomverse implements GameEngine {
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
             if (menu.getSelected().equals("start")) {
                 gameMode = GameMode.GAME;
+	            spriteCollection.clear();
                 command.clear();
                 createPlayer();
                 spriteCollection.put(SpriteLayer.PLAYER, player);
                 this.world = new LevelOne(this.spriteCollection);
+
+	            DialogCallback callback = new DialogCallback() {
+		            @Override
+		            public void onClose() {
+		            }
+	            };
+	            Dialog dialog = new Dialog("GAME START",200,200,400,200,callback);
+	            showDialog(dialog);
+
             } else if (menu.getSelected().equals("options")) {
 
             } if (menu.getSelected().equals("exit")) {
@@ -279,7 +315,7 @@ public class Randomverse implements GameEngine {
     }
 
     @Override
-    public void drawGUI(Graphics2D g2, ImageLoader iml) {
+    public void drawHUD(Graphics2D g2, ImageLoader iml) {
         switch(gameMode) {
             case GAME:
                 Font font = new Font("system",Font.BOLD,12);
@@ -289,20 +325,47 @@ public class Randomverse implements GameEngine {
                 break;
             case MAIN_MENU:
                 // clear the background
-                g2.setColor(Color.darkGray);
-                g2.fillRect(0, 0, 800, 600);
+	            // clear the background
+	            clearScreen(g2, Color.darkGray);
 
                 menu.drawMenu(g2);
                 break;
             case INVENTORY:
                 // clear the background
-                g2.setColor(Color.darkGray);
-                g2.fillRect(0, 0, 800, 600);
+               clearScreen(g2, Color.darkGray);
 
                 inventory.drawScreen(g2, iml);
                 break;
         }
     }
 
+	@Override
+	public void waitForUnpause() {
+		if(command.isAnyKey()) {
+			if (getDialog() != null) {
+				closeDialog();
+			}
+			unpause();
+			command.clear();
+		}
+	}
+
+	/**
+	 *  Paints black over whole screen.
+	 * @param g graphics
+	 */
+	public void clearScreen(Graphics g) {
+		clearScreen(g, Color.BLACK);
+	}
+
+	/**
+	 * Paints black with given color over whole screen.
+	 * @param g graphics
+	 */
+	public void clearScreen(Graphics g, Color color) {
+		// clear the background
+		g.setColor(color);
+		g.fillRect(0, 0, screenWidth, screenHeight);
+	}
 
 }

@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.core;
 
+import cz.terrmith.randomverse.core.dialog.Dialog;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
@@ -103,6 +104,11 @@ public class GraphicEngine {
         sprites.drawLayer(SpriteLayer.PROJECTILE, g2, iml);
         sprites.drawLayer(SpriteLayer.PLAYER, g2, iml);
 
-        gameEngine.drawGUI(g2, iml);
+	    Dialog dialog = gameEngine.getDialog();
+	    if (dialog != null) {
+		    dialog.drawDialog(g2);
+	    }
+
+        gameEngine.drawHUD(g2, iml);
     }
 }
