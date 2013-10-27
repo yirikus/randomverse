@@ -30,6 +30,7 @@ public class InputHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
+	    ctrl.setAnyKey(true);
         processCommand(keyCode, true);
 
     }
@@ -37,6 +38,7 @@ public class InputHandler implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
+	    ctrl.setAnyKey(false);
        processCommand(keyCode, false);
     }
 

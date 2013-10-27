@@ -52,7 +52,11 @@ public class AnimationEngine {
         beforeTime = System.nanoTime();
 
         while(!cmd.isTerminated()) {
-            game.update();
+            if (!game.isPaused()) {
+	            game.update();
+            } else {
+	            game.waitForUnpause();
+            }
             graphics.update();
 
             afterTime = System.nanoTime();

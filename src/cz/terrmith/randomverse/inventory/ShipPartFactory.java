@@ -64,9 +64,9 @@ public class ShipPartFactory {
         switch (i) {
             //SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation
             case 0: return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1);
-            case 1: return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1);
-            case 2: return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1);
-            case 3: return new SimpleGun(spriteCollection,12,new Damage(4, damageType),new ImageLocation("sideGun",3),1);
+            case 1: return new SimpleGun(spriteCollection,16,new Damage(2, damageType),new ImageLocation("sideGun",1),1);
+            case 2: return new SimpleGun(spriteCollection,64,new Damage(3, damageType),new ImageLocation("sideGun",2),1);
+            case 3: return new SimpleGun(spriteCollection,32,new Damage(4, damageType),new ImageLocation("sideGun",3),1);
             case 4: return createCockpit(new ImageLocation("cockpit",0));
             case 5: return createCockpit(new ImageLocation("cockpit",1));
             case 6: return createCockpit(new ImageLocation("cockpit",2));
