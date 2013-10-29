@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.sprite.gun;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
@@ -23,28 +24,15 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	private int canShootIn = shootTimer;
     private SpriteCreator spriteCreator;
 
-	/**
-	 * Creates sprite wtih initial position x, y and size w, h
-	 *
-	 * @param totalHealth total health
-	 */
-	public SimpleGun(int totalHealth, SpriteCollection spriteCollection, Damage.DamageType damageType) {
-		super(totalHealth, null, new HashSet<ExtensionPoint>());
-		this.getExtensions().add(ExtensionPoint.RIGHT);
-        this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(new Damage(1,damageType)));
-        this.getImageForStatus().put(SpriteStatus.DEFAULT, new ImageLocation("sideGun",0));
-    }
-
     /**
      * Convenience contructor with x = 0, y = 0, w,h = Tile.DEFAULT_SIZE
      * with default projectile
      *
+     * TODO tenhle konstruktor je picovina
      */
     public SimpleGun(SpriteCollection spriteCollection,Damage.DamageType damageType, int totalHealth) {
-        super(totalHealth, null, new HashSet<ExtensionPoint>());
-	    this.getExtensions().add(ExtensionPoint.RIGHT);
-	    this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(new Damage(1,damageType)));
-        this.getImageForStatus().put(SpriteStatus.DEFAULT, new ImageLocation("sideGun",0));
+	    this(spriteCollection, DEFAULT_SHOOT_TIMER, new Damage(1, damageType), new ImageLocation("sideGun", 0),
+	         totalHealth);
     }
 
     /**
@@ -59,6 +47,13 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
         this.getImageForStatus().put(SpriteStatus.DEFAULT, imageLocation);
     }
 
+	public SimpleGun(SimpleGun simpleGun) {
+		super(simpleGun);
+		this.shootTimer = simpleGun.getAttackTimer();
+		this.spriteCreator = new ProjectileCreator((ProjectileCreator)simpleGun.getSpriteCreator());
+		this.setImageForStatus(simpleGun.getImageForStatus());
+	}
+
 	@Override
 	public void updateSprite() {
 		super.updateSprite();
@@ -71,7 +66,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 		if(canShootIn <= 0 && !SpriteStatus.DEAD.equals(getStatus())) {
 			spriteCreator.createSprites(getXPosn() + getWidth() / 2,
 			                            getYPosn() + getHeight() / 2, 0, 1, -12, -getHeight());
-			canShootIn = shootTimer;
+			canShootIn = DEFAULT_SHOOT_TIMER;
 		}
 	}
 
@@ -97,4 +92,12 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
         spriteCreator.flipVertical();
     }
 
+	@Override
+	public Sprite copy() {
+		return new SimpleGun(this);
+	}
+
+	public SpriteCreator getSpriteCreator() {
+		return spriteCreator;
+	}
 }

@@ -23,6 +23,10 @@ public class ProjectileCreator implements SpriteCreator {
         this.projectileFactory = projectileFactory;
     }
 
+	public ProjectileCreator(ProjectileCreator that) {
+		this(that.getSpriteCollection(), that.getProjectileFactory());
+	}
+
     @Override
     public void createSprites(double x, double y, int dx, int dy, int speed, int distanceFromOrigin) {
         if(dx > 1 || dx < -1 || dy > 1 || dy < -1) {
@@ -43,4 +47,12 @@ public class ProjectileCreator implements SpriteCreator {
     public void flipVertical() {
         this.verticalFlip = -this.verticalFlip;
     }
+
+	public SpriteCollection getSpriteCollection() {
+		return spriteCollection;
+	}
+
+	public SpriteFactory getProjectileFactory() {
+		return projectileFactory;
+	}
 }

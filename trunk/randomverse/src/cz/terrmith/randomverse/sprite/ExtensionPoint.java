@@ -9,5 +9,24 @@ public enum ExtensionPoint {
 	TOP,
 	LEFT,
 	RIGHT,
-	BOTTOM
+	BOTTOM;
+
+	public static ExtensionPoint flip(ExtensionPoint ex) {
+		if (ex == null) {
+			return null;
+		}
+
+		switch(ex) {
+			case TOP:
+				return BOTTOM;
+			case BOTTOM:
+				return TOP;
+			case LEFT:
+				return RIGHT;
+			case RIGHT:
+				return LEFT;
+			default:
+				return null;
+		}
+	}
 }

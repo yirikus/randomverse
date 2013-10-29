@@ -97,4 +97,14 @@ public interface Sprite {
 	 * @param status
 	 */
 	void setStatus(SpriteStatus status);
+
+	/**
+	 * Return copy of this sprite such as
+	 * this.copy() != this
+	 * this.copy().equals(this)
+	 *
+	 * @return
+	 */
+	Sprite copy();
+
 }

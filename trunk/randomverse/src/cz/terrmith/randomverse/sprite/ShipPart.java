@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.sprite;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
@@ -78,6 +79,10 @@ public class ShipPart extends SimpleSprite implements Destructible{
 	@Override
 	public void flipVertical() {
 		super.flipVertical();
+		flipExtensionPointsVertically();
+	}
+
+	private void flipExtensionPointsVertically() {
 		boolean removedTop = extensions.remove(ExtensionPoint.TOP);
 		boolean removedBottom = extensions.remove(ExtensionPoint.BOTTOM);
 		if (removedBottom) {
@@ -91,13 +96,26 @@ public class ShipPart extends SimpleSprite implements Destructible{
 	@Override
 	public void flipHorizontal() {
 		super.flipHorizontal();
+		flipExtensionPointsHorizontally();
+	}
+
+	private void flipExtensionPointsHorizontally() {
 		boolean removedLeft = extensions.remove(ExtensionPoint.LEFT);
 		boolean removedRight = extensions.remove(ExtensionPoint.RIGHT);
+		System.out.println("removedLeft: " + removedLeft + ", removedright: " + removedRight);
+
 		if (removedLeft) {
+			System.out.println("addRight");
 			extensions.add(ExtensionPoint.RIGHT);
 		}
 		if (removedRight) {
+			System.out.println("addLeft");
 			extensions.add(ExtensionPoint.LEFT);
 		}
+	}
+
+	@Override
+	public Sprite copy() {
+		return new ShipPart(this);
 	}
 }

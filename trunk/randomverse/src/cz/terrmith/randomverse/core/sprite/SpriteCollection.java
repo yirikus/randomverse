@@ -61,7 +61,9 @@ public class SpriteCollection {
     }
 
     public void put(SpriteLayer layer, Sprite sprite){
-        sprites.get(layer).add(sprite);
+        if (sprite != null) {
+	        sprites.get(layer).add(sprite);
+        }
     }
 
    public List<Sprite> getSprites(SpriteLayer layer){
