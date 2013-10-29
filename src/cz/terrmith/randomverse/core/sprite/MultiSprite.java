@@ -53,7 +53,7 @@ public class MultiSprite implements Sprite{
      * @param sprite
      */
     public MultiSprite(MultiSprite sprite) {
-        this((int)sprite.getXPosn(), (int)sprite.getYPosn(), Tile.cloneTiles(sprite.getTiles()));
+	    this((int)sprite.getXPosn(), (int)sprite.getYPosn(), Tile.cloneTiles(sprite.getTiles()));
     }
 	/**
 	 * Adds sprite to a grid,
@@ -276,7 +276,6 @@ public class MultiSprite implements Sprite{
             //assign
             t.getSprite().flipVertical();
         }
-       System.out.println("flip V");
         setPosition(getXPosn(), getYPosn());
     }
 
@@ -286,5 +285,10 @@ public class MultiSprite implements Sprite{
 
 	public void setStatus(SpriteStatus status) {
 		this.status = status;
+	}
+
+	@Override
+	public Sprite copy() {
+		return new MultiSprite(this);
 	}
 }

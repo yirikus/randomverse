@@ -33,7 +33,10 @@ public class Tile {
     }
 
     public Tile(Tile tile) {
-        this(tile.getTileX(), tile.getTileY(), new SimpleSprite(tile.getSprite()));
+        this(tile.getTileX(), tile.getTileY(), (SimpleSprite)tile.getSprite().copy());
+	    if (!this.getSprite().getClass().getName().equals(tile.getSprite().getClass().getName())) {
+		    throw new IllegalStateException("Did you override copy method? When copying tiles, it's classes were different. Expected: " + tile.getSprite().getClass().getName() + ", actual: " + this.getSprite().getClass().getName());
+	    }
     }
 
     /**

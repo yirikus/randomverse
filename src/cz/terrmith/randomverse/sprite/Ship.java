@@ -1,23 +1,30 @@
 package cz.terrmith.randomverse.sprite;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
+import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
+import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Ship is a sprite that moves and uses it's parts to use abilities like an attack
  * can be player or npc controlled
  */
-public class Ship extends MultiSprite implements CanAttack, Destructible{
+public class Ship extends MultiSprite implements CanAttack, Destructible, Lootable {
 
     private ArtificialIntelligence ai;
+	private LootSprite lootSprite;
 
-    public Ship(int x, int y) {
+	public Ship(int x, int y) {
         this(x, y, null, null);
     }
 
@@ -28,7 +35,8 @@ public class Ship extends MultiSprite implements CanAttack, Destructible{
      * @param ship
      */
     public Ship(Ship ship) {
-       this((int)ship.getXPosn(), (int)ship.getYPosn(), Tile.cloneTiles(ship.getTiles()), null);
+        super(ship);
+
     }
 
     /**
@@ -90,8 +98,8 @@ public class Ship extends MultiSprite implements CanAttack, Destructible{
         super.updateSprite();
 
 	    if(SpriteStatus.DEAD.equals(core.getSprite().getStatus())) {
+		    this.setStatus(SpriteStatus.DEAD);
 		    setActive(false);
-		    return;
 	    }
     }
 
@@ -141,4 +149,18 @@ public class Ship extends MultiSprite implements CanAttack, Destructible{
 	public void reduceHealth(int amount) {
 		throw new IllegalStateException("Can not reduce health directly");
 	}
+
+	@Override
+	public LootSprite getLootSprite() {
+		lootSprite.setPosition(getXPosn() + getWidth() / 2, getYPosn() + getHeight() / 2);
+		return lootSprite;
+	}
+
+	@Override
+	public void setLootSprite(LootSprite lootSprite) {
+		this.lootSprite = lootSprite;
+	}
+
+
+
 }

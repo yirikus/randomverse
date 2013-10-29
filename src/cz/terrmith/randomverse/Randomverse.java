@@ -7,36 +7,29 @@ import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
-import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.menu.Menu;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
-import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CollisionTester;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Loot;
+import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.inventory.ShipModificationScreen;
-import cz.terrmith.randomverse.inventory.ShipPartFactory;
-import cz.terrmith.randomverse.sprite.Ship;
-import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 import cz.terrmith.randomverse.world.LevelOne;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Contains global constants
@@ -44,16 +37,15 @@ import java.util.Random;
 public class Randomverse extends GameEngine {
 
     public static final String WINDOW_NAME = "Randomverse";
-    public static final int STEP = 6;
 
     private final Command command;
 	private final CollisionTester collisionTester;
+	private final Player player;
 	private ShipModificationScreen inventory = null;
     private int screenWidth;
     private int screenHeight;
     private World world;
     private SpriteCollection spriteCollection;
-    private Ship player;
     private enum GameMode {MAIN_MENU, GAME, INVENTORY}
     private GameMode gameMode = GameMode.MAIN_MENU;
     private Menu menu;
@@ -65,26 +57,12 @@ public class Randomverse extends GameEngine {
         Boundary screenBoundary = new Boundary(0, screenWidth, 0, screenHeight);
         Boundary extendedBoundary = new Boundary(-screenWidth, 2 * screenWidth, -screenHeight, 2 * screenHeight);
         this.spriteCollection = new SpriteCollection(screenBoundary, extendedBoundary);
+	    this.player = new Player(cmd, spriteCollection);
 	    this.collisionTester = new CollisionTester(this.spriteCollection);
         this.menu = new Menu(new Position(100,100));
         menu.addItem("start");
         menu.addItem("options");
         menu.addItem("exit");
-    }
-
-    private void createPlayer() {
-        this.player = new Ship(300, 300);
-	    ShipPartFactory factory = new ShipPartFactory(getSpriteCollection(), Damage.DamageType.NPC);
-
-	    player.addTile(-1, 0, factory.create(ShipPartFactory.Item.GUN_1.ordinal()));
-	    SimpleSprite gun2 = factory.create(ShipPartFactory.Item.GUN_1.ordinal());
-	    gun2.flipHorizontal();
-	    player.addTile(1, 0, gun2);
-
-	    player.addTile(0, -1, factory.create(ShipPartFactory.Item.COCKPIT_1.ordinal()));
-	    player.addTile(0, 0, factory.create(ShipPartFactory.Item.MID_1.ordinal()));
-	    player.addTile(0, 1, factory.create(ShipPartFactory.Item.ENGINE_1.ordinal()));
-
     }
 
     @Override
@@ -109,7 +87,7 @@ public class Randomverse extends GameEngine {
                   || Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
                     gameMode = GameMode.MAIN_MENU;
                     command.clear();
-                } else if (!player.isActive()) {
+                } else if (!player.getSprite().isActive()) {
 	               // add modal game over dialog
 	                DialogCallback callback = new DialogCallback() {
 		                @Override
@@ -129,12 +107,30 @@ public class Randomverse extends GameEngine {
                 } else {
                     updateProjectiles();
                     updateNpcs();
-                    updatePlayer();
+	                updateItems();
+                    player.update();
                     updateWorld();
                 }
                 break;
         }
     }
+
+	private void updateItems() {
+		Iterator<Sprite> iterator = getSpriteCollection().getSprites(SpriteLayer.ITEM).iterator();
+		while (iterator.hasNext()) {
+			Sprite s = iterator.next();
+			s.updateSprite();
+			if (!s.collidesWith(player.getSprite()).isEmpty()) {
+				Loot loot = ((LootSprite) s).pickUp();
+				player.addLoot(loot);
+			}
+
+			if (!s.isActive()) {
+				iterator.remove();
+			}
+
+		}
+	}
 
 	@Override
 	public void pause() {
@@ -196,7 +192,11 @@ public class Randomverse extends GameEngine {
             if (s.isActive()) {
                 s.updateSprite();
             } else {
-                iterator.remove();
+	            // if sprite was killed add loot to sprite collection
+	            if (SpriteStatus.DEAD.equals(s.getStatus()) && s instanceof Lootable) {
+		            getSpriteCollection().put(SpriteLayer.ITEM, ((Lootable) s).getLootSprite());
+	            }
+	            iterator.remove();
             }
         }
     }
@@ -247,11 +247,9 @@ public class Randomverse extends GameEngine {
 
     public void updateMenu(){
         if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
-            System.out.println("select prev: "+ command.getUp());
             menu.selectPrevious();
             command.setUp(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getDown())) {
-            System.out.println("select next:" + command.getDown());
             menu.selectNext();
             command.setDown(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
@@ -259,8 +257,8 @@ public class Randomverse extends GameEngine {
                 gameMode = GameMode.GAME;
 	            spriteCollection.clear();
                 command.clear();
-                createPlayer();
-                spriteCollection.put(SpriteLayer.PLAYER, player);
+                player.reset();
+                spriteCollection.put(SpriteLayer.PLAYER, player.getSprite());
                 this.world = new LevelOne(this.spriteCollection);
 
 	            DialogCallback callback = new DialogCallback() {
@@ -279,35 +277,7 @@ public class Randomverse extends GameEngine {
         }
     }
 
-    private void updatePlayer() {
-        int dx = 0;
-        int dy = 0;
-        if (Command.State.RELEASED_PRESSED.equals(command.getUp())
-            || Command.State.PRESSED.equals(command.getUp())) {
-            dy -= STEP;
-        }
-        if (Command.State.RELEASED_PRESSED.equals(command.getDown())
-                || Command.State.PRESSED.equals(command.getDown())) {
-            dy += STEP;
-        }
-        if (Command.State.RELEASED_PRESSED.equals(command.getLeft())
-            || Command.State.PRESSED.equals(command.getLeft())) {
-            dx -= STEP;
-        }
-        if (Command.State.RELEASED_PRESSED.equals(command.getRight())
-            || Command.State.PRESSED.equals(command.getRight())) {
-            dx += STEP;
-        }
 
-        if (Command.State.RELEASED_PRESSED.equals(command.getAction1())
-            || Command.State.PRESSED.equals(command.getAction1())) {
-            player.attack();
-        }
-
-        player.setStep(dx, dy);
-        player.updateSprite();
-
-    }
 
     @Override
     public SpriteCollection getSpriteCollection() {
@@ -318,22 +288,20 @@ public class Randomverse extends GameEngine {
     public void drawHUD(Graphics2D g2, ImageLoader iml) {
         switch(gameMode) {
             case GAME:
-                Font font = new Font("system",Font.BOLD,12);
+                Font font = new Font("system",Font.BOLD,20);
                 g2.setFont(font);
                 g2.setColor(Color.WHITE);
                 g2.drawString(player.getCurrentHealth() + "/" + player.getTotalHealth(), 10, screenHeight -50);
+	            g2.drawString("$" + player.getMoney(), 10, screenHeight -20);
                 break;
             case MAIN_MENU:
                 // clear the background
-	            // clear the background
 	            clearScreen(g2, Color.darkGray);
-
                 menu.drawMenu(g2);
                 break;
             case INVENTORY:
                 // clear the background
-               clearScreen(g2, Color.darkGray);
-
+                clearScreen(g2, Color.darkGray);
                 inventory.drawScreen(g2, iml);
                 break;
         }

@@ -52,7 +52,6 @@ public class Command {
     }
 
     public void setPause(boolean pause) {
-        System.out.println("pause");
         this.pause = pause;
     }
 
@@ -61,7 +60,6 @@ public class Command {
     }
 
     public void setPrevious(boolean previous) {
-        System.out.println("prev");
         this.previous = changeState(this.previous,previous);
     }
 
@@ -70,7 +68,6 @@ public class Command {
     }
 
     public void setInventory(boolean inventory) {
-        System.out.println("inv");
         this.inventory = changeState(this.inventory,inventory);
     }
 
@@ -79,7 +76,6 @@ public class Command {
     }
 
     public void setUp(boolean up) {
-        System.out.println("up");
         this.up = changeState(this.up,up);
     }
 
@@ -88,7 +84,6 @@ public class Command {
     }
 
     public void setDown(boolean down) {
-        System.out.println("down");
         this.down = changeState(this.down,down);
     }
 
@@ -97,7 +92,6 @@ public class Command {
     }
 
     public void setLeft(boolean left) {
-        System.out.println("left");
         this.left = changeState(this.left,left);
     }
 
@@ -106,7 +100,6 @@ public class Command {
     }
 
     public void setRight(boolean right) {
-        System.out.println("right");
         this.right = changeState(this.right,right);
     }
 
@@ -115,7 +108,6 @@ public class Command {
     }
 
     public void setAction1(boolean action1) {
-        System.out.println("action1");
         this.action1 = changeState(this.action1, action1);
     }
 
@@ -124,7 +116,6 @@ public class Command {
     }
 
     public void setAction2(boolean action2) {
-        System.out.println("action2");
         this.action2 = changeState(this.action2, action2);
     }
 
@@ -133,7 +124,6 @@ public class Command {
     }
 
     public void setAction3(boolean action3) {
-        System.out.println("action3");
         this.action3 = changeState(this.action3, action3);
     }
 
@@ -171,34 +161,34 @@ public class Command {
         switch(currentState){
             case PRESSED:
                 if (pressed) {
-                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
                     return Command.State.PRESSED;
                 } else {
-                    System.out.println("change state " + currentState + " -> PRESSED_RELEASED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> PRESSED_RELEASED (" + pressed + ")");
                     return State.PRESSED_RELEASED;
                 }
             case PRESSED_RELEASED:
                 if (pressed) {
-                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
                     return State.PRESSED;
                 } else {
-                    System.out.println("change state " + currentState + " -> RELEASED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> RELEASED (" + pressed + ")");
                     return State.RELEASED;
                 }
             case RELEASED:
                 if (pressed) {
-                    System.out.println("change state " + currentState + " -> RELEASED_PRESSED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> RELEASED_PRESSED (" + pressed + ")");
                     return Command.State.RELEASED_PRESSED;
                 } else {
-                    System.out.println("change state " + currentState + " -> RELEASED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> RELEASED (" + pressed + ")");
                     return State.RELEASED;
                 }
             case RELEASED_PRESSED:
                 if (pressed) {
-                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> PRESSED (" + pressed + ")");
                     return Command.State.PRESSED;
                 } else {
-                    System.out.println("change state " + currentState + " -> PRESSED_RELEASED (" + pressed + ")");
+//                    System.out.println("change state " + currentState + " -> PRESSED_RELEASED (" + pressed + ")");
                     return State.PRESSED_RELEASED;
                 }
         }
