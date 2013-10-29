@@ -162,4 +162,19 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 		this.lootSprite = lootSprite;
 	}
 
+	public double getSpeed() {
+		double totalSpeed = 0;
+		for (Tile t : getTiles()) {
+			if (!t.getSprite().getStatus().equals(SpriteStatus.DEAD)
+			    && t.getSprite() instanceof ShipPart) {
+
+				totalSpeed += ((ShipPart) t.getSprite()).getSpeed();
+			}
+		}
+		if (totalSpeed <= 0.25) {
+			totalSpeed = 0.25;
+		}
+		return totalSpeed;
+	}
+
 }

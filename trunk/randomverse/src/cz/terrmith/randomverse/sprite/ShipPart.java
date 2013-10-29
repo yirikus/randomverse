@@ -24,6 +24,9 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	private boolean connectedToCore;
 	private Set<ExtensionPoint> extensions;
 
+	private double speed = 0.0;
+
+
 	public ShipPart(ShipPart sprite) {
 		super(sprite);
 		this.totalHealth = sprite.getTotalHealth();
@@ -123,5 +126,13 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	@Override
 	public int getImpactDamage() {
 		return 1;
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
 }
