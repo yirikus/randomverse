@@ -20,6 +20,8 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Loot;
 import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
+import cz.terrmith.randomverse.core.sprite.collision.Collision;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.inventory.ShipModificationScreen;
 import cz.terrmith.randomverse.world.LevelOne;
@@ -180,21 +182,44 @@ public class Randomverse extends GameEngine {
         Iterator<Sprite> iterator = getSpriteCollection().getSprites(SpriteLayer.NPC).iterator();
         Boundary b = getSpriteCollection().getBoundary(SpriteLayer.NPC);
         while (iterator.hasNext()) {
-            Sprite s = iterator.next();
+            Sprite npcSprite = iterator.next();
 
             // set sprites that are not within as inactive
-            Position spritePos = new Position(s.getXPosn(), s.getYPosn());
+            Position spritePos = new Position(npcSprite.getXPosn(), npcSprite.getYPosn());
             if (!b.withinBoundary(spritePos)) {
-                s.setActive(false);
+                npcSprite.setActive(false);
             }
 
+	        // test collision with player
+	        List<Collision> collisions = player.getSprite().findCollisionCollections(npcSprite);
+	        //deal damage
+	        for (Collision c : collisions) {
+
+		        if (c.getSprite() instanceof Solid) {
+			        Solid solidPlayerPart = (Solid) c.getSprite();
+			        for (Sprite s : c.getCollidingSprites()) {
+				        if (s instanceof Solid) {
+					        //deal damage
+					        if (s instanceof Destructible) {
+						        ((Destructible) s).reduceHealth(solidPlayerPart.getImpactDamage());
+					        }
+
+					        if (c.getSprite() instanceof Destructible) {
+						        ((Destructible) c.getSprite()).reduceHealth(((Solid) s).getImpactDamage());
+					        }
+					        //obtain damage
+				        }
+			        }
+		        }
+	        }
+
             // delete inactive sprites
-            if (s.isActive()) {
-                s.updateSprite();
+            if (npcSprite.isActive()) {
+                npcSprite.updateSprite();
             } else {
 	            // if sprite was killed add loot to sprite collection
-	            if (SpriteStatus.DEAD.equals(s.getStatus()) && s instanceof Lootable) {
-		            getSpriteCollection().put(SpriteLayer.ITEM, ((Lootable) s).getLootSprite());
+	            if (SpriteStatus.DEAD.equals(npcSprite.getStatus()) && npcSprite instanceof Lootable) {
+		            getSpriteCollection().put(SpriteLayer.ITEM, ((Lootable) npcSprite).getLootSprite());
 	            }
 	            iterator.remove();
             }

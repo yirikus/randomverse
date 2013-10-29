@@ -10,6 +10,7 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.Map;
  * Ship is a sprite that moves and uses it's parts to use abilities like an attack
  * can be player or npc controlled
  */
-public class Ship extends MultiSprite implements CanAttack, Destructible, Lootable {
+public class Ship extends MultiSprite implements CanAttack, Destructible, Lootable{
 
     private ArtificialIntelligence ai;
 	private LootSprite lootSprite;
@@ -160,7 +161,5 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 	public void setLootSprite(LootSprite lootSprite) {
 		this.lootSprite = lootSprite;
 	}
-
-
 
 }

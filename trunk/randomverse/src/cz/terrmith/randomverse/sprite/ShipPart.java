@@ -6,6 +6,7 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Set;
  * Can have extentions point - other ship parts can be connected to these extension points
  * Must be connected to core (ship tile [0,0]) or they are destroyed
  */
-public class ShipPart extends SimpleSprite implements Destructible{
+public class ShipPart extends SimpleSprite implements Destructible, Solid {
 
 	private int totalHealth;
 	private int currentHealth;
@@ -117,5 +118,10 @@ public class ShipPart extends SimpleSprite implements Destructible{
 	@Override
 	public Sprite copy() {
 		return new ShipPart(this);
+	}
+
+	@Override
+	public int getImpactDamage() {
+		return 1;
 	}
 }

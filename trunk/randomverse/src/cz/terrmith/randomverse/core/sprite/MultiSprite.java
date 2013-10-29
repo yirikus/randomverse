@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.core.sprite;
 
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
+import cz.terrmith.randomverse.core.sprite.collision.Collision;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -223,6 +224,26 @@ public class MultiSprite implements Sprite{
             t.getSprite().drawSprite(g, ims);
         }
     }
+
+	/**
+	 * Finds collisions between two multisprites and returns detailed collision information
+	 * @param sprite multisprite
+	 * @return list of collisions
+	 */
+	public List<Collision> findCollisionCollections(Sprite sprite) {
+		List<Collision> collidingSprites = new ArrayList<Collision>();
+		for (Tile t: tiles) {
+			Sprite s = t.getSprite();
+			if (!SpriteStatus.DEAD.equals(s.getStatus())) {
+
+				List<Sprite> collisions = sprite.collidesWith(s);
+				if (!collisions.isEmpty()) {
+					collidingSprites.add(new Collision(s, collisions));
+				}
+			}
+		}
+		return collidingSprites;
+	}
 
 	@Override
 	public List<Sprite> collidesWith(Sprite sprite) {
