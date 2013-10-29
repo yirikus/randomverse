@@ -72,7 +72,8 @@ public interface Sprite {
      * returns all sprites parts that collide with given sprite or itself if its single part
      *
      * @param sprite sprite that is tested for collision
-     * @return sprite collection or empty collection if no colliding sprite was found
+     * @return sprite collection contains nothing, this or sprites that are parts of this
+     *                sprite and collide with given sprite
      */
     List<Sprite> collidesWith(Sprite sprite);
 
