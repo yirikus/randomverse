@@ -8,10 +8,12 @@ import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.ShipPart;
+import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -236,10 +238,11 @@ public class ShipModificationScreen {
                     Tile.DEFAULT_SIZE,
                     Tile.DEFAULT_SIZE);
 
-        int initX = 100;
-        int initY = 300;
-        int column = 0;
-        int row = 0;
+	    // draw parts to choose from
+	    int initX = 100;
+	    int initY = 300;
+	    int column = 0;
+	    int row = 0;
 
         for (Sprite s : parts) {
             s.setPosition(initX + column * s.getWidth(), initY + row * s.getHeight());
@@ -250,7 +253,16 @@ public class ShipModificationScreen {
                             (int)s.getYPosn(),
                             s.getWidth(),
                             s.getHeight());
+	            // draw part info
+	            g.drawString("speed: " + ((ShipPart)s).getSpeed(),400,300);
+	            g.drawString("health: " + ((ShipPart)s).getTotalHealth(),400,320);
+	            if (s instanceof SimpleGun) {
+		            g.drawString("damage: " + ((SimpleGun)s).getDamage().getAmount(),400,340);
+		            g.drawString("attack rate: " + ((SimpleGun)s).getAttackTimer(),400,360);
+	            }
             }
+
+	        g.drawString("total ship speed: " + playerRef.getSprite().getSpeed(), 400, 100);
 
             column++;
              if(column == PARTS_PER_ROW) {
@@ -258,6 +270,7 @@ public class ShipModificationScreen {
                 row++;
             }
         }
+
 
 	    // draw extension points
 	    for (Map.Entry<GridLocation, Set<ExtensionPoint>> entry: extensionPoints.entrySet()) {

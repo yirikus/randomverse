@@ -36,23 +36,24 @@ public class Player {
 	 * Processes user input and updates player sprite
 	 */
 	public void update() {
-		int dx = 0;
-		int dy = 0;
+		double dx = 0;
+		double dy = 0;
+		double step = getSprite().getSpeed();
 		if (Command.State.RELEASED_PRESSED.equals(command.getUp())
 		  || Command.State.PRESSED.equals(command.getUp())) {
-			dy -= STEP;
+			dy -= step;
 		}
 		if (Command.State.RELEASED_PRESSED.equals(command.getDown())
 		  || Command.State.PRESSED.equals(command.getDown())) {
-			dy += STEP;
+			dy += step;
 		}
 		if (Command.State.RELEASED_PRESSED.equals(command.getLeft())
 		  || Command.State.PRESSED.equals(command.getLeft())) {
-			dx -= STEP;
+			dx -= step;
 		}
 		if (Command.State.RELEASED_PRESSED.equals(command.getRight())
 		  || Command.State.PRESSED.equals(command.getRight())) {
-			dx += STEP;
+			dx += step;
 		}
 
 		if (Command.State.RELEASED_PRESSED.equals(command.getAction1())

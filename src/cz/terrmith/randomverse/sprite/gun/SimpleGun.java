@@ -20,6 +20,7 @@ import java.util.HashSet;
  */
 public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	private static final int DEFAULT_SHOOT_TIMER = 8;
+	private final Damage damage;
 	private int shootTimer = DEFAULT_SHOOT_TIMER;
 	private int canShootIn = shootTimer;
     private SpriteCreator spriteCreator;
@@ -43,6 +44,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
         super(totalHealth, null, new HashSet<ExtensionPoint>());
 	    this.getExtensions().add(ExtensionPoint.RIGHT);
 	    this.shootTimer = rateOfFire;
+	    this.damage = damage;
         this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(damage));
         this.getImageForStatus().put(SpriteStatus.DEFAULT, imageLocation);
     }
@@ -50,6 +52,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	public SimpleGun(SimpleGun simpleGun) {
 		super(simpleGun);
 		this.shootTimer = simpleGun.getAttackTimer();
+		this.damage = simpleGun.getDamage();
 		this.spriteCreator = new ProjectileCreator((ProjectileCreator)simpleGun.getSpriteCreator());
 		this.setImageForStatus(simpleGun.getImageForStatus());
 	}
@@ -66,7 +69,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 		if(canShootIn <= 0 && !SpriteStatus.DEAD.equals(getStatus())) {
 			spriteCreator.createSprites(getXPosn() + getWidth() / 2,
 			                            getYPosn() + getHeight() / 2, 0, 1, -12, -getHeight());
-			canShootIn = DEFAULT_SHOOT_TIMER;
+			canShootIn = shootTimer;
 		}
 	}
 
@@ -99,5 +102,9 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 
 	public SpriteCreator getSpriteCreator() {
 		return spriteCreator;
+	}
+
+	public Damage getDamage() {
+		return damage;
 	}
 }

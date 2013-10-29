@@ -66,49 +66,53 @@ public class ShipPartFactory {
             case 0: return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1);
             case 1: return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1);
             case 2: return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1);
-            case 3: return new SimpleGun(spriteCollection,12,new Damage(4, damageType),new ImageLocation("sideGun",3),1);
-            case 4: return createCockpit(new ImageLocation("cockpit",0));
-            case 5: return createCockpit(new ImageLocation("cockpit",1));
-            case 6: return createCockpit(new ImageLocation("cockpit",2));
-            case 7: return createCockpit(new ImageLocation("cockpit",3));
-            case 8: return createMidPart(new ImageLocation("midParts",0));
-            case 9: return createMidPart(new ImageLocation("midParts",1));
-            case 10: return createMidPart(new ImageLocation("midParts",2));
-            case 11: return createMidPart(new ImageLocation("midParts",3));
-            case 12: return createBottomEngine(new ImageLocation("bottomEngines",0));
-            case 13: return createBottomEngine(new ImageLocation("bottomEngines",1));
-            case 14: return createBottomEngine(new ImageLocation("bottomEngines",2));
-            case 15: return createBottomEngine(new ImageLocation("bottomEngines",3));
+            case 3: return new SimpleGun(spriteCollection,12,new Damage(4, damageType),new ImageLocation("sideGun",3),2);
+            case 4: return createCockpit(new ImageLocation("cockpit",0),2);
+            case 5: return createCockpit(new ImageLocation("cockpit",1),3);
+            case 6: return createCockpit(new ImageLocation("cockpit",2),4);
+            case 7: return createCockpit(new ImageLocation("cockpit",3),1);
+            case 8: return createMidPart(new ImageLocation("midParts",0),-0.5, 2);
+            case 9: return createMidPart(new ImageLocation("midParts",1),-1, 3);
+            case 10: return createMidPart(new ImageLocation("midParts",2),-1.5, 4);
+            case 11: return createMidPart(new ImageLocation("midParts",3),-2, 5);
+            case 12: return createBottomEngine(new ImageLocation("bottomEngines",0),4,2);
+            case 13: return createBottomEngine(new ImageLocation("bottomEngines",1),6,1);
+            case 14: return createBottomEngine(new ImageLocation("bottomEngines",2),8,1);
+            case 15: return createBottomEngine(new ImageLocation("bottomEngines",3),10,1);
         }
 
         return null;
     }
 
-    public SimpleSprite createSprite(ImageLocation image, Set<ExtensionPoint> extensions){
+    public ShipPart createSprite(ImageLocation image, Set<ExtensionPoint> extensions, int health){
         Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
         imageForStatus.put(SpriteStatus.DEFAULT, image);
-	    return new ShipPart(1, imageForStatus, extensions);
+	    return new ShipPart(health, imageForStatus, extensions);
     }
 
-	public SimpleSprite createCockpit(ImageLocation image) {
+	public ShipPart createCockpit(ImageLocation image, int health) {
 		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
 		extensions.add(ExtensionPoint.BOTTOM);
-		return createSprite(image, extensions);
+		return createSprite(image, extensions, health);
 	}
 
-	public SimpleSprite createMidPart(ImageLocation image) {
+	public ShipPart createMidPart(ImageLocation image,double speed, int health) {
 		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
 		extensions.add(ExtensionPoint.BOTTOM);
 		extensions.add(ExtensionPoint.LEFT);
 		extensions.add(ExtensionPoint.RIGHT);
 		extensions.add(ExtensionPoint.TOP);
-		return createSprite(image, extensions);
+		ShipPart part = createSprite(image, extensions, health);
+		part.setSpeed(speed);
+		return part;
 	}
 
-	public SimpleSprite createBottomEngine(ImageLocation image) {
+	public ShipPart createBottomEngine(ImageLocation image,double speed, int health) {
 		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
 		extensions.add(ExtensionPoint.TOP);
-		return createSprite(image, extensions);
+		ShipPart shipPart = createSprite(image, extensions, health);
+		shipPart.setSpeed(speed);
+		return shipPart;
 	}
 
 
