@@ -176,6 +176,16 @@ public class Randomverse extends GameEngine {
 
     private void updateWorld() {
         world.update();
+	    if (world.completed()) {
+		    DialogCallback callback = new DialogCallback() {
+			    @Override
+			    public void onClose() {
+				    gameMode = GameMode.MAIN_MENU;
+			    }
+		    };
+		    Dialog dialog = new Dialog("YOU WIN, BITCH! SCORE: " + player.getMoney(), 200, 200, 400, 200, callback);
+		    showDialog(dialog);
+	    }
     }
 
     private void updateNpcs() {
