@@ -15,16 +15,18 @@ public abstract class World {
     private SpriteCollection spriteCollection;
     private boolean paused;
     private long pausedTime;
+	private long wavesToDefeat = 0;
 
-    /**
+	/**
      *
      * @param spriteCollection
      * @param period time to wait between updates in seconds
      */
-    public World(SpriteCollection spriteCollection, long period) {
+    public World(SpriteCollection spriteCollection, long period, long wavesToDefeat) {
         this.spriteCollection = spriteCollection;
         this.startTime = System.currentTimeMillis();
         this.period = TimeUnit.SECONDS.toMillis(period);
+	    this.wavesToDefeat = wavesToDefeat;
     }
 
     /**
@@ -36,6 +38,10 @@ public abstract class World {
             createSprites();
         }
     }
+	
+	public boolean completed() {
+		return updateCount >= wavesToDefeat;
+	}
 
     public long getUpdateCount() {
         return updateCount;

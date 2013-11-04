@@ -26,18 +26,14 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 12.10.13
- * Time: 16:35
- * To change this template use File | Settings | File Templates.
+ * Testing level
  */
 public class LevelOne extends World {
     private Random random = new Random();
     private SpriteFormationFactory formationFactory;
 
     public LevelOne(SpriteCollection spriteCollection) {
-        super(spriteCollection,3);
+        super(spriteCollection,3,10);
         this.formationFactory = new SpriteFormationFactory(spriteCollection) {
             @Override
             protected Sprite createEnemy(int x, int y) {
@@ -72,20 +68,12 @@ public class LevelOne extends World {
 
     @Override
     protected void createSprites() {
-        if (getUpdateCount() < 5) {
+        if (getUpdateCount() < 2 || (getUpdateCount() > 6)) {
             formationFactory.createBoxFormation(random.nextInt(600), random.nextInt(3) + 1, random.nextInt(3) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        } else if (getUpdateCount() < 10) {
-            formationFactory.createBoxFormation(random.nextInt(500), random.nextInt(4) + 1, random.nextInt(4) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        } else if (getUpdateCount() < 15) {
-            formationFactory.createBoxFormation(random.nextInt(400), random.nextInt(5) + 1, random.nextInt(5) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        } else if (getUpdateCount() < 15) {
-            formationFactory.createBoxFormation(random.nextInt(300), random.nextInt(6) + 1, random.nextInt(6) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        } else if (getUpdateCount() < 15) {
-            formationFactory.createBoxFormation(random.nextInt(200), random.nextInt(7) + 1, random.nextInt(7) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        } else if (getUpdateCount() < 15) {
-            formationFactory.createBoxFormation(random.nextInt(200), random.nextInt(8) + 1, random.nextInt(8) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        } else {
-            formationFactory.createBoxFormation(random.nextInt(200), random.nextInt(9) + 1, random.nextInt(9) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        } else if (getUpdateCount() < 4) {
+            formationFactory.createBoxFormation(random.nextInt(400), 6, 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        } else if (getUpdateCount() < 6) {
+            formationFactory.createBoxFormation(random.nextInt(200), 1, 6, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         }
     }
 }
