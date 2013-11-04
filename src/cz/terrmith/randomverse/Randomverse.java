@@ -48,7 +48,9 @@ public class Randomverse extends GameEngine {
     private int screenHeight;
     private World world;
     private SpriteCollection spriteCollection;
-    private enum GameMode {MAIN_MENU, GAME, INVENTORY}
+    private enum GameMode {MAIN_MENU, GAME,
+	    MACRO_GAME,
+	    INVENTORY}
     private GameMode gameMode = GameMode.MAIN_MENU;
     private Menu menu;
 
@@ -180,7 +182,7 @@ public class Randomverse extends GameEngine {
 		    DialogCallback callback = new DialogCallback() {
 			    @Override
 			    public void onClose() {
-				    gameMode = GameMode.MAIN_MENU;
+				    gameMode = GameMode.MACRO_GAME;
 			    }
 		    };
 		    Dialog dialog = new Dialog("YOU WIN, BITCH! SCORE: " + player.getMoney(), 200, 200, 400, 200, callback);
@@ -345,11 +347,11 @@ public class Randomverse extends GameEngine {
 	@Override
 	public void waitForUnpause() {
 		if(command.isAnyKey()) {
-			if (getDialog() != null) {
-				closeDialog();
+			boolean closed = getDialog() == null || closeDialog();
+			if (closed) {
+				unpause();
+				command.clear();
 			}
-			unpause();
-			command.clear();
 		}
 	}
 

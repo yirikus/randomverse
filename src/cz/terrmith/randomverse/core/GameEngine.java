@@ -75,9 +75,12 @@ public abstract class GameEngine {
 	/**
 	 * Closes dialog window
 	 */
-	public void closeDialog() {
-		this.dialog.close();
-		this.dialog = null;
+	public boolean closeDialog() {
+		boolean closed = this.dialog.close();
+		if (closed) {
+			this.dialog = null;
+		}
+		return closed;
 	}
 
 	/**

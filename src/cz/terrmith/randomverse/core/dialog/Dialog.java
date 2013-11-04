@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Modal window with a callback action
@@ -20,6 +21,7 @@ public class Dialog{
 	private int width;
 	private int height;
 	private DialogCallback callback;
+	private long timer;
 
 	/**
 	 *
@@ -31,18 +33,29 @@ public class Dialog{
 	 * @param callback callback that will be called at certain time like on close operation (can be null)
 	 */
 	public Dialog(String text, int posX, int posY, int width, int height, DialogCallback callback) {
+		System.out.println("new dialog: " + text);
 		this.text = text;
 		this.posX = posX;
 		this.posY = posY;
 		this.width = width;
 		this.height = height;
 		this.callback = callback;
+		timer = System.currentTimeMillis();
 	}
 
-	public void close() {
+	/**
+	 * Closes dialog window
+	 * @return true if dialog was closed, false otherwise
+	 */
+	public boolean close() {
+		// prevents accidental close
+		if (System.currentTimeMillis() - timer < 500) {
+			return false;
+		}
 		if (callback != null) {
 			callback.onClose();
 		}
+		return true;
 	}
 
 
