@@ -13,6 +13,7 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CollisionTester;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
@@ -23,6 +24,7 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
 import cz.terrmith.randomverse.core.world.World;
+import cz.terrmith.randomverse.inventory.GridMenu;
 import cz.terrmith.randomverse.inventory.ShipModificationScreen;
 import cz.terrmith.randomverse.world.LevelOne;
 
@@ -48,9 +50,9 @@ public class Randomverse extends GameEngine {
     private int screenHeight;
     private World world;
     private SpriteCollection spriteCollection;
-    private enum GameMode {MAIN_MENU, GAME,
-	    MACRO_GAME,
-	    INVENTORY}
+	private GridMenu map;
+
+	private enum GameMode {MAIN_MENU, GAME, MAP, INVENTORY}
     private GameMode gameMode = GameMode.MAIN_MENU;
     private Menu menu;
 
@@ -67,6 +69,7 @@ public class Randomverse extends GameEngine {
         menu.addItem("start");
         menu.addItem("options");
         menu.addItem("exit");
+	    map = new GridMenu(10, 16, Tile.DEFAULT_SIZE, new Position(100,100));
     }
 
     @Override
@@ -84,7 +87,10 @@ public class Randomverse extends GameEngine {
                     command.setInventory(false);
                     world.setPaused(false);
                 }
-            break;
+                break;
+            case MAP:
+	            updateMap();
+	            break;
             case GAME:
 
                 if (Command.State.PRESSED.equals(command.getPrevious())
@@ -118,6 +124,47 @@ public class Randomverse extends GameEngine {
                 break;
         }
     }
+
+	private void updateMap() {
+		if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
+			map.selectAbove();
+			command.setUp(false);
+		} else if (Command.State.PRESSED_RELEASED.equals(command.getDown())) {
+			map.selectBelow();
+			command.setDown(false);
+		} else if (Command.State.PRESSED_RELEASED.equals(command.getLeft())) {
+			map.selectLeft();
+			command.setLeft(false);
+		} else if (Command.State.PRESSED_RELEASED.equals(command.getRight())) {
+			map.selectRight();
+			command.setRight(false);
+		} else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
+			int mapx = map.getX();
+			int mapy = map.getY();
+
+			gameMode = GameMode.GAME;
+			spriteCollection.clear();
+			command.clear();
+			spriteCollection.put(SpriteLayer.PLAYER, player.getSprite());
+			this.world = new LevelOne(this.spriteCollection);
+
+			DialogCallback callback = new DialogCallback() {
+				@Override
+				public void onClose() {
+				}
+			};
+			Dialog dialog = new Dialog("GAME START",200,200,400,200,callback);
+			showDialog(dialog);
+
+		} else if (Command.State.PRESSED_RELEASED.equals(command.getAction2())) {
+		} else if (Command.State.PRESSED_RELEASED.equals(command.getAction3())) {
+		} else if (Command.State.PRESSED_RELEASED.equals(command.getAction4())) {
+		} else if (Command.State.PRESSED.equals(command.getPrevious())
+		  || Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
+			gameMode = GameMode.MAIN_MENU;
+			command.clear();
+		}
+	}
 
 	private void updateItems() {
 		Iterator<Sprite> iterator = getSpriteCollection().getSprites(SpriteLayer.ITEM).iterator();
@@ -182,7 +229,7 @@ public class Randomverse extends GameEngine {
 		    DialogCallback callback = new DialogCallback() {
 			    @Override
 			    public void onClose() {
-				    gameMode = GameMode.MACRO_GAME;
+				    gameMode = GameMode.MAP;
 			    }
 		    };
 		    Dialog dialog = new Dialog("YOU WIN, BITCH! SCORE: " + player.getMoney(), 200, 200, 400, 200, callback);
@@ -341,6 +388,10 @@ public class Randomverse extends GameEngine {
                 clearScreen(g2, Color.darkGray);
                 inventory.drawScreen(g2, iml);
                 break;
+	        case MAP:
+		        clearScreen(g2, Color.darkGray);
+		        map.drawMenu(g2);
+		        break;
         }
     }
 

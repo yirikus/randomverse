@@ -33,7 +33,7 @@ public class LevelOne extends World {
     private SpriteFormationFactory formationFactory;
 
     public LevelOne(SpriteCollection spriteCollection) {
-        super(spriteCollection,3,10);
+        super(spriteCollection,3,3);
         this.formationFactory = new SpriteFormationFactory(spriteCollection) {
             @Override
             protected Sprite createEnemy(int x, int y) {
