@@ -41,7 +41,8 @@ public class SimpleSprite implements Sprite {
      */
     public SimpleSprite(SimpleSprite sprite) {
         this(sprite.getXPosn(), sprite.getYPosn(), sprite.getWidth(), sprite.getHeight(), sprite.getImageForStatus());
-        this.xFlip = sprite.isFlippedHorizontally();
+        this.status = sprite.getStatus();
+	    this.xFlip = sprite.isFlippedHorizontally();
 	    this.yFlip = sprite.isFlippedVertically();
     }
 

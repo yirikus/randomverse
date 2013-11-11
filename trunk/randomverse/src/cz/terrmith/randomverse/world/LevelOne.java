@@ -40,10 +40,10 @@ public class LevelOne extends World {
                 ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
                 Ship enemy = new Ship(x,y,null,ai);
                 if (random.nextBoolean()) {
-                    enemy.addTile(-1, 1, new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1));
+                    enemy.addTile(-1, 1, new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1,0));
                 }
                 if (random.nextBoolean()) {
-                    SimpleGun flippedGun = new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1);
+                    SimpleGun flippedGun = new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1,0);
                     flippedGun.flipHorizontal();
                     enemy.addTile(1, 1, flippedGun);
                 }
@@ -55,7 +55,7 @@ public class LevelOne extends World {
 	            extensions.add(ExtensionPoint.RIGHT);
 	            extensions.add(ExtensionPoint.TOP);
 	            extensions.add(ExtensionPoint.BOTTOM);
-	            ShipPart body = new ShipPart(1, imageForStatus, extensions);
+	            ShipPart body = new ShipPart(1, imageForStatus, extensions, 0);
 	            enemy.addTile(0, 1, body);
 
                 enemy.flipVertical();

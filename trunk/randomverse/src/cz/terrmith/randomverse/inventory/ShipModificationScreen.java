@@ -7,6 +7,7 @@ import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
@@ -26,11 +27,7 @@ import java.util.Set;
 
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 17.10.13
- * Time: 22:59
- * To change this template use File | Settings | File Templates.
+ * Screen that allows modification of a ship = adding and removing ship parts
  */
 public class ShipModificationScreen {
 
@@ -150,22 +147,33 @@ public class ShipModificationScreen {
                mode = Mode.PART;
                break;
            case PART:
-               mode = Mode.SHIP;
-	           // change/add ship part to local copy
-	           ship.removeTile(shipX, shipY);
-	           SimpleSprite sprite = factory.create(partX + partY * PARTS_PER_ROW);
-	           Tile newTile = new Tile(shipX, shipY, sprite);
-	           ship.addTile(newTile);
+	           ShipPart shipPart = parts.get(partX + partY * PARTS_PER_ROW);
+	           Tile tileBeingReplaced = Tile.findTile(playerRef.getSprite().getTiles(), shipX, shipY);
+	           int replacementPartPrice = 0;
+	           if (tileBeingReplaced != null) {
+	                ShipPart partBingReplaced = (ShipPart)tileBeingReplaced.getSprite();
+		           replacementPartPrice = + partBingReplaced.getComputedPrice();
+	           }
 
-               // change/add ship part to player reference
-               playerRef.getSprite().removeTile(shipX, shipY);
-               SimpleSprite sprite2 = factory.create(partX + partY * PARTS_PER_ROW);
-               playerRef.getSprite().addTile(shipX, shipY, sprite2);
+	           if (shipPart.getPrice() <= (playerRef.getMoney() + replacementPartPrice)) {
+		           playerRef.setMoney(playerRef.getMoney() + replacementPartPrice - shipPart.getPrice());
+	               mode = Mode.SHIP;
+		           // change/add ship part to local copy
+		           ship.removeTile(shipX, shipY);
+		           SimpleSprite sprite = factory.create(partX + partY * PARTS_PER_ROW);
+		           Tile newTile = new Tile(shipX, shipY, sprite);
+		           ship.addTile(newTile);
 
-	           addExtensionPoints(newTile);
+	               // change/add ship part to player reference
+	               playerRef.getSprite().removeTile(shipX, shipY);
+	               SimpleSprite sprite2 = factory.create(partX + partY * PARTS_PER_ROW);
+	               playerRef.getSprite().addTile(shipX, shipY, sprite2);
 
-	           partX = 0;
-	           partY = 0;
+		           addExtensionPoints(newTile);
+
+		           partX = 0;
+		           partY = 0;
+	           }
                break;
        }
     }
@@ -230,7 +238,17 @@ public class ShipModificationScreen {
         //translate ship
         ship.setPosition(100, 100);
         for (Tile t : ship.getTiles()) {
+	        SpriteStatus prevStatus = t.getSprite().getStatus();
+	        if(t.getSprite().getStatus().equals(SpriteStatus.DEAD)) {
+		        g.setColor(Color.RED);
+		        g.fillRect( (int)t.getSprite().getXPosn(),
+		                    (int)t.getSprite().getYPosn(),
+		                    t.getSprite().getWidth(),
+		                    t.getSprite().getHeight());
+		        t.getSprite().setStatus(SpriteStatus.DEFAULT);
+	        }
             t.getSprite().drawSprite(g,iml);
+	        t.getSprite().setStatus(prevStatus);
         }
         g.setColor(Color.GREEN);
         g.drawRect( (int) ship.getXPosn() + this.shipX * Tile.DEFAULT_SIZE,
@@ -244,15 +262,35 @@ public class ShipModificationScreen {
 	    int column = 0;
 	    int row = 0;
 
-        for (Sprite s : parts) {
+	    int replacementTilePrice = 0;
+	    Tile tileBeignReplaced = Tile.findTile(playerRef.getSprite().getTiles(), shipX, shipY);
+	    if (tileBeignReplaced != null) {
+		    ShipPart partBeingReplaced = (ShipPart) tileBeignReplaced.getSprite();
+		    replacementTilePrice = partBeingReplaced.getComputedPrice();
+	    }
+
+
+	    for (Sprite s : parts) {
             s.setPosition(initX + column * s.getWidth(), initY + row * s.getHeight());
             s.drawSprite(g,iml);
-            if (column == this.partX && row == this.partY) {
+
+		    // darken if not enough money
+		    if (((ShipPart)s).getPrice() > (playerRef.getMoney() + replacementTilePrice)) {
+			    g.setColor(new Color(0,0,0,125));
+			    g.fillRect((int) s.getXPosn(),
+			               (int) s.getYPosn(),
+			               s.getWidth(),
+			               s.getHeight());
+		    }
+
+		    // draw rectangle if selected
+		    if (column == this.partX && row == this.partY) {
                 g.setColor(Color.GREEN);
                 g.drawRect( (int)s.getXPosn(),
                             (int)s.getYPosn(),
                             s.getWidth(),
                             s.getHeight());
+
 	            // draw part info
 	            g.drawString("speed: " + ((ShipPart)s).getSpeed(),400,300);
 	            g.drawString("health: " + ((ShipPart)s).getTotalHealth(),400,320);
@@ -260,9 +298,12 @@ public class ShipModificationScreen {
 		            g.drawString("damage: " + ((SimpleGun)s).getDamage().getAmount(),400,340);
 		            g.drawString("attack rate: " + ((SimpleGun)s).getAttackTimer(),400,360);
 	            }
+	            g.drawString("Price: $" + ((ShipPart)s).getPrice(),400,380);
             }
 
 	        g.drawString("total ship speed: " + playerRef.getSprite().getSpeed(), 400, 100);
+		    g.drawString("total money: " + playerRef.getMoney(), 400, 120);
+		    g.drawString("part sell price: " + replacementTilePrice, 400, 160);
 
             column++;
              if(column == PARTS_PER_ROW) {
