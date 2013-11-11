@@ -52,7 +52,9 @@ public class Randomverse extends GameEngine {
     private SpriteCollection spriteCollection;
 	private GridMenu map;
 
-	private enum GameMode {MAIN_MENU, GAME, MAP, INVENTORY}
+	private enum GameMode {MAIN_MENU, GAME, MAP,
+		SHOP,
+		INVENTORY}
     private GameMode gameMode = GameMode.MAIN_MENU;
     private Menu menu;
 
@@ -88,6 +90,15 @@ public class Randomverse extends GameEngine {
                     world.setPaused(false);
                 }
                 break;
+	        case SHOP:
+		        updateInventory();
+		        if (Command.State.PRESSED.equals(command.getInventory())
+		          || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
+
+			        gameMode = GameMode.MAP;
+			        command.setInventory(false);
+		        }
+		        break;
             case MAP:
 	            updateMap();
 	            break;
@@ -159,6 +170,11 @@ public class Randomverse extends GameEngine {
 		} else if (Command.State.PRESSED_RELEASED.equals(command.getAction2())) {
 		} else if (Command.State.PRESSED_RELEASED.equals(command.getAction3())) {
 		} else if (Command.State.PRESSED_RELEASED.equals(command.getAction4())) {
+		} else  if (Command.State.PRESSED.equals(command.getInventory())
+		  || Command.State.RELEASED_PRESSED.equals(command.getInventory())) {
+			gameMode = GameMode.SHOP;
+			inventory = new ShipModificationScreen(player, spriteCollection);
+			command.setInventory(false);
 		} else if (Command.State.PRESSED.equals(command.getPrevious())
 		  || Command.State.RELEASED_PRESSED.equals(command.getPrevious())) {
 			gameMode = GameMode.MAIN_MENU;

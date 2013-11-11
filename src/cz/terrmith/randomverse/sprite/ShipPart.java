@@ -25,20 +25,24 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	private Set<ExtensionPoint> extensions;
 
 	private double speed = 0.0;
+	private int price;
 
 
 	public ShipPart(ShipPart sprite) {
 		super(sprite);
 		this.totalHealth = sprite.getTotalHealth();
 		this.currentHealth = sprite.getTotalHealth();
+		this.price = sprite.getPrice();
 		this.extensions = new HashSet<ExtensionPoint>(sprite.getExtensions());
 	}
 
-	public ShipPart(int totalHealth, Map<SpriteStatus, ImageLocation> imageForStatus, Set<ExtensionPoint> extensions) {
+	public ShipPart(int totalHealth, Map<SpriteStatus, ImageLocation> imageForStatus, Set<ExtensionPoint> extensions,
+	                int price) {
 		super(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, imageForStatus);
 		this.totalHealth = totalHealth;
 		this.currentHealth = totalHealth;
 		this.extensions = extensions;
+		this.price = price;
 	}
 
 	@Override
@@ -135,4 +139,21 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	public void setSpeed(double speed) {
 		this.speed = speed;
 	}
+
+	/**
+	 * Returns price that ignores health (price that was set on instantiation)
+	 * @return
+	 */
+	public int getPrice() {
+		return price;
+	}
+
+	/**
+	 * Price is computed from price and health
+	 * @return
+	 */
+	public int getComputedPrice() {
+		return (currentHealth/totalHealth) * price;
+	}
+
 }
