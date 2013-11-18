@@ -13,6 +13,7 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
 import cz.terrmith.randomverse.core.world.World;
+import cz.terrmith.randomverse.inventory.ShipPartFactory;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.MoneyLoot;
 import cz.terrmith.randomverse.sprite.Ship;
@@ -32,13 +33,14 @@ public class LevelOne extends World {
     private Random random = new Random();
     private SpriteFormationFactory formationFactory;
 
-    public LevelOne(SpriteCollection spriteCollection) {
+    public LevelOne(final SpriteCollection spriteCollection) {
         super(spriteCollection,3,3);
         this.formationFactory = new SpriteFormationFactory(spriteCollection) {
             @Override
             protected Sprite createEnemy(int x, int y) {
                 ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
                 Ship enemy = new Ship(x,y,null,ai);
+	            ShipPartFactory factory = new ShipPartFactory(spriteCollection, Damage.DamageType.PLAYER);
                 if (random.nextBoolean()) {
                     enemy.addTile(-1, 1, new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1,0));
                 }

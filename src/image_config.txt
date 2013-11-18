@@ -4,4 +4,10 @@ s midParts.png 4
 s sideEngines.png 4
 s sideGun.png 4
 s topGun.png 4
+s bottomEngines_damaged.png 4
+s cockpit_damaged.png 4
+s midParts_damaged.png 4
+s sideEngines_damaged.png 4
+s sideGun_damaged.png 4
+s topGun_damaged.png 4
 s shots.png 8

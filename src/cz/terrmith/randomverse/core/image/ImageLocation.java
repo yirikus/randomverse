@@ -7,6 +7,10 @@ public class ImageLocation {
     private int number;
     private String name;
 
+	public ImageLocation(ImageLocation iml) {
+		this(iml.getName(), iml.getNumber());
+	}
+
     public ImageLocation(String name, int number) {
         this.number = number;
         this.name = name;

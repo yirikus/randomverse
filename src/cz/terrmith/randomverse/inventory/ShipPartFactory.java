@@ -63,10 +63,10 @@ public class ShipPartFactory {
     public SimpleSprite create(int i) {
         switch (i) {
             //SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation
-            case 0: return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1,2);
-            case 1: return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1,8);
-            case 2: return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1,6);
-            case 3: return new SimpleGun(spriteCollection,12,new Damage(4, damageType),new ImageLocation("sideGun",3),2,4);
+            case 0:  return createGun(new ImageLocation("sideGun", 0), 1, 2, 8, new Damage(1, damageType));//return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1,2);
+            case 1:  return createGun(new ImageLocation("sideGun", 1), 1, 8, 4, new Damage(2, damageType));//return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1,8);
+            case 2:  return createGun(new ImageLocation("sideGun", 2), 1, 6, 8, new Damage(3, damageType));//return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1,6);
+            case 3: return createGun(new ImageLocation("sideGun", 3), 2, 4, 12, new Damage(4, damageType));
             case 4: return createCockpit(new ImageLocation("cockpit",0),2, 2);
             case 5: return createCockpit(new ImageLocation("cockpit",1),3, 4);
             case 6: return createCockpit(new ImageLocation("cockpit",2),4, 6);
@@ -84,9 +84,17 @@ public class ShipPartFactory {
         return null;
     }
 
-    public ShipPart createSprite(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
+	private SimpleSprite createGun(ImageLocation imageLocation, int health, int price, int attackRate, Damage damage) {
+		SimpleGun gun =
+		  new SimpleGun(spriteCollection, attackRate, damage, imageLocation, health, price);
+		return gun;
+	}
+
+	public ShipPart createSprite(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
         Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
         imageForStatus.put(SpriteStatus.DEFAULT, image);
+	    ImageLocation damagedImage = new ImageLocation(image.getName() + "_damaged", image.getNumber());
+	    imageForStatus.put(SpriteStatus.DAMAGED, damagedImage);
 	    return new ShipPart(health, imageForStatus, extensions, price);
     }
 
