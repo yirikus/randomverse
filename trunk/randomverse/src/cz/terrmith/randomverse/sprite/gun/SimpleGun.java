@@ -66,7 +66,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	}
 	@Override
 	public void attack() {
-		if(canShootIn <= 0 && !SpriteStatus.DEAD.equals(getStatus())) {
+		if(canShootIn <= 0 && SpriteStatus.DEFAULT.equals(getStatus())) {
 			spriteCreator.createSprites(getXPosn() + getWidth() / 2,
 			                            getYPosn() + getHeight() / 2, 0, 1, -12, -getHeight());
 			canShootIn = shootTimer;

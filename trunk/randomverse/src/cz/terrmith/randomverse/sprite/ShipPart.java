@@ -60,6 +60,8 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 		this.currentHealth -= amount;
 		if (this.currentHealth < 1) {
 			this.setStatus(SpriteStatus.DEAD);
+		} else if (this.currentHealth < this.totalHealth) {
+			this.setStatus(SpriteStatus.DAMAGED);
 		}
 	}
 
