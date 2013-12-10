@@ -1,6 +1,9 @@
 package cz.terrmith.randomverse.core.geometry;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author jiri.kus
@@ -61,7 +64,7 @@ public class GridLocation {
      * @param list
      * @return
      */
-    public static RelativePosition getRelativePositionTo(GridLocation loc, List<GridLocation> list) {
+    public static RelativePosition getRelativePositionTo(GridLocation loc, Collection<GridLocation> list) {
         //4 - hood
         GridLocation top = new GridLocation(loc.getX(), loc.getY() - 1);
         GridLocation bottom = new GridLocation(loc.getX(), loc.getY() + 1);
@@ -74,16 +77,27 @@ public class GridLocation {
         GridLocation bottomLeft = new GridLocation(loc.getX() + 1,loc.getY() - 1);
         GridLocation bottomRight = new GridLocation(loc.getX() + 1,loc.getY() + 1);
 
+        Set<RelativePosition> positions = new HashSet<RelativePosition>();
+
         for (GridLocation entry : list) {
            if (entry.equals(loc)) {
-               return RelativePosition.CONTAINS;
+               positions.add(RelativePosition.CONTAINS);
            } else if (entry.equals(top) || entry.equals(bottom) || entry.equals(left) || entry.equals(right)) {
-                return RelativePosition.NEIGHBOURHOOD_4;
+               positions.add(RelativePosition.NEIGHBOURHOOD_4);
            } else if (entry.equals(topLeft) || entry.equals(bottomLeft) || entry.equals(topRight) || entry.equals(bottomRight)) {
-                return RelativePosition.NEIHGBOURHOOD_8;
+               positions.add(RelativePosition.NEIGHBOURHOOD_8);
            }
         }
 
-        return RelativePosition.NOT_CONTAINS;
+        // since one location can have multiple relative positions, priority must be defined
+        if (positions.contains(RelativePosition.CONTAINS)) {
+            return RelativePosition.CONTAINS;
+        } else  if (positions.contains(RelativePosition.NEIGHBOURHOOD_4)) {
+            return RelativePosition.NEIGHBOURHOOD_4;
+        } else  if (positions.contains(RelativePosition.NEIGHBOURHOOD_8)) {
+            return RelativePosition.NEIGHBOURHOOD_8;
+        } else {
+            return RelativePosition.NOT_CONTAINS;
+        }
     }
 }

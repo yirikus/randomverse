@@ -6,7 +6,9 @@ import cz.terrmith.randomverse.core.geometry.RelativePosition;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public class GameMap extends GridMenu {
 
-    private List<GridLocation> explored = new ArrayList<GridLocation>();
+    private Set<GridLocation> explored = new HashSet<GridLocation>();
 
 
     public GameMap(int rows, int columns, int cellSize, Position position) {
@@ -41,8 +43,8 @@ public class GameMap extends GridMenu {
      */
     private boolean canMove(GridLocation loc) {
         RelativePosition relativePosition = GridLocation.getRelativePositionTo(loc, explored);
-        return (loc.equals(RelativePosition.CONTAINS)
-                || loc.equals(RelativePosition.NEIGHBOURHOOD_4));
+        return (relativePosition.equals(RelativePosition.CONTAINS)
+                || relativePosition.equals(RelativePosition.NEIGHBOURHOOD_4));
     }
 
     @Override
@@ -90,15 +92,15 @@ public class GameMap extends GridMenu {
 
                 if (relativePosition.equals(RelativePosition.NEIGHBOURHOOD_4)
                     || relativePosition.equals(RelativePosition.CONTAINS)) {
-                    g.drawRect((int)getPosition().getX() + i * getCellSize(),
-                               (int)getPosition().getY() + j * getCellSize(),
-                                getCellSize(), getCellSize());
+                    g.drawRect((int)getPosition().getX() + i * getCellSize() + 1,
+                               (int)getPosition().getY() + j * getCellSize() + 1,
+                                getCellSize() - 1, getCellSize() - 1);
                 }
             }
         }
         g.setColor(Color.green);
-        g.drawRect((int) getPosition().getX() + getX() * getCellSize(),
-                   (int) getPosition().getY() + getY() * getCellSize(),
-                    getCellSize(), getCellSize());
+        g.drawRect((int) getPosition().getX() + getX() * getCellSize() + 1,
+                   (int) getPosition().getY() + getY() * getCellSize() + 1,
+                    getCellSize() - 1, getCellSize() - 1);
     }
 }

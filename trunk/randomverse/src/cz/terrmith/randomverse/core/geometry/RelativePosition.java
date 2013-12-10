@@ -10,7 +10,7 @@ package cz.terrmith.randomverse.core.geometry;
 public enum RelativePosition {
     CONTAINS,
     NEIGHBOURHOOD_4,
-    NEIHGBOURHOOD_8,
+    NEIGHBOURHOOD_8,
     NOT_CONTAINS
 
 }

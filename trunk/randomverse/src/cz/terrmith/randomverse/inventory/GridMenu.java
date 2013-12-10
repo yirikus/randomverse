@@ -90,14 +90,14 @@ public class GridMenu {
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {
                 g.setColor(Color.white);
-                g.drawRect((int)position.getX() + i * cellSize,
-                           (int)position.getY() + j * cellSize,
-                           cellSize,cellSize);
+                g.drawRect((int)position.getX() + i * cellSize + 1,
+                           (int)position.getY() + j * cellSize + 1,
+                           cellSize - 1 ,cellSize - 1);
             }
         }
         g.setColor(Color.green);
-        g.drawRect((int)position.getX() + x * cellSize,
-                (int)position.getY() + y * cellSize,
-                cellSize,cellSize);
+        g.drawRect((int)position.getX() + x * cellSize + 1,
+                (int)position.getY() + y * cellSize + 1,
+                cellSize - 1 ,cellSize - 1);
     }
 }
