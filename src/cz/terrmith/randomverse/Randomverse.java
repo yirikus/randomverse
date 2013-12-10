@@ -407,7 +407,7 @@ public class Randomverse extends GameEngine {
                 inventory.drawScreen(g2, iml);
                 break;
 	        case MAP:
-		        clearScreen(g2, Color.darkGray);
+		        clearScreen(g2, Color.BLACK);
 		        map.drawMenu(g2);
 		        break;
         }
