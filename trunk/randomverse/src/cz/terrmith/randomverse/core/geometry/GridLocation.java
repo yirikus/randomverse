@@ -1,5 +1,7 @@
 package cz.terrmith.randomverse.core.geometry;
 
+import java.util.List;
+
 /**
  * @author jiri.kus
  */
@@ -52,4 +54,36 @@ public class GridLocation {
 	public String toString() {
 		return "[" + x + "," + y +"]";
 	}
+
+    /**
+     * Returns relative position of given point to given set of points
+     * @param loc
+     * @param list
+     * @return
+     */
+    public static RelativePosition getRelativePositionTo(GridLocation loc, List<GridLocation> list) {
+        //4 - hood
+        GridLocation top = new GridLocation(loc.getX(), loc.getY() - 1);
+        GridLocation bottom = new GridLocation(loc.getX(), loc.getY() + 1);
+        GridLocation left = new GridLocation(loc.getX() - 1, loc.getY());
+        GridLocation right = new GridLocation(loc.getX() + 1, loc.getY());
+
+        // 8 hood
+        GridLocation topLeft = new GridLocation(loc.getX() - 1, loc.getY() - 1);
+        GridLocation topRight = new GridLocation(loc.getX() -1, loc.getY() + 1);
+        GridLocation bottomLeft = new GridLocation(loc.getX() + 1,loc.getY() - 1);
+        GridLocation bottomRight = new GridLocation(loc.getX() + 1,loc.getY() + 1);
+
+        for (GridLocation entry : list) {
+           if (entry.equals(loc)) {
+               return RelativePosition.CONTAINS;
+           } else if (entry.equals(top) || entry.equals(bottom) || entry.equals(left) || entry.equals(right)) {
+                return RelativePosition.NEIGHBOURHOOD_4;
+           } else if (entry.equals(topLeft) || entry.equals(bottomLeft) || entry.equals(topRight) || entry.equals(bottomRight)) {
+                return RelativePosition.NEIHGBOURHOOD_8;
+           }
+        }
+
+        return RelativePosition.NOT_CONTAINS;
+    }
 }

@@ -70,6 +70,22 @@ public class GridMenu {
         this.y = y;
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public int getCellSize() {
+        return cellSize;
+    }
+
     public void drawMenu(Graphics g) {
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {

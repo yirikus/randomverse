@@ -1,11 +1,7 @@
 package cz.terrmith.randomverse.core.geometry;
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 11.10.13
- * Time: 0:13
- * To change this template use File | Settings | File Templates.
+ * Position in a real space
  */
 public class Position {
     private double x;

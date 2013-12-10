@@ -24,6 +24,7 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
 import cz.terrmith.randomverse.core.world.World;
+import cz.terrmith.randomverse.inventory.GameMap;
 import cz.terrmith.randomverse.inventory.GridMenu;
 import cz.terrmith.randomverse.inventory.ShipModificationScreen;
 import cz.terrmith.randomverse.world.LevelOne;
@@ -50,7 +51,7 @@ public class Randomverse extends GameEngine {
     private int screenHeight;
     private World world;
     private SpriteCollection spriteCollection;
-	private GridMenu map;
+	private GameMap map;
 
 	private enum GameMode {MAIN_MENU, GAME, MAP,
 		SHOP,
@@ -71,7 +72,7 @@ public class Randomverse extends GameEngine {
         menu.addItem("start");
         menu.addItem("options");
         menu.addItem("exit");
-	    map = new GridMenu(10, 16, Tile.DEFAULT_SIZE, new Position(100,100));
+	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100));
     }
 
     @Override
@@ -245,6 +246,7 @@ public class Randomverse extends GameEngine {
 		    DialogCallback callback = new DialogCallback() {
 			    @Override
 			    public void onClose() {
+                    map.markExplored();
 				    gameMode = GameMode.MAP;
 			    }
 		    };
