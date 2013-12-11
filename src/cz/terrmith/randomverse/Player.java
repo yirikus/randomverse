@@ -2,12 +2,11 @@ package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Loot;
 import cz.terrmith.randomverse.inventory.ShipPartFactory;
-import cz.terrmith.randomverse.sprite.MoneyLoot;
+import cz.terrmith.randomverse.loot.LootType;
 import cz.terrmith.randomverse.sprite.Ship;
 
 /**
@@ -106,8 +105,8 @@ public class Player {
 	}
 
 	public void addLoot(Loot loot) {
-		if (loot instanceof MoneyLoot) {
-			money += ((MoneyLoot) loot).getAmount();
+		if (loot.getType().equals(LootType.MONEY.name())) {
+			money += loot.getAmount();
 		}
 	}
 

@@ -14,8 +14,8 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.inventory.ShipPartFactory;
+import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
-import cz.terrmith.randomverse.sprite.MoneyLoot;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
@@ -61,7 +61,7 @@ public class LevelOne extends World {
 	            enemy.addTile(0, 1, body);
 
                 enemy.flipVertical();
-	            ((Lootable) enemy).setLootSprite(new LootSprite(0,0,10,10,null, new MoneyLoot(1)));
+	            ((Lootable) enemy).setLootSprite(new LootSprite(0,0,10,10,null, LootFactory.randomLoot(1)));
                 return enemy;
             }
         };

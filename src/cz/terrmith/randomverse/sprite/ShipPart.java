@@ -6,7 +6,9 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Loot;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
+import cz.terrmith.randomverse.loot.LootType;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -62,7 +64,9 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 			this.setStatus(SpriteStatus.DEAD);
 		} else if (this.currentHealth < this.totalHealth) {
 			this.setStatus(SpriteStatus.DAMAGED);
-		}
+		} else {
+            this.setStatus(SpriteStatus.DEFAULT);
+        }
 	}
 
 	public Set<ExtensionPoint> getExtensions() {
@@ -158,4 +162,9 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 		return (currentHealth/totalHealth) * price;
 	}
 
+    public void addPowerup(Loot loot) {
+        if(LootType.HEALTH.name().equals(loot.getType())) {
+            reduceHealth(-loot.getAmount());
+        }
+    }
 }

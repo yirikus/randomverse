@@ -25,8 +25,8 @@ import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.inventory.GameMap;
-import cz.terrmith.randomverse.inventory.GridMenu;
 import cz.terrmith.randomverse.inventory.ShipModificationScreen;
+import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.world.LevelOne;
 
 import java.awt.Color;
@@ -188,9 +188,16 @@ public class Randomverse extends GameEngine {
 		while (iterator.hasNext()) {
 			Sprite s = iterator.next();
 			s.updateSprite();
-			if (!s.collidesWith(player.getSprite()).isEmpty()) {
-				Loot loot = ((LootSprite) s).pickUp();
-				player.addLoot(loot);
+            List<Sprite> collisionList = s.collidesWith(player.getSprite());
+			if (!collisionList.isEmpty()) {
+				Loot loot = ((LootSprite) s).drop();
+                if (loot.isPowerup()) {
+                   if (collisionList.get(0) instanceof ShipPart) {
+                       ((ShipPart)collisionList.get(0)).addPowerup(loot);
+                   }
+                } else {
+				    player.addLoot(loot);
+                }
 			}
 
 			if (!s.isActive()) {
