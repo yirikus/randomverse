@@ -4,6 +4,7 @@ import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
+import cz.terrmith.randomverse.loot.LootType;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -28,14 +29,19 @@ public class LootSprite extends SimpleSprite {
 		setStep(0,1);
 	}
 
-	public Loot pickUp() {
+	public Loot drop() {
 		setActive(false);
 		return loot;
 	}
 
 	@Override
 	public void drawSprite(Graphics g, ImageLoader ims) {
-		g.setColor(Color.YELLOW);
+		//FIXME !!!!! there must not be reference outside of core!
+        if (loot.getType().equals(LootType.HEALTH.name())) {
+            g.setColor(Color.GREEN);
+        } else {
+            g.setColor(Color.YELLOW);
+        }
 		g.fillRect((int) getXPosn(), (int) getYPosn(), 10, 10);
 	}
 }
