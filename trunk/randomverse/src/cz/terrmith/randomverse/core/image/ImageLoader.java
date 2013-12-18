@@ -260,7 +260,7 @@ public class ImageLoader {
      * several images stored under that name, return the
      * first one in the list.
      *
-     * @param name reuested iamge name
+     * @param name reuested iamge name without suffix
      * @return image
      */
     public BufferedImage getImage(String name) {
