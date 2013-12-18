@@ -11,6 +11,7 @@ import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.ShipPart;
@@ -18,6 +19,7 @@ import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +34,8 @@ import java.util.Set;
 public class ShipModificationScreen {
 
 	private static final int PARTS_PER_ROW = 4;
+    // shifts parts
+    private static final int PART_SHIFT = 1;
     private final Player playerRef;
     private final Ship ship;
     private final ShipPartFactory factory;
@@ -95,7 +99,7 @@ public class ShipModificationScreen {
 	            }
                 break;
             case PART:
-	            if (partX < (PARTS_PER_ROW - 1)) {
+	            if (partX < (PARTS_PER_ROW - 1) && (partX + partY * PARTS_PER_ROW) < (parts.size() + PART_SHIFT - 1)) {
                     this.partX++;
 	            }
                 break;
@@ -131,7 +135,7 @@ public class ShipModificationScreen {
 	            }
                 break;
             case PART:
-                if (partY < ((parts.size() - 1)/ PARTS_PER_ROW)) {
+                if ((partX + (partY + 1) * PARTS_PER_ROW) < (parts.size() + PART_SHIFT)) {
 	                this.partY++;
                 }
                 break;
@@ -147,33 +151,51 @@ public class ShipModificationScreen {
                mode = Mode.PART;
                break;
            case PART:
-	           ShipPart shipPart = parts.get(partX + partY * PARTS_PER_ROW);
-	           Tile tileBeingReplaced = Tile.findTile(playerRef.getSprite().getTiles(), shipX, shipY);
-	           int replacementPartPrice = 0;
-	           if (tileBeingReplaced != null) {
-	                ShipPart partBingReplaced = (ShipPart)tileBeingReplaced.getSprite();
-		           replacementPartPrice = + partBingReplaced.getComputedPrice();
-	           }
+               int partSelection = partX + partY * PARTS_PER_ROW - PART_SHIFT;
+               Tile tileBeingReplaced = Tile.findTile(playerRef.getSprite().getTiles(), shipX, shipY);
+               int replacementPartPrice = 0;
+               int replacementPartTotalPrice = 0;
+               ShipPart partBeingReplaced = null;
+               if (tileBeingReplaced != null) {
+                   partBeingReplaced = (ShipPart)tileBeingReplaced.getSprite();
+                   replacementPartPrice = + partBeingReplaced.getComputedPrice();
+                   replacementPartTotalPrice = partBeingReplaced.getPrice();
+               }
 
-	           if (shipPart.getPrice() <= (playerRef.getMoney() + replacementPartPrice)) {
-		           playerRef.setMoney(playerRef.getMoney() + replacementPartPrice - shipPart.getPrice());
-	               mode = Mode.SHIP;
-		           // change/add ship part to local copy
-		           ship.removeTile(shipX, shipY);
-		           SimpleSprite sprite = factory.create(partX + partY * PARTS_PER_ROW);
-		           Tile newTile = new Tile(shipX, shipY, sprite);
-		           ship.addTile(newTile);
 
-	               // change/add ship part to player reference
-	               playerRef.getSprite().removeTile(shipX, shipY);
-	               SimpleSprite sprite2 = factory.create(partX + partY * PARTS_PER_ROW);
-	               playerRef.getSprite().addTile(shipX, shipY, sprite2);
+               // buy part
+               if (partSelection >= 0) {
+                   ShipPart shipPart = parts.get(partSelection);
 
-		           addExtensionPoints(newTile);
+                   if (shipPart.getPrice() <= (playerRef.getMoney() + replacementPartPrice)) {
+                       playerRef.setMoney(playerRef.getMoney() + replacementPartPrice - shipPart.getPrice());
+                       mode = Mode.SHIP;
+                       // change/add ship part to local copy
+                       ship.removeTile(shipX, shipY);
+                       SimpleSprite sprite = factory.create(partSelection);
+                       Tile newTile = new Tile(shipX, shipY, sprite);
+                       ship.addTile(newTile);
 
-		           partX = 0;
-		           partY = 0;
-	           }
+                       // change/add ship part to player reference
+                       playerRef.getSprite().removeTile(shipX, shipY);
+                       SimpleSprite sprite2 = factory.create(partSelection);
+                       playerRef.getSprite().addTile(shipX, shipY, sprite2);
+
+                       addExtensionPoints(newTile);
+
+                   }
+                   partX = 0;
+                   partY = 0;
+               //repair part
+               } else  if (partBeingReplaced != null && (replacementPartTotalPrice - replacementPartPrice) > 0) {
+                   playerRef.setMoney(playerRef.getMoney() - (replacementPartTotalPrice - replacementPartPrice) );
+                   partBeingReplaced.reduceHealth(partBeingReplaced.getCurrentHealth() - partBeingReplaced.getTotalHealth());
+                   ShipPart mirrorPart = (ShipPart)Tile.findTile(ship.getTiles(), shipX, shipY).getSprite();
+                   mirrorPart.reduceHealth(partBeingReplaced.getCurrentHealth() - partBeingReplaced.getTotalHealth());
+                   partX = 0;
+                   partY = 0;
+               }
+
                break;
        }
     }
@@ -259,16 +281,45 @@ public class ShipModificationScreen {
 	    // draw parts to choose from
 	    int initX = 100;
 	    int initY = 300;
-	    int column = 0;
+	    int column = 0 + PART_SHIFT;
 	    int row = 0;
 
 	    int replacementTilePrice = 0;
+        int replacementTileTotalPrice = 0;
 	    Tile tileBeignReplaced = Tile.findTile(playerRef.getSprite().getTiles(), shipX, shipY);
 	    if (tileBeignReplaced != null) {
 		    ShipPart partBeingReplaced = (ShipPart) tileBeignReplaced.getSprite();
 		    replacementTilePrice = partBeingReplaced.getComputedPrice();
+            replacementTileTotalPrice = partBeingReplaced.getPrice();
 	    }
 
+
+        //test if shift block is selected
+        for (int i = 0; i < PART_SHIFT; i++) {
+            if (i == 0) {
+                //g.drawString("Repair",initX + i * column * Tile.DEFAULT_SIZE,
+                //                      initY + i * row * Tile.DEFAULT_SIZE + 20);
+                BufferedImage image = iml.getImage("repair");
+                g.drawImage(image, initX + i * column,  initY + i * row, null);
+                // darken if no reason to repair
+                if (tileBeignReplaced != null && (replacementTileTotalPrice - replacementTilePrice) > 0) {
+                    g.setColor(new Color(0,0,0,125));
+                    g.fillRect(initX + i * column * Tile.DEFAULT_SIZE,
+                                initY + i * row * Tile.DEFAULT_SIZE,
+                                Tile.DEFAULT_SIZE,
+                                Tile.DEFAULT_SIZE);
+                }
+            }
+            if ((partX + partY * PARTS_PER_ROW) == i) {
+                g.setColor(Color.GREEN);
+                g.drawRect(initX + i * column * Tile.DEFAULT_SIZE,
+                           initY + i * row * Tile.DEFAULT_SIZE,
+                           Tile.DEFAULT_SIZE,
+                           Tile.DEFAULT_SIZE);
+
+                g.drawString("repair price: " + (replacementTileTotalPrice - replacementTilePrice), 400, 180);
+            }
+        }
 
 	    for (Sprite s : parts) {
             s.setPosition(initX + column * s.getWidth(), initY + row * s.getHeight());
