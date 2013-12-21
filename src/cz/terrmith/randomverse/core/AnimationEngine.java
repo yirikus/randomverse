@@ -20,7 +20,7 @@ public class AnimationEngine {
     // no. of frames that can be skipped in any one animation loop
     // i.e the games state is updated but not rendered
     private static final int NO_DELAYS_PER_YIELD = 16;
-    /* Number of frames with a delay of 0 ms before the animation thread yields
+    /* Number of frames with a delay of 0 ms activate the animation thread yields
     to other running threads. */
     private static final int MAX_FRAME_SKIPS = 2;   // was 2;
     private final GameEngine game;

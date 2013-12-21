@@ -31,6 +31,7 @@ public class GameWindow extends JFrame implements Runnable{
     public static final int SCREEN_W = 800;
     public static final int SCREEN_H = 600;
     public static final int SCREEN_BIT_DEPTH = 32;
+    public static final String WINDOW_NAME = "Randomverse";
     private int pWidth, pHeight;     // panel dimensions
 
     private static final int NUM_BUFFERS = 2;    // used for page flipping
@@ -44,11 +45,12 @@ public class GameWindow extends JFrame implements Runnable{
     private AnimationEngine animationEngine;
     private Thread animator;
     private Command systemCommand;
+
     /**
      * Constructor - creates new game window in a fullscreen mode
      */
     public GameWindow(){
-        super(Randomverse.WINDOW_NAME); // window name
+        super(WINDOW_NAME); // window name
         this.setAlwaysOnTop(true);
         this.systemCommand = new Command();
         initFullscreen();
@@ -249,7 +251,7 @@ public class GameWindow extends JFrame implements Runnable{
     }
 
     /**
-     *    Tasks to do before terminating. Called at end of start()
+     *    Tasks to do activate terminating. Called at end of start()
      *  and via the shutdown hook in readyForTermination().
      *
      *  The call at the end of start() is not really necessary, but

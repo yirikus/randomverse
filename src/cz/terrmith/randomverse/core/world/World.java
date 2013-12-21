@@ -5,7 +5,7 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Endless world that creates sprites just before active screen based on time and number of updates
+ * Endless world that creates sprites just activate active screen based on time and number of updates
  */
 public abstract class World {
 
