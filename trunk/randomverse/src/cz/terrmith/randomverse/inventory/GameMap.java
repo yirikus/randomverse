@@ -11,11 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Dell
- * Date: 12/10/13
- * Time: 7:12 PM
- * To change this template use File | Settings | File Templates.
+ * Grid that represent global game map
  */
 public class GameMap extends GridMenu {
 

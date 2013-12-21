@@ -413,7 +413,7 @@ public class ImageLoader {
             BufferedImage im = ImageIO.read(
                     getClass().getResource(imageDirctory + fnm));
             // An image returned from ImageIO in J2SE <= 1.4.2 is
-            // _not_ a managed image, but is after copying!
+            // _not_ a managed image, but is deactivate copying!
 
             int transparency = im.getColorModel().getTransparency();
             BufferedImage copy = gc.createCompatibleImage(

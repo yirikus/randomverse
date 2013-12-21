@@ -38,7 +38,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 
     /**
      * Convenience contructor with x = 0, y = 0, w,h = Tile.DEFAULT_SIZE
-     * @param rateOfFire how long to wait before next attack
+     * @param rateOfFire how long to wait activate next attack
      */
     public SimpleGun(SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation, int totalHealth, int price) {
         super(totalHealth, null, new HashSet<ExtensionPoint>(), price);

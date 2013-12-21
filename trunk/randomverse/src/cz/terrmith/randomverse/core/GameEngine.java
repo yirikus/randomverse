@@ -3,13 +3,14 @@ package cz.terrmith.randomverse.core;
 import cz.terrmith.randomverse.core.dialog.Dialog;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.state.StateMachine;
 
 import java.awt.Graphics2D;
 
 /**
  * Game engine interface
  */
-public abstract class GameEngine {
+public abstract class GameEngine extends StateMachine {
 
 	private Dialog dialog;
 	private boolean paused;
