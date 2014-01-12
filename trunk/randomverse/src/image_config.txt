@@ -12,3 +12,5 @@ s sideGun_damaged.png 4
 s topGun_damaged.png 4
 s shots.png 8
 s repair.png 1
+s asteroid.png 4
+s asteroid_4x4.png 1

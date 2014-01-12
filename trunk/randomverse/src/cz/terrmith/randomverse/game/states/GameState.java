@@ -16,6 +16,7 @@ import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.inventory.ShipModificationScreen;
 import cz.terrmith.randomverse.sprite.ShipPart;
+import cz.terrmith.randomverse.world.LevelAsteroidField;
 import cz.terrmith.randomverse.world.LevelOne;
 
 import java.awt.*;
@@ -224,7 +225,7 @@ public class GameState implements State {
             //Create new world
             stateMachine.getSpriteCollection().clear();
             stateMachine.getSpriteCollection().put(SpriteLayer.PLAYER, stateMachine.getPlayer().getSprite());
-            this.world = new LevelOne(this.stateMachine.getSpriteCollection());
+            this.world = new LevelAsteroidField(this.stateMachine.getSpriteCollection());
             command.clear();
             DialogCallback callback = new DialogCallback() {
                 @Override
