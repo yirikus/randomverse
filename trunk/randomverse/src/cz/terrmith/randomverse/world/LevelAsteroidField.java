@@ -29,6 +29,6 @@ public class LevelAsteroidField extends World {
     protected void createSprites() {
         Asteroid enemy = new Asteroid(random.nextInt() % 600 + 100, -100);
         getSpriteCollection().put(SpriteLayer.NPC, enemy);
-        enemy.setStep(0, 1);
+        enemy.setStep(0, enemy.getSpeed());
     }
 }

@@ -35,6 +35,7 @@ public class Randomverse extends GameEngine {
     private final CollisionTester collisionTester;
     private final Player player;
     private SpriteCollection spriteCollection;
+	private GameMap map;
 
     public Randomverse (Command cmd, int screenWidth, int screenHeight) {
         this.command = cmd;
@@ -45,6 +46,7 @@ public class Randomverse extends GameEngine {
         this.spriteCollection = new SpriteCollection(screenBoundary, extendedBoundary);
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
+	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100));
 
         addState(new GameState(this));
         addState(new MenuState(this));
@@ -129,4 +131,8 @@ public class Randomverse extends GameEngine {
     public Command getCommand() {
         return command;
     }
+
+	public GameMap getMap() {
+		return map;
+	}
 }

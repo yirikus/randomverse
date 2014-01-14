@@ -225,7 +225,8 @@ public class GameState implements State {
             //Create new world
             stateMachine.getSpriteCollection().clear();
             stateMachine.getSpriteCollection().put(SpriteLayer.PLAYER, stateMachine.getPlayer().getSprite());
-            this.world = new LevelAsteroidField(this.stateMachine.getSpriteCollection());
+            //obtain level from map
+	        this.world = stateMachine.getMap().createLevel(this.stateMachine.getSpriteCollection());
             command.clear();
             DialogCallback callback = new DialogCallback() {
                 @Override
