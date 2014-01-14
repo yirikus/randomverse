@@ -21,12 +21,10 @@ import java.awt.*;
 public class MapState implements State {
     private final Command command;
     private final Randomverse stateMachine;
-    private GameMap map;
 
     public MapState(Randomverse stateMachine) {
         this.command = stateMachine.getCommand();
         this.stateMachine = stateMachine;
-        map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100));
     }
 
     @Override
@@ -37,20 +35,20 @@ public class MapState implements State {
     @Override
     public void update() {
         if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
-            map.selectAbove();
+            stateMachine.getMap().selectAbove();
             command.setUp(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getDown())) {
-            map.selectBelow();
+	        stateMachine.getMap().selectBelow();
             command.setDown(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getLeft())) {
-            map.selectLeft();
+	        stateMachine.getMap().selectLeft();
             command.setLeft(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getRight())) {
-            map.selectRight();
+	        stateMachine.getMap().selectRight();
             command.setRight(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
-            int mapx = map.getX();
-            int mapy = map.getY();
+            int mapx = stateMachine.getMap().getX();
+            int mapy = stateMachine.getMap().getY();
 
             stateMachine.setCurrentState(StateName.GAME.name());
 
@@ -69,13 +67,13 @@ public class MapState implements State {
     @Override
     public void draw(Graphics2D g2, ImageLoader iml) {
         stateMachine.clearScreen(g2, Color.BLACK);
-        map.drawMenu(g2);
+	    stateMachine.getMap().drawMenu(g2);
     }
 
     @Override
     public void activate(State prevState) {
         if (StateName.GAME.name().equals(prevState.getName())) {
-            map.markExplored();
+	        stateMachine.getMap().markExplored();
         }
     }
 

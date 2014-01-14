@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -410,8 +411,12 @@ public class ImageLoader {
      */
     public BufferedImage loadImage(String fnm) {
         try {
-            BufferedImage im = ImageIO.read(
-                    getClass().getResource(imageDirctory + fnm));
+
+	        URL url = getClass().getResource(imageDirctory + fnm);
+	        if (url == null) {
+		        throw new IllegalArgumentException(fnm + " could not be loaded. Does given file exist?");
+	        }
+            BufferedImage im = ImageIO.read(url);
             // An image returned from ImageIO in J2SE <= 1.4.2 is
             // _not_ a managed image, but is deactivate copying!
 

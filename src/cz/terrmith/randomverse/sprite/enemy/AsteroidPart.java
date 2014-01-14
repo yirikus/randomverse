@@ -5,6 +5,7 @@ import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +13,9 @@ import java.util.Map;
 /**
  * Part of an asteroid
  */
-public class AsteroidPart extends SimpleSprite implements Destructible{
+public class AsteroidPart extends SimpleSprite implements Destructible, Solid {
 
-    private static final int MAX_HEALTH = 1;
+    private static final int MAX_HEALTH = 3;
     private int currentHealth = MAX_HEALTH;
 
 
@@ -27,7 +28,7 @@ public class AsteroidPart extends SimpleSprite implements Destructible{
 
     @Override
     public int getTotalHealth() {
-        return 1;
+        return MAX_HEALTH;
     }
 
     @Override
@@ -44,4 +45,9 @@ public class AsteroidPart extends SimpleSprite implements Destructible{
             this.setStatus(SpriteStatus.DEFAULT);
         }
     }
+
+	@Override
+	public int getImpactDamage() {
+		return 1;
+	}
 }

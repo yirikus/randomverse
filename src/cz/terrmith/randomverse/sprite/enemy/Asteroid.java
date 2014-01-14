@@ -16,8 +16,9 @@ import java.util.*;
 public class Asteroid extends MultiSprite implements Destructible{
 
     private static Random r = new Random();
+	private double speed;
 
-    /**
+	/**
      * Creates random asteroid at given position
      * @param x x position
      * @param y y position
@@ -39,8 +40,9 @@ public class Asteroid extends MultiSprite implements Destructible{
         locations.add(new GridLocation(0,0));
 
         generateLocations(locations, locations, maxSize -1);
+	    this.speed = Math.max(5 - locations.size()/4, 1);
 
-        System.out.println("generated asteroid of size " + locations.size());
+        System.out.println("generated asteroid of size: " + locations.size() + ", speed:" + speed);
 
         for (GridLocation gl : locations) {
             addTile(gl.getX(), gl.getY(), new AsteroidPart(0, 0));
@@ -94,4 +96,8 @@ public class Asteroid extends MultiSprite implements Destructible{
     public void reduceHealth(int amount) {
         throw new IllegalStateException("Can not reduce health directly");
     }
+
+	public double getSpeed() {
+		return speed;
+	}
 }
