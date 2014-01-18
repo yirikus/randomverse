@@ -1,8 +1,8 @@
 package cz.terrmith.randomverse.sprite.projectile;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
@@ -12,11 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 8.10.13
- * Time: 0:06
- * To change this template use File | Settings | File Templates.
+ * Projectile - sprite that is fired by a gun
  */
 public class Projectile extends SimpleSprite implements DamageDealer {
 
@@ -31,8 +27,8 @@ public class Projectile extends SimpleSprite implements DamageDealer {
     public Projectile(double x, double y, Damage damage) {
         super(x, y, 11, 22, null);
 
-        Map<SpriteStatus, ImageLocation> aMap = new HashMap<SpriteStatus, ImageLocation>();
-        aMap.put(SpriteStatus.DEFAULT, new ImageLocation("shots",damage.getAmount()%4));
+        Map<String, ImageLocation> aMap = new HashMap<String, ImageLocation>();
+        aMap.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("shots",damage.getAmount()%4));
         setImageForStatus(aMap);
 
         this.damage = damage;

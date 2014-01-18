@@ -3,11 +3,9 @@ package cz.terrmith.randomverse.core.sprite.abilitiy;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.loot.LootType;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.Map;
 
 /**
@@ -23,7 +21,7 @@ public class LootSprite extends SimpleSprite {
 	}
 
 	public LootSprite(double x, double y, int w, int h,
-	                  Map<SpriteStatus, ImageLocation> imageForStatus, Loot loot) {
+	                  Map<String, ImageLocation> imageForStatus, Loot loot) {
 		super(x, y, w, h, imageForStatus);
 		this.loot = loot;
 		setStep(0,1);

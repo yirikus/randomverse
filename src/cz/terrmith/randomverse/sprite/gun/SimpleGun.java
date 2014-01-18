@@ -1,9 +1,9 @@
 package cz.terrmith.randomverse.sprite.gun;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
@@ -46,7 +46,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	    this.shootTimer = rateOfFire;
 	    this.damage = damage;
         this.spriteCreator = new ProjectileCreator(spriteCollection, new ProjectileFactory(damage));
-        this.getImageForStatus().put(SpriteStatus.DEFAULT, imageLocation);
+        this.getImageForStatus().put(DefaultSpriteStatus.DEFAULT.name(), imageLocation);
     }
 
 	public SimpleGun(SimpleGun simpleGun) {
@@ -66,7 +66,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	}
 	@Override
 	public void attack() {
-		if(canShootIn <= 0 && SpriteStatus.DEFAULT.equals(getStatus())) {
+		if(canShootIn <= 0 && DefaultSpriteStatus.DEFAULT.name().equals(getStatus())) {
 			spriteCreator.createSprites(getXPosn() + getWidth() / 2,
 			                            getYPosn() + getHeight() / 2, 0, 1, -12, -getHeight());
 			canShootIn = shootTimer;

@@ -1,28 +1,18 @@
 package cz.terrmith.randomverse.inventory;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 24.10.13
- * Time: 20:29
- * To change this template use File | Settings | File Templates.
+ * Factory class that creates ship part instances
  */
 public class ShipPartFactory {
 
@@ -44,10 +34,10 @@ public class ShipPartFactory {
 
     /**
      * Creates all ship part in their order and returns it as a collection
-     * @return
+     * @return ship part collection
      */
     public Collection<ShipPart> createAll() {
-        List parts = new ArrayList<SimpleSprite>();
+        List<ShipPart> parts = new ArrayList<ShipPart>();
 
         for (int i = 0; i < 16; i++) {
             parts.add(create(i));
@@ -57,16 +47,16 @@ public class ShipPartFactory {
 
     /**
      * Creates a ship part for given index
-     * @param i
-     * @return
+     * @param i index of ship part that should be created
+     * @return new shipPart instance
      */
-    public SimpleSprite create(int i) {
+    public ShipPart create(int i) {
         switch (i) {
             //SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation
-            case 0:  return createGun(new ImageLocation("sideGun", 0), 1, 2, 8, new Damage(1, damageType));//return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1,2);
-            case 1:  return createGun(new ImageLocation("sideGun", 1), 1, 8, 4, new Damage(2, damageType));//return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1,8);
-            case 2:  return createGun(new ImageLocation("sideGun", 2), 1, 6, 8, new Damage(3, damageType));//return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1,6);
-            case 3: return createGun(new ImageLocation("sideGun", 3), 2, 4, 12, new Damage(4, damageType));
+            case 0:  return (ShipPart) createGun(new ImageLocation("sideGun", 0), 1, 2, 8, new Damage(1, damageType));//return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1,2);
+            case 1:  return (ShipPart) createGun(new ImageLocation("sideGun", 1), 1, 8, 4, new Damage(2, damageType));//return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1,8);
+            case 2:  return (ShipPart) createGun(new ImageLocation("sideGun", 2), 1, 6, 8, new Damage(3, damageType));//return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1,6);
+            case 3: return (ShipPart) createGun(new ImageLocation("sideGun", 3), 2, 4, 12, new Damage(4, damageType));
             case 4: return createCockpit(new ImageLocation("cockpit",0),2, 2);
             case 5: return createCockpit(new ImageLocation("cockpit",1),3, 4);
             case 6: return createCockpit(new ImageLocation("cockpit",2),4, 6);
@@ -85,16 +75,14 @@ public class ShipPartFactory {
     }
 
 	private SimpleSprite createGun(ImageLocation imageLocation, int health, int price, int attackRate, Damage damage) {
-		SimpleGun gun =
-		  new SimpleGun(spriteCollection, attackRate, damage, imageLocation, health, price);
-		return gun;
+        return new SimpleGun(spriteCollection, attackRate, damage, imageLocation, health, price);
 	}
 
 	public ShipPart createSprite(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
-        Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
-        imageForStatus.put(SpriteStatus.DEFAULT, image);
+        Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
+        imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), image);
 	    ImageLocation damagedImage = new ImageLocation(image.getName() + "_damaged", image.getNumber());
-	    imageForStatus.put(SpriteStatus.DAMAGED, damagedImage);
+	    imageForStatus.put(DefaultSpriteStatus.DAMAGED.name(), damagedImage);
 	    return new ShipPart(health, imageForStatus, extensions, price);
     }
 

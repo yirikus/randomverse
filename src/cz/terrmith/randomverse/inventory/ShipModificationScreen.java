@@ -4,28 +4,17 @@ import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.image.ImageLoader;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
-import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
+import cz.terrmith.randomverse.core.sprite.*;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -260,14 +249,14 @@ public class ShipModificationScreen {
         //translate ship
         ship.setPosition(100, 100);
         for (Tile t : ship.getTiles()) {
-	        SpriteStatus prevStatus = t.getSprite().getStatus();
-	        if(t.getSprite().getStatus().equals(SpriteStatus.DEAD)) {
+            String prevStatus = t.getSprite().getStatus();
+	        if(t.getSprite().getStatus().equals(DefaultSpriteStatus.DEAD.name())) {
 		        g.setColor(Color.RED);
 		        g.fillRect( (int)t.getSprite().getXPosn(),
 		                    (int)t.getSprite().getYPosn(),
 		                    t.getSprite().getWidth(),
 		                    t.getSprite().getHeight());
-		        t.getSprite().setStatus(SpriteStatus.DEFAULT);
+		        t.getSprite().setStatus(DefaultSpriteStatus.DEFAULT.name());
 	        }
             t.getSprite().drawSprite(g,iml);
 	        t.getSprite().setStatus(prevStatus);
@@ -281,7 +270,7 @@ public class ShipModificationScreen {
 	    // draw parts to choose from
 	    int initX = 100;
 	    int initY = 300;
-	    int column = 0 + PART_SHIFT;
+	    int column = PART_SHIFT;
 	    int row = 0;
 
 	    int replacementTilePrice = 0;
