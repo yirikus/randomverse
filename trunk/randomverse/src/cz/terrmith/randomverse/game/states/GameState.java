@@ -1,26 +1,23 @@
 package cz.terrmith.randomverse.game.states;
 
 import cz.terrmith.randomverse.Randomverse;
-import cz.terrmith.randomverse.core.dialog.*;
+import cz.terrmith.randomverse.core.dialog.DialogCallback;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.abilitiy.*;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
-import cz.terrmith.randomverse.inventory.ShipModificationScreen;
 import cz.terrmith.randomverse.sprite.ShipPart;
-import cz.terrmith.randomverse.world.LevelAsteroidField;
-import cz.terrmith.randomverse.world.LevelOne;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -156,7 +153,7 @@ public class GameState implements State {
                 npcSprite.updateSprite();
             } else {
                 // if sprite was killed add loot to sprite collection
-                if (SpriteStatus.DEAD.equals(npcSprite.getStatus()) && npcSprite instanceof Lootable) {
+                if (DefaultSpriteStatus.DEAD.name().equals(npcSprite.getStatus()) && npcSprite instanceof Lootable) {
                     stateMachine.getSpriteCollection().put(SpriteLayer.ITEM, ((Lootable) npcSprite).getLootSprite());
                 }
                 iterator.remove();

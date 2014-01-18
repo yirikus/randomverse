@@ -5,13 +5,11 @@ import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.geometry.RelativePosition;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.world.LevelAsteroidField;
+import cz.terrmith.randomverse.world.LevelDebrisField;
 import cz.terrmith.randomverse.world.LevelOne;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -38,8 +36,8 @@ public class GameMap extends GridMenu {
 
     /**
      * returns true, if it is possible to select given location
-     * @param loc
-     * @return
+     * @param loc location
+     * @return true if it is possible to move to given location
      */
     private boolean canMove(GridLocation loc) {
         RelativePosition relativePosition = GridLocation.getRelativePositionTo(loc, explored);
@@ -81,14 +79,14 @@ public class GameMap extends GridMenu {
 
 	/**
 	 * Creates a level based on current position
-	 * @return
-	 * @param spriteCollection
+	 * @return level to be played
+	 * @param spriteCollection sprite collection
 	 */
 	public World createLevel(SpriteCollection spriteCollection) {
 		if (getX() % 2 == 0) {
 			return new LevelOne(spriteCollection);
 		} else {
-			return new LevelAsteroidField(spriteCollection);
+			return new LevelDebrisField(spriteCollection);
 		}
 	}
 

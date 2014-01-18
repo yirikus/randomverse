@@ -1,9 +1,9 @@
 package cz.terrmith.randomverse.sprite;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Loot;
@@ -38,7 +38,7 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 		this.extensions = new HashSet<ExtensionPoint>(sprite.getExtensions());
 	}
 
-	public ShipPart(int totalHealth, Map<SpriteStatus, ImageLocation> imageForStatus, Set<ExtensionPoint> extensions,
+	public ShipPart(int totalHealth, Map<String, ImageLocation> imageForStatus, Set<ExtensionPoint> extensions,
 	                int price) {
 		super(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, imageForStatus);
 		this.totalHealth = totalHealth;
@@ -61,11 +61,11 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	public void reduceHealth(int amount) {
 		this.currentHealth -= amount;
 		if (this.currentHealth < 1) {
-			this.setStatus(SpriteStatus.DEAD);
+			this.setStatus(DefaultSpriteStatus.DEAD.name());
 		} else if (this.currentHealth < this.totalHealth) {
-			this.setStatus(SpriteStatus.DAMAGED);
+			this.setStatus(DefaultSpriteStatus.DAMAGED.name());
 		} else {
-            this.setStatus(SpriteStatus.DEFAULT);
+            this.setStatus(DefaultSpriteStatus.DEFAULT.name());
         }
 	}
 
@@ -148,7 +148,7 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 
 	/**
 	 * Returns price that ignores health (price that was set on instantiation)
-	 * @return
+	 * @return  price
 	 */
 	public int getPrice() {
 		return price;
@@ -156,7 +156,7 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 
 	/**
 	 * Price is computed from price and health
-	 * @return
+	 * @return  price
 	 */
 	public int getComputedPrice() {
 		return (currentHealth/totalHealth) * price;

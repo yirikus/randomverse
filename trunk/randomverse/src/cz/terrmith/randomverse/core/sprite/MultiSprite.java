@@ -4,8 +4,7 @@ import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -27,7 +26,7 @@ public class MultiSprite implements Sprite{
      * Y Position of tile on a [0,0] position
      */
     private int locY;
-	private SpriteStatus status = SpriteStatus.DEFAULT;
+	private String status = DefaultSpriteStatus.DEFAULT.name();
 
 	/**
      * Creates empty multisprites, tiles are expected to be added by calling provided methods
@@ -51,7 +50,7 @@ public class MultiSprite implements Sprite{
 
     /**
      * Copy constructor
-     * @param sprite
+     * @param sprite instance that should be copied
      */
     public MultiSprite(MultiSprite sprite) {
 	    this((int)sprite.getXPosn(), (int)sprite.getYPosn(), Tile.cloneTiles(sprite.getTiles()));
@@ -234,7 +233,7 @@ public class MultiSprite implements Sprite{
 		List<Collision> collidingSprites = new ArrayList<Collision>();
 		for (Tile t: tiles) {
 			Sprite s = t.getSprite();
-			if (!SpriteStatus.DEAD.equals(s.getStatus())) {
+			if (!DefaultSpriteStatus.DEAD.name().equals(s.getStatus())) {
 
 				List<Sprite> collisions = sprite.collidesWith(s);
 				if (!collisions.isEmpty()) {
@@ -250,7 +249,7 @@ public class MultiSprite implements Sprite{
 		List<Sprite> collidingSprites = new ArrayList<Sprite>();
 		for (Tile t: tiles) {
 			Sprite s = t.getSprite();
-			if (!s.collidesWith(sprite).isEmpty() && !SpriteStatus.DEAD.equals(s.getStatus())) {
+			if (!s.collidesWith(sprite).isEmpty() && !DefaultSpriteStatus.DEAD.name().equals(s.getStatus())) {
 				collidingSprites.add(s);
 			}
 		}
@@ -300,11 +299,11 @@ public class MultiSprite implements Sprite{
         setPosition(getXPosn(), getYPosn());
     }
 
-	public SpriteStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(SpriteStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

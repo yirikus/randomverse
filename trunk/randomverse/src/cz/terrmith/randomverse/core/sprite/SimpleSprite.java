@@ -4,9 +4,7 @@ import cz.terrmith.randomverse.Debug;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +17,7 @@ import java.util.Map;
  */
 public class SimpleSprite implements Sprite {
     // default dimensions when there is no image
-    private Map<SpriteStatus, ImageLocation> imageForStatus;
+    private Map<String, ImageLocation> imageForStatus;
 
     // image-related
     private int width, height;     // image dimensions
@@ -31,13 +29,13 @@ public class SimpleSprite implements Sprite {
     private double locx, locy;        // location of sprite
     private double dx, dy;            // amount to move for each update
     // sprite status
-    private SpriteStatus status = SpriteStatus.DEFAULT;;
+    private String status = DefaultSpriteStatus.DEFAULT.name();
     private boolean yFlip = false;
     private boolean xFlip = false;
 
     /**
      * Copy constructor
-     * @param sprite
+     * @param sprite instance that should be copied
      */
     public SimpleSprite(SimpleSprite sprite) {
         this(sprite.getXPosn(), sprite.getYPosn(), sprite.getWidth(), sprite.getHeight(), sprite.getImageForStatus());
@@ -54,7 +52,7 @@ public class SimpleSprite implements Sprite {
      * @param h height
      * @param imageForStatus Map of sprite statuses and images
      */
-    public SimpleSprite(double x, double y, int w, int h, Map<SpriteStatus, ImageLocation> imageForStatus) {
+    public SimpleSprite(double x, double y, int w, int h, Map<String, ImageLocation> imageForStatus) {
         locx = x; locy = y;
         dx = 0; dy = 0;
 	    this.width = w;
@@ -62,15 +60,15 @@ public class SimpleSprite implements Sprite {
         if (imageForStatus != null) {
             this.imageForStatus = imageForStatus;
         } else {
-            this.imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
+            this.imageForStatus = new HashMap<String, ImageLocation>();
         }
     }
 
-    public Map<SpriteStatus, ImageLocation> getImageForStatus() {
+    public Map<String, ImageLocation> getImageForStatus() {
         return imageForStatus;
     }
 
-    public void setImageForStatus(Map<SpriteStatus, ImageLocation> imageForStatus) {
+    public void setImageForStatus(Map<String, ImageLocation> imageForStatus) {
         this.imageForStatus = imageForStatus;
     }
 
@@ -154,6 +152,9 @@ public class SimpleSprite implements Sprite {
             g.setColor(new Color(0,0,255,150));
             g.fillRect(getBoundingBox().x, getBoundingBox().y, (int)getBoundingBox().getWidth(), (int)getBoundingBox().getHeight());
         }
+        if (imageForStatus == null) {
+            throw new IllegalStateException("no imageForStatus collection");
+        }
 	    if (isActive() && imageForStatus != null) {
             ImageLocation imageLocation = imageForStatus.get(this.status);
 		    if (imageLocation != null) {
@@ -195,12 +196,20 @@ public class SimpleSprite implements Sprite {
 	    if (sprite instanceof MultiSprite) {
 		    MultiSprite multiSprite = (MultiSprite) sprite;
 		    return multiSprite.collidesWith(this);
-	    } else if (!SpriteStatus.DEAD.equals(getStatus()) && this.getBoundingBox().intersects(sprite.getBoundingBox())){
+	    } else if (!DefaultSpriteStatus.DEAD.name().equals(getStatus()) && this.getBoundingBox().intersects(sprite.getBoundingBox())){
 		    List<Sprite> ret = new ArrayList<Sprite>();
 		    ret.add(this);
             return ret;
 	    }
 	    return new ArrayList<Sprite>();
+    }
+
+    public void setXFlip(boolean flip) {
+        this.xFlip = flip;
+    }
+
+    public void setYFlip(boolean flip) {
+        this.yFlip = flip;
     }
 
     @Override
@@ -221,11 +230,11 @@ public class SimpleSprite implements Sprite {
         return this.yFlip;
     }
 
-	public SpriteStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(SpriteStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

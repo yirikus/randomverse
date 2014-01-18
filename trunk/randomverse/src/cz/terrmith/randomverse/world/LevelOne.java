@@ -4,27 +4,17 @@ import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
 import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteFormationFactory;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
-import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.*;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
 import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.inventory.ShipPartFactory;
 import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Testing level
@@ -40,7 +30,7 @@ public class LevelOne extends World {
             protected Sprite createEnemy(int x, int y) {
                 ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
                 Ship enemy = new Ship(x,y,null,ai);
-	            ShipPartFactory factory = new ShipPartFactory(spriteCollection, Damage.DamageType.PLAYER);
+	            //ShipPartFactory factory = new ShipPartFactory(spriteCollection, Damage.DamageType.PLAYER);
                 if (random.nextBoolean()) {
                     enemy.addTile(-1, 1, new SimpleGun(getSpriteCollection(), Damage.DamageType.PLAYER,1,0));
                 }
@@ -50,8 +40,8 @@ public class LevelOne extends World {
                     enemy.addTile(1, 1, flippedGun);
                 }
 
-	            Map<SpriteStatus, ImageLocation> imageForStatus = new HashMap<SpriteStatus, ImageLocation>();
-	            imageForStatus.put(SpriteStatus.DEFAULT, new ImageLocation("midParts",random.nextInt(4)));
+	            Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
+	            imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("midParts",random.nextInt(4)));
 	            Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
 	            extensions.add(ExtensionPoint.LEFT);
 	            extensions.add(ExtensionPoint.RIGHT);
@@ -61,7 +51,7 @@ public class LevelOne extends World {
 	            enemy.addTile(0, 1, body);
 
                 enemy.flipVertical();
-	            ((Lootable) enemy).setLootSprite(new LootSprite(0,0,10,10,null, LootFactory.randomLoot(1)));
+	            enemy.setLootSprite(new LootSprite(0,0,10,10,null, LootFactory.randomLoot(1)));
                 return enemy;
             }
         };

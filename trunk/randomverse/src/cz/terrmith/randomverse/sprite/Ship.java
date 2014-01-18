@@ -1,20 +1,15 @@
 package cz.terrmith.randomverse.sprite;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
-import cz.terrmith.randomverse.core.geometry.GridLocation;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Ship is a sprite that moves and uses it's parts to use abilities like an attack
@@ -33,7 +28,7 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
     /**
      * Copy constructor
      * NOTE: AI is not Copied
-     * @param ship
+     * @param ship instance that should be copied
      */
     public Ship(Ship ship) {
         super(ship);
@@ -57,11 +52,11 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 	 * Sets sprite at given tile and all adjacent tiles
 	 * as connected to core
 	 *
-	 * @param tile
+	 * @param tile tile to be connected
 	 */
 	private void setConnectionToCore(Tile tile) {
 		ShipPart part = (ShipPart) tile.getSprite();
-		if (SpriteStatus.DEAD.equals(part.getStatus())) {
+		if (DefaultSpriteStatus.DEAD.name().equals(part.getStatus())) {
 			return;
 		}
 		part.setConnectedToCore(true);
@@ -98,8 +93,8 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 
         super.updateSprite();
 
-	    if(SpriteStatus.DEAD.equals(core.getSprite().getStatus())) {
-		    this.setStatus(SpriteStatus.DEAD);
+	    if(DefaultSpriteStatus.DEAD.name().equals(core.getSprite().getStatus())) {
+		    this.setStatus(DefaultSpriteStatus.DEAD.name());
 		    setActive(false);
 	    }
     }
@@ -165,7 +160,7 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 	public double getSpeed() {
 		double totalSpeed = 0;
 		for (Tile t : getTiles()) {
-			if (!t.getSprite().getStatus().equals(SpriteStatus.DEAD)
+			if (!t.getSprite().getStatus().equals(DefaultSpriteStatus.DEAD.name())
 			    && t.getSprite() instanceof ShipPart) {
 
 				totalSpeed += ((ShipPart) t.getSprite()).getSpeed();

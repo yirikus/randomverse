@@ -1,19 +1,18 @@
-package cz.terrmith.randomverse.sprite.enemy;
+package cz.terrmith.randomverse.sprite.enemy.debris;
 
 import cz.terrmith.randomverse.core.geometry.GridLocation;
-import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.SpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
- * Asteroid
+ * Debris
  */
-public class Asteroid extends MultiSprite implements Destructible{
+public class Debris extends MultiSprite implements Destructible{
 
     private static Random r = new Random();
 	private double speed;
@@ -23,7 +22,7 @@ public class Asteroid extends MultiSprite implements Destructible{
      * @param x x position
      * @param y y position
      */
-    public Asteroid(int x, int y) {
+    public Debris(int x, int y) {
         super(x, y);
         generateAsteroid(5);
 
@@ -32,7 +31,6 @@ public class Asteroid extends MultiSprite implements Destructible{
     /**
      * Generates tiles of asteroid\
      * @param maxSize maximum distance from center
-     * @return
      */
     private void generateAsteroid(int maxSize) {
 
@@ -42,11 +40,30 @@ public class Asteroid extends MultiSprite implements Destructible{
         generateLocations(locations, locations, maxSize -1);
 	    this.speed = Math.max(5 - locations.size()/4, 1);
 
-        System.out.println("generated asteroid of size: " + locations.size() + ", speed:" + speed);
+        System.out.println("generated debris of size: " + locations.size() + ", speed:" + speed);
 
         for (GridLocation gl : locations) {
-            addTile(gl.getX(), gl.getY(), new AsteroidPart(0, 0));
+            DebrisPart.DebrisPartType type = DebrisPart.DebrisPartType.REGULAR;
+            if (r.nextInt() % 10 == 0) {
+                switch(r.nextInt(6)) {
+                    case 0: type = DebrisPart.DebrisPartType.CARGO;
+                        break;
+                    case 1: type = DebrisPart.DebrisPartType.HARD;
+                        break;
+                    case 2: type = DebrisPart.DebrisPartType.EXPLODING;
+                        break;
+                    case 3: type = DebrisPart.DebrisPartType.CLUSTER;
+                        break;
+                    case 4: type = DebrisPart.DebrisPartType.GUN;
+                        break;
+                    case 5: type = DebrisPart.DebrisPartType.REFLECT;
+                        break;
+                }
+            }
+            addTile(gl.getX(), gl.getY(), new DebrisPart(0, 0, this, type));
         }
+
+        updateSpriteStatus();
 
     }
 
@@ -84,12 +101,12 @@ public class Asteroid extends MultiSprite implements Destructible{
 
     @Override
     public int getTotalHealth() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new IllegalStateException("Can not reduce health directly");
     }
 
     @Override
     public int getCurrentHealth() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new IllegalStateException("Can not reduce health directly");
     }
 
     @Override
@@ -100,4 +117,12 @@ public class Asteroid extends MultiSprite implements Destructible{
 	public double getSpeed() {
 		return speed;
 	}
+
+    public void updateSpriteStatus(){
+        System.out.println("#######################");
+        for (Tile t: getTiles()) {
+            DebrisPart sprite = (DebrisPart)t.getSprite();
+            sprite.updateSpriteStatus(new GridLocation(t.getTileX(), t.getTileY()));
+        }
+    }
 }

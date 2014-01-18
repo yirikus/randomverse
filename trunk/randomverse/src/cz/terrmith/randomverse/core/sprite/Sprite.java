@@ -2,8 +2,7 @@ package cz.terrmith.randomverse.core.sprite;
 
 import cz.terrmith.randomverse.core.image.ImageLoader;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.List;
 
 
@@ -16,13 +15,13 @@ public interface Sprite {
 
     /**
      * Width of the sprite's image
-     * @return
+     * @return width in pixels
      */
     int getWidth();
 
     /**
      * Height of the sprite's image
-     * @return
+     * @return height in pixels
      */
     int getHeight();
 
@@ -37,13 +36,13 @@ public interface Sprite {
     /**
      * Returns X position
      *
-     * @return
+     * @return position on screen
      */
     double getXPosn();
 
     /**
      * Returns Y position
-     * @return
+     * @return position on screen
      */
     double getYPosn();
 
@@ -89,22 +88,22 @@ public interface Sprite {
 
 	/**
 	 * Returns sprite status
-	 * @return
+	 * @return status of sprite
 	 */
-	SpriteStatus getStatus();
+	String getStatus();
 
 	/**
 	 * Sets sprite status
-	 * @param status
+	 * @param status sprite status
 	 */
-	void setStatus(SpriteStatus status);
+	void setStatus(String status);
 
 	/**
 	 * Return copy of this sprite such as
 	 * this.copy() != this
 	 * this.copy().equals(this)
 	 *
-	 * @return
+	 * @return copy of this sprite
 	 */
 	Sprite copy();
 
