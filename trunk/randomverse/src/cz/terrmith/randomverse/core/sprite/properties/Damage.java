@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core.sprite.abilitiy;
+package cz.terrmith.randomverse.core.sprite.properties;
 
 /**
  * Represents damage

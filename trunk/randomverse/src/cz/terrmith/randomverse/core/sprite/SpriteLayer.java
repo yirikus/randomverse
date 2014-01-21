@@ -9,5 +9,6 @@ public enum SpriteLayer {
 	PROJECTILE,
     ITEM,
     PLAYER,
-    NPC
+	SHIELD,
+	NPC
 }

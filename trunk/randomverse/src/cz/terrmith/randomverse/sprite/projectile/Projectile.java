@@ -3,9 +3,9 @@ package cz.terrmith.randomverse.sprite.projectile;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
-import cz.terrmith.randomverse.core.sprite.abilitiy.DamageDealer;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.Damage;
+import cz.terrmith.randomverse.core.sprite.properties.DamageDealer;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 
 import java.util.HashMap;
 import java.util.List;

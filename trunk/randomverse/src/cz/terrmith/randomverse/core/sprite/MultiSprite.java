@@ -29,8 +29,12 @@ public class MultiSprite implements Sprite{
 	private String status = DefaultSpriteStatus.DEFAULT.name();
 
 	/**
-     * Creates empty multisprites, tiles are expected to be added by calling provided methods
-     */
+	 * Creates empty multisprites, tiles are expected to be added by calling provided methods
+	 *
+	 * @param x x position of [0,0] tile
+	 * @param y y position of [0,0] tile
+	 * @param tiles tile list
+	 */
     public MultiSprite(int x, int y, List<Tile> tiles){
         this.locX = x;
         this.locY = y;
@@ -207,7 +211,32 @@ public class MultiSprite implements Sprite{
 
     @Override
     public Rectangle getBoundingBox() {
-        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+        Tile top = getTiles().get(0);
+	    Tile left = getTiles().get(0);
+	    Tile right = getTiles().get(0);
+	    Tile bottom = getTiles().get(0);
+
+	    for (Tile t : getTiles()) {
+			if (t.getTileX() < left.getTileX()) {
+				left = t;
+			}
+
+		    if (t.getTileX() > right.getTileX()) {
+				right = t;
+		    }
+
+		    if (t.getTileY() < top.getTileY()) {
+				top = t;
+		    }
+
+		    if (t.getTileY() > bottom.getTileY()) {
+				bottom = t;
+		    }
+	    }
+	    return new Rectangle((int)left.getSprite().getXPosn(),
+	                         (int)top.getSprite().getYPosn(),
+	                         left.getSprite().getWidth() + (int)right.getSprite().getXPosn() - (int)left.getSprite().getXPosn(),
+	                         top.getSprite().getHeight() + (int)bottom.getSprite().getYPosn() - (int)top.getSprite().getYPosn());
     }
 
     @Override

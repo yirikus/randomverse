@@ -1,7 +1,7 @@
 package cz.terrmith.randomverse.sprite.factory;
 
 import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
+import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.sprite.projectile.Projectile;
 

@@ -5,7 +5,7 @@ import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.sprite.*;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Damage;
+import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.Ship;
 import cz.terrmith.randomverse.sprite.ShipPart;
