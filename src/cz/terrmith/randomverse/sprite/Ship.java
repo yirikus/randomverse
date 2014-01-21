@@ -4,10 +4,10 @@ import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.core.sprite.abilitiy.LootSprite;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Lootable;
+import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
+import cz.terrmith.randomverse.core.sprite.properties.Lootable;
 
 import java.util.List;
 

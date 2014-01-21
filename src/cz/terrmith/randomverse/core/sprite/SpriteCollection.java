@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * Collection of sprites in layers
+ * SpriteCollection does not remove inactive sprites! Game must handle removal itself.
  */
 public class SpriteCollection {
 

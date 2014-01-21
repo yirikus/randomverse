@@ -5,8 +5,8 @@ import cz.terrmith.randomverse.core.geometry.NHood4;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.Solid;
 
 import java.util.HashMap;
 import java.util.List;

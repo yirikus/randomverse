@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core.sprite.abilitiy;
+package cz.terrmith.randomverse.core.sprite.properties;
 
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;

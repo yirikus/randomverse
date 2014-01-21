@@ -5,9 +5,9 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Loot;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Solid;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.Loot;
+import cz.terrmith.randomverse.core.sprite.properties.Solid;
 import cz.terrmith.randomverse.loot.LootType;
 
 import java.util.HashSet;

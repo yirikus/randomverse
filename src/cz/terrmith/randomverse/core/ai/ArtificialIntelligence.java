@@ -4,7 +4,7 @@ import cz.terrmith.randomverse.core.ai.attack.AttackPattern;
 import cz.terrmith.randomverse.core.ai.movement.MovementPattern;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.abilitiy.CanAttack;
+import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
 
 /**
  * Immutable class that contains all behavioral patterns of an npc

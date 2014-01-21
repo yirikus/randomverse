@@ -1,10 +1,12 @@
-package cz.terrmith.randomverse.test.core.image;
+package cz.terrmith.randomverse.test.core.core.sprite;
 
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import junit.framework.Assert;
 import org.junit.Test;
+
+import java.awt.Rectangle;
 
 /**
  * Created with IntelliJ IDEA.
@@ -72,4 +74,17 @@ public class TestMultisprite {
         Assert.assertEquals(0,tile_10.getTileY());
 
     }
+
+	@Test
+	public void testBoundingBox() throws Exception {
+		MultiSprite m = new MultiSprite(100, 100);
+		m.addTile(new Tile(0, 0, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null)));
+		m.addTile(new Tile(-1, 0, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null)));
+		m.addTile(new Tile(1, 0, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null)));
+		m.addTile(new Tile(0, -1, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null)));
+		m.addTile(new Tile(0, 1, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null)));
+
+		Rectangle r = m.getBoundingBox();
+		int x = 0;
+	}
 }

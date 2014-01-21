@@ -3,7 +3,7 @@ package cz.terrmith.randomverse.sprite.enemy.debris;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.abilitiy.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 
 import java.util.ArrayList;
 import java.util.List;

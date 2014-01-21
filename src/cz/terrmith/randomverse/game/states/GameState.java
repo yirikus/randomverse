@@ -9,7 +9,7 @@ import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.abilitiy.*;
+import cz.terrmith.randomverse.core.sprite.properties.*;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;

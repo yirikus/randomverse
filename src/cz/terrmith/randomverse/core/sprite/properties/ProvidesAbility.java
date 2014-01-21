@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core.sprite.abilitiy;
+package cz.terrmith.randomverse.core.sprite.properties;
 
 import java.util.Map;
 
@@ -20,5 +20,5 @@ public interface ProvidesAbility {
 	 * Returns list of abilities which are provided by this object
  	 * @return map [Group, ability name]
 	 */
-	Map<String, String> getAbilities();
+	Map<String, Ability> getAbilities();
 }

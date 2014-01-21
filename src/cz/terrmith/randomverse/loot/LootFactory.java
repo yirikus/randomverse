@@ -1,6 +1,6 @@
 package cz.terrmith.randomverse.loot;
 
-import cz.terrmith.randomverse.core.sprite.abilitiy.Loot;
+import cz.terrmith.randomverse.core.sprite.properties.Loot;
 
 import java.util.Random;
 

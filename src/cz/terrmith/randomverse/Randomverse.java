@@ -1,16 +1,13 @@
 package cz.terrmith.randomverse;
 
-import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.GameEngine;
-import cz.terrmith.randomverse.core.dialog.Dialog;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.abilitiy.CollisionTester;
-import cz.terrmith.randomverse.core.state.StateMachine;
+import cz.terrmith.randomverse.core.sprite.properties.CollisionTester;
 import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.game.states.GameState;
 import cz.terrmith.randomverse.game.states.InventoryState;
