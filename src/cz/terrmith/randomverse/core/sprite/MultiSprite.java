@@ -71,6 +71,7 @@ public class MultiSprite implements Sprite{
         }
 
         tiles.add(newTile);
+	    newTile.getSprite().setParent(this);
         setPosition(this.locX, this.locY);
     }
 
@@ -87,6 +88,7 @@ public class MultiSprite implements Sprite{
             throw new IllegalArgumentException("Tile must have a sprite");
         }
         Tile newTile = new Tile(x, y, sprite);
+	    sprite.setParent(this);
         addTile(newTile);
     }
 
@@ -339,5 +341,15 @@ public class MultiSprite implements Sprite{
 	@Override
 	public Sprite copy() {
 		return new MultiSprite(this);
+	}
+
+	@Override
+	public void setParent(Sprite parent) {
+		throw new UnsupportedOperationException("Multisprite can not have parent");
+	}
+
+	@Override
+	public Sprite getParent() {
+		throw new UnsupportedOperationException("Multisprite can not have parent");
 	}
 }

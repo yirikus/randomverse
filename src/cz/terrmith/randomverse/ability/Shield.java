@@ -33,7 +33,9 @@ public class Shield extends Ability {
 		if (isActive()) {
 			//update parent [x, y]
             this.parent = parent;
+			setPosition(parent.getXPosn(), parent.getYPosn());
 		}
+		System.out.println("shield: " + isActive());
 	}
 
     @Override

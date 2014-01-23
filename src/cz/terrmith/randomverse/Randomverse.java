@@ -67,7 +67,9 @@ public class Randomverse extends GameEngine {
 
     @Override
     public void update() {
-        getCurrentState().update();
+	    if (!isPaused()) {
+            getCurrentState().update();
+        }
     }
 
     @Override

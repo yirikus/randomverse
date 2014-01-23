@@ -117,6 +117,7 @@ public class Command {
 
     public void setAction2(boolean action2) {
         this.action2 = changeState(this.action2, action2);
+	    System.out.println("action2:" + this.action2.name());
     }
 
     public State getAction3() {

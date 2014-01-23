@@ -43,10 +43,28 @@ public class ShieldPart extends ShipPart implements ProvidesAbility{
 		this.spc = spriteCollection;
 	}
 
+	@Override
+	public void updateSprite() {
+		super.updateSprite();
+		if (getCurrentHealth() < 1) {
+			for (Ability a : getAbilities().values()) {
+				if (a.isActive()) {
+					setActive(false);
+					spc.remove(SpriteLayer.SHIELD, a);
+				}
+			}
+		} else {
+			for (Ability a : getAbilities().values()) {
+				a.updateSprite();
+			}
+		}
+
+	}
 
 	@Override
 	public void useAbility(String group, Sprite parent) {
 		Ability a = abilities.get(group);
+		System.out.println("ShieldPart: " + a);
 		if (a != null) {
             if (!a.isActive()) {
                 spc.put(SpriteLayer.SHIELD, a);

@@ -24,7 +24,7 @@ public class Player {
 	private Ship playerSprite;
     private Command command;
 	public static final int STEP = 6;
-	private int money = 0;
+	private int money = 10;
     private boolean canUseAbiltities = true;
 
     public Player(Command command, SpriteCollection sc) {
@@ -61,8 +61,9 @@ public class Player {
 		  || Command.State.PRESSED.equals(command.getAction1())) {
 			playerSprite.attack();
 		}
-        if (Command.State.PRESSED.equals(command.getAction2())) {    //
+        if (Command.State.RELEASED_PRESSED.equals(command.getAction2())) {    //
             if (canUseAbiltities) {
+	            System.out.println("usingAbiltiy!");
                 playerSprite.useAbility(AbilityGroup.ACTION_2.name(), null);
                 canUseAbiltities = false;
             }

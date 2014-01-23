@@ -69,7 +69,6 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
         } else if (type.equals(DebrisPartType.REFLECT)) {
             setStatus(DebrisPartStatus.REFLECT.name());
         }
-        System.out.println("created status: " + getStatus());
     }
 
     @Override
@@ -99,9 +98,7 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
      * @param tileLocation since debris part does not know its location in a tile set, parent must provide its location
      */
     public void updateSpriteStatus(GridLocation tileLocation) {
-        System.out.println("type: " + type);
         if (this.getStatus().equals(DebrisPartStatus.DEAD.name()) || !type.equals(DebrisPartType.REGULAR)) {
-            System.out.println("FU! status:" + getStatus());
             return;
         }
         // if neighborhood is not set, set it
@@ -123,8 +120,6 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
         boolean right = !isDead(nhood.getRight());
         boolean left = !isDead(nhood.getLeft());
         //set status according to neighborhood
-
-        System.out.println(top + " " + left + " " + bottom + " " + right);
 
         if (top && right && !bottom && !left) {
             setStatus(DebrisPartStatus.NHOOD2.name());
