@@ -116,14 +116,11 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	private void flipExtensionPointsHorizontally() {
 		boolean removedLeft = extensions.remove(ExtensionPoint.LEFT);
 		boolean removedRight = extensions.remove(ExtensionPoint.RIGHT);
-		System.out.println("removedLeft: " + removedLeft + ", removedright: " + removedRight);
 
 		if (removedLeft) {
-			System.out.println("addRight");
 			extensions.add(ExtensionPoint.RIGHT);
 		}
 		if (removedRight) {
-			System.out.println("addLeft");
 			extensions.add(ExtensionPoint.LEFT);
 		}
 	}

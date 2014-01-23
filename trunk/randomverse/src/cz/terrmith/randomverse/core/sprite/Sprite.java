@@ -107,4 +107,16 @@ public interface Sprite {
 	 */
 	Sprite copy();
 
+	/**
+	 * Sets parent of this sprite (like multisprite)
+	 * @param parent
+	 */
+	void setParent(Sprite parent);
+
+	/**
+	 * Returns parent or null
+	 * @return
+	 */
+	Sprite getParent();
+
 }

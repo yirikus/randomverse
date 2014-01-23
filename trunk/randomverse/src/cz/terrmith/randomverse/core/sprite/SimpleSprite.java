@@ -32,8 +32,9 @@ public class SimpleSprite implements Sprite {
     private String status = DefaultSpriteStatus.DEFAULT.name();
     private boolean yFlip = false;
     private boolean xFlip = false;
+	private Sprite parent;
 
-    /**
+	/**
      * Copy constructor
      * @param sprite instance that should be copied
      */
@@ -42,6 +43,7 @@ public class SimpleSprite implements Sprite {
         this.status = sprite.getStatus();
 	    this.xFlip = sprite.isFlippedHorizontally();
 	    this.yFlip = sprite.isFlippedVertically();
+	    this.parent = sprite.getParent();
     }
 
     /**
@@ -241,5 +243,15 @@ public class SimpleSprite implements Sprite {
 	@Override
 	public Sprite copy() {
 		return new SimpleSprite(this);
+	}
+
+	@Override
+	public void setParent(Sprite parent) {
+		this.parent = parent;
+	}
+
+	@Override
+	public Sprite getParent() {
+		return this.parent;
 	}
 }

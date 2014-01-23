@@ -13,7 +13,7 @@ import java.util.Map;
 public interface ProvidesAbility {
 
 	/**
-	 * Group of ability
+	 * use ability (switch on/off)
 	 * @param group
      * @param parent
 	 */

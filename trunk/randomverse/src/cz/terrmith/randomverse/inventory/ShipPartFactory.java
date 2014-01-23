@@ -6,6 +6,7 @@ import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.sprite.ExtensionPoint;
+import cz.terrmith.randomverse.sprite.ShieldPart;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
@@ -70,7 +71,7 @@ public class ShipPartFactory {
             case 8: return createMidPart(new ImageLocation("midParts",0),-0.5, 2, 2);
             case 9: return createMidPart(new ImageLocation("midParts",1),-1, 3, 3);
             case 10: return createMidPart(new ImageLocation("midParts",2),-1.5, 4, 4);
-            case 11: return createMidPart(new ImageLocation("midParts",3),-2, 5, 5);
+            case 11: return createShieldPart(new ImageLocation("midParts",3),-2, 5, 5);
             case 12: return createBottomEngine(new ImageLocation("bottomEngines",0), 4, 2, 2);
             case 13: return createBottomEngine(new ImageLocation("bottomEngines",1), 6, 1, 4);
             case 14: return createBottomEngine(new ImageLocation("bottomEngines",2), 8, 1, 6);
@@ -127,6 +128,14 @@ public class ShipPartFactory {
         part.setSpeed(speed);
         return part;
     }
+
+	public ShipPart createShieldPart(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
+		Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
+		imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), image);
+		ImageLocation damagedImage = new ImageLocation(image.getName() + "_damaged", image.getNumber());
+		imageForStatus.put(DefaultSpriteStatus.DAMAGED.name(), damagedImage);
+		return new ShieldPart(health, imageForStatus, extensions, price, spriteCollection);
+	}
 
 	public ShipPart createBottomEngine(ImageLocation image, double speed, int health, int price) {
 		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
