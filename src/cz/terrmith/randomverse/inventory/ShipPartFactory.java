@@ -9,7 +9,13 @@ import cz.terrmith.randomverse.sprite.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Factory class that creates ship part instances
@@ -78,7 +84,7 @@ public class ShipPartFactory {
         return new SimpleGun(spriteCollection, attackRate, damage, imageLocation, health, price);
 	}
 
-	public ShipPart createSprite(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
+	public ShipPart createShipPart(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
         Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
         imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), image);
 	    ImageLocation damagedImage = new ImageLocation(image.getName() + "_damaged", image.getNumber());
@@ -86,10 +92,18 @@ public class ShipPartFactory {
 	    return new ShipPart(health, imageForStatus, extensions, price);
     }
 
+    public ShipPart createSprite(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
+        Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
+        imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), image);
+        ImageLocation damagedImage = new ImageLocation(image.getName() + "_damaged", image.getNumber());
+        imageForStatus.put(DefaultSpriteStatus.DAMAGED.name(), damagedImage);
+        return new ShipPart(health, imageForStatus, extensions, price);
+    }
+
 	public ShipPart createCockpit(ImageLocation image, int health, int price) {
 		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
 		extensions.add(ExtensionPoint.BOTTOM);
-		return createSprite(image, extensions, health, price);
+		return createShipPart(image, extensions, health, price);
 	}
 
 	public ShipPart createMidPart(ImageLocation image, double speed, int health, int price) {
@@ -98,15 +112,26 @@ public class ShipPartFactory {
 		extensions.add(ExtensionPoint.LEFT);
 		extensions.add(ExtensionPoint.RIGHT);
 		extensions.add(ExtensionPoint.TOP);
-		ShipPart part = createSprite(image, extensions, health, price);
+		ShipPart part = createShipPart(image, extensions, health, price);
 		part.setSpeed(speed);
 		return part;
 	}
 
+    public ShipPart createShieldPart(ImageLocation image, double speed, int health, int price) {
+        Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
+        extensions.add(ExtensionPoint.BOTTOM);
+        extensions.add(ExtensionPoint.LEFT);
+        extensions.add(ExtensionPoint.RIGHT);
+        extensions.add(ExtensionPoint.TOP);
+        ShipPart part = createShipPart(image, extensions, health, price);
+        part.setSpeed(speed);
+        return part;
+    }
+
 	public ShipPart createBottomEngine(ImageLocation image, double speed, int health, int price) {
 		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
 		extensions.add(ExtensionPoint.TOP);
-		ShipPart shipPart = createSprite(image, extensions, health, price);
+		ShipPart shipPart = createShipPart(image, extensions, health, price);
 		shipPart.setSpeed(speed);
 		return shipPart;
 	}

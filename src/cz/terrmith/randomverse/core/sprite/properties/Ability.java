@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.core.sprite.properties;
 
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
 
 /**
@@ -21,5 +22,9 @@ public abstract class Ability extends SimpleSprite {
 		return group;
 	}
 
-	public abstract void useAbility();
+    /**
+     * Triggers ability on/off
+     * @param parent top parent sprite
+     */
+	public abstract void useAbility(Sprite parent);
 }

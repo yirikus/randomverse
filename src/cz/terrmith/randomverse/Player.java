@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse;
 
+import cz.terrmith.randomverse.ability.AbilityGroup;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
@@ -24,8 +25,9 @@ public class Player {
     private Command command;
 	public static final int STEP = 6;
 	private int money = 0;
+    private boolean canUseAbiltities = true;
 
-	public Player(Command command, SpriteCollection sc) {
+    public Player(Command command, SpriteCollection sc) {
 		this.command = command;
 		this.spriteCollection = sc;
 		this.playerSprite = createPlayerSprite();
@@ -59,6 +61,14 @@ public class Player {
 		  || Command.State.PRESSED.equals(command.getAction1())) {
 			playerSprite.attack();
 		}
+        if (Command.State.PRESSED.equals(command.getAction2())) {    //
+            if (canUseAbiltities) {
+                playerSprite.useAbility(AbilityGroup.ACTION_2.name(), null);
+                canUseAbiltities = false;
+            }
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getAction2())) {    //
+            canUseAbiltities = true;
+        }
 
 		playerSprite.setStep(dx, dy);
 		playerSprite.updateSprite();

@@ -3,9 +3,10 @@ package cz.terrmith.randomverse.core.sprite;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,22 @@ public class SpriteCollection {
     public void clear(){
         for (Map.Entry<SpriteLayer, List<Sprite>> entry : sprites.entrySet()) {
             entry.setValue(new ArrayList<Sprite>());
+        }
+    }
+
+    /**
+     * Removes given reference from sprite layer
+     * @param layer layer from which the sprite will be removed
+     * @param sprite sprite to remove
+     */
+    public void remove(SpriteLayer layer, Sprite sprite) {
+        List<Sprite> spriteLayer = sprites.get(layer);
+        Iterator<Sprite> it = spriteLayer.iterator();
+        while (it.hasNext()) {
+            Sprite next = it.next();
+            if (sprite == next) {
+                it.remove();
+            }
         }
     }
 }

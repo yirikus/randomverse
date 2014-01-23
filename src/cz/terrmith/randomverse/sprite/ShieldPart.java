@@ -3,7 +3,9 @@ package cz.terrmith.randomverse.sprite;
 import cz.terrmith.randomverse.ability.AbilityGroup;
 import cz.terrmith.randomverse.ability.Shield;
 import cz.terrmith.randomverse.core.image.ImageLocation;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.properties.Ability;
 import cz.terrmith.randomverse.core.sprite.properties.ProvidesAbility;
 
@@ -43,10 +45,15 @@ public class ShieldPart extends ShipPart implements ProvidesAbility{
 
 
 	@Override
-	public void useAbility(String group) {
+	public void useAbility(String group, Sprite parent) {
 		Ability a = abilities.get(group);
 		if (a != null) {
-			a.useAbility();
+            if (!a.isActive()) {
+                spc.put(SpriteLayer.SHIELD, a);
+            } else {
+                spc.remove(SpriteLayer.SHIELD, a);
+            }
+            a.useAbility(parent);
 		}
 	}
 

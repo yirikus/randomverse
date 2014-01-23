@@ -3,19 +3,23 @@ package cz.terrmith.randomverse.sprite;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.properties.Ability;
 import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.sprite.properties.Lootable;
+import cz.terrmith.randomverse.core.sprite.properties.ProvidesAbility;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Ship is a sprite that moves and uses it's parts to use abilities like an attack
  * can be player or npc controlled
  */
-public class Ship extends MultiSprite implements CanAttack, Destructible, Lootable{
+public class Ship extends MultiSprite implements CanAttack, Destructible, Lootable, ProvidesAbility{
 
     private ArtificialIntelligence ai;
 	private LootSprite lootSprite;
@@ -172,4 +176,17 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 		return totalSpeed;
 	}
 
+    @Override
+    public void useAbility(String group, Sprite parent) {
+        for (Tile t : getTiles()) {
+            if (t.getSprite() instanceof ProvidesAbility) {
+                ((ProvidesAbility) t.getSprite()).useAbility(group, this);
+            }
+        }
+    }
+
+    @Override
+    public Map<String, Ability> getAbilities() {
+        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
