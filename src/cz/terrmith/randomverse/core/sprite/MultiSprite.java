@@ -211,27 +211,31 @@ public class MultiSprite implements Sprite{
         }
     }
 
+    /**
+     * Computes bounding box from active tile sprites
+     * @return
+     */
     @Override
     public Rectangle getBoundingBox() {
-        Tile top = getTiles().get(0);
-	    Tile left = getTiles().get(0);
-	    Tile right = getTiles().get(0);
-	    Tile bottom = getTiles().get(0);
+        Tile top = null;
+	    Tile left = null;
+	    Tile right = null;
+	    Tile bottom = null;
 
 	    for (Tile t : getTiles()) {
-			if (t.getTileX() < left.getTileX()) {
+			if (t.getSprite().isActive() && (left == null || t.getTileX() < left.getTileX())) {
 				left = t;
 			}
 
-		    if (t.getTileX() > right.getTileX()) {
+		    if (t.getSprite().isActive() && (right == null || t.getTileX() > right.getTileX())) {
 				right = t;
 		    }
 
-		    if (t.getTileY() < top.getTileY()) {
+		    if (t.getSprite().isActive() && (top == null || t.getTileY() < top.getTileY())) {
 				top = t;
 		    }
 
-		    if (t.getTileY() > bottom.getTileY()) {
+		    if (t.getSprite().isActive() && (bottom == null || t.getTileY() > bottom.getTileY())) {
 				bottom = t;
 		    }
 	    }

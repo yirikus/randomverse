@@ -59,13 +59,16 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 
 	@Override
 	public void reduceHealth(int amount) {
-		this.currentHealth -= amount;
+        this.currentHealth -= amount;
 		if (this.currentHealth < 1) {
 			this.setStatus(DefaultSpriteStatus.DEAD.name());
+            setActive(false);
 		} else if (this.currentHealth < this.totalHealth) {
 			this.setStatus(DefaultSpriteStatus.DAMAGED.name());
+            setActive(true);
 		} else {
             this.setStatus(DefaultSpriteStatus.DEFAULT.name());
+            setActive(true);
         }
 	}
 
@@ -77,9 +80,8 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	public void updateSprite() {
 		if(!connectedToCore){
 			reduceHealth(getCurrentHealth());
-		} else {
-			super.updateSprite();
 		}
+		super.updateSprite();
 	}
 
 	public boolean isConnectedToCore() {
@@ -164,4 +166,6 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
             reduceHealth(-loot.getAmount());
         }
     }
+
+
 }

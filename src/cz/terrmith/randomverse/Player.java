@@ -61,7 +61,8 @@ public class Player {
 		  || Command.State.PRESSED.equals(command.getAction1())) {
 			playerSprite.attack();
 		}
-        if (Command.State.RELEASED_PRESSED.equals(command.getAction2())) {    //
+        if (Command.State.RELEASED_PRESSED.equals(command.getAction2())
+                || Command.State.PRESSED.equals(command.getAction2()) ) {    //
             if (canUseAbiltities) {
 	            System.out.println("usingAbiltiy!");
                 playerSprite.useAbility(AbilityGroup.ACTION_2.name(), null);

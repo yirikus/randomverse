@@ -10,13 +10,7 @@ import cz.terrmith.randomverse.sprite.ShieldPart;
 import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.gun.SimpleGun;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Factory class that creates ship part instances
@@ -71,7 +65,7 @@ public class ShipPartFactory {
             case 8: return createMidPart(new ImageLocation("midParts",0),-0.5, 2, 2);
             case 9: return createMidPart(new ImageLocation("midParts",1),-1, 3, 3);
             case 10: return createMidPart(new ImageLocation("midParts",2),-1.5, 4, 4);
-            case 11: return createShieldPart(new ImageLocation("midParts",3),-2, 5, 5);
+            case 11: return createShieldPart(new ImageLocation("midParts", 3), -2, 5, 5);
             case 12: return createBottomEngine(new ImageLocation("bottomEngines",0), 4, 2, 2);
             case 13: return createBottomEngine(new ImageLocation("bottomEngines",1), 6, 1, 4);
             case 14: return createBottomEngine(new ImageLocation("bottomEngines",2), 8, 1, 6);
@@ -118,18 +112,18 @@ public class ShipPartFactory {
 		return part;
 	}
 
-    public ShipPart createShieldPart(ImageLocation image, double speed, int health, int price) {
+    public ShieldPart createShieldPart(ImageLocation image, double speed, int health, int price) {
         Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
         extensions.add(ExtensionPoint.BOTTOM);
         extensions.add(ExtensionPoint.LEFT);
         extensions.add(ExtensionPoint.RIGHT);
         extensions.add(ExtensionPoint.TOP);
-        ShipPart part = createShipPart(image, extensions, health, price);
+        ShieldPart part = createShieldPart(image, extensions, health, price);
         part.setSpeed(speed);
         return part;
     }
 
-	public ShipPart createShieldPart(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
+	public ShieldPart createShieldPart(ImageLocation image, Set<ExtensionPoint> extensions, int health, int price){
 		Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
 		imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), image);
 		ImageLocation damagedImage = new ImageLocation(image.getName() + "_damaged", image.getNumber());
