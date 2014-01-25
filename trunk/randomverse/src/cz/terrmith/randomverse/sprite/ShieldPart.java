@@ -79,4 +79,9 @@ public class ShieldPart extends ShipPart implements ProvidesAbility{
 	public Map<String, Ability> getAbilities() {
 		return abilities;
 	}
+
+    @Override
+    public Sprite copy() {
+        return new ShieldPart(this);
+    }
 }
