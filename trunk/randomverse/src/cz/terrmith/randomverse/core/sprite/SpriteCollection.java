@@ -4,11 +4,7 @@ import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Collection of sprites in layers
@@ -68,8 +64,15 @@ public class SpriteCollection {
         }
     }
 
-   public List<Sprite> getSprites(SpriteLayer layer){
-        return this.sprites.get(layer);
+    /**
+     * Returns unmodifible collection of sprites of given layer
+     * @param layer
+     * @return
+     */
+   public Collection<Sprite> getSprites(SpriteLayer layer){
+       List<Sprite> spritesToReturn = new ArrayList<Sprite>();
+       spritesToReturn.addAll(this.sprites.get(layer));
+        return Collections.unmodifiableCollection(spritesToReturn);
    }
 
    public void drawLayer(SpriteLayer layer, Graphics g, ImageLoader iml){
@@ -99,6 +102,21 @@ public class SpriteCollection {
         while (it.hasNext()) {
             Sprite next = it.next();
             if (sprite == next) {
+                it.remove();
+            }
+        }
+    }
+
+    /**
+     * Removes sprites that are not active
+     * @param layer layer from which the sprite will be removed
+     */
+    public void removeInactive(SpriteLayer layer) {
+        List<Sprite> spriteLayer = sprites.get(layer);
+        Iterator<Sprite> it = spriteLayer.iterator();
+        while (it.hasNext()) {
+            Sprite next = it.next();
+            if (!next.isActive()) {
                 it.remove();
             }
         }

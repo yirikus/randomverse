@@ -4,9 +4,13 @@ import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.NHood4;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import cz.terrmith.randomverse.core.sprite.properties.Solid;
+import cz.terrmith.randomverse.sprite.projectile.Explosion;
 
 import java.util.HashMap;
 import java.util.List;
@@ -87,6 +91,11 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
         if (this.currentHealth < 1) {
             this.setStatus(DebrisPartStatus.DEAD.name());
             parent.updateSpriteStatus();
+            if (type.equals(DebrisPartType.EXPLODING)) {
+                // add explosion to projectiles
+                Explosion explosion = new Explosion(getXPosn(), getYPosn(), new Damage(3, Damage.DamageType.BOTH));
+                parent.getSpriteCollection().put(SpriteLayer.PROJECTILE, explosion);
+            }
         } else if (this.currentHealth < maxHealth/2 && this.type.equals(DebrisPartType.HARD)) {
             this.setStatus(DebrisPartStatus.HARD_DAMAGED.name());
         }
