@@ -200,7 +200,10 @@ public class GameState implements State {
             collidingSprites = stateMachine.getCollisionTester().findCollisions(dmgDealer, SpriteLayer.NPC);
             // player collision
         } else {
-            collidingSprites = stateMachine.getCollisionTester().findCollisions(dmgDealer, SpriteLayer.PLAYER);
+            collidingSprites = stateMachine.getCollisionTester().findCollisions(dmgDealer, SpriteLayer.SHIELD);
+            if (collidingSprites.isEmpty()) {
+                collidingSprites = stateMachine.getCollisionTester().findCollisions(dmgDealer, SpriteLayer.PLAYER);
+            }
         }
         dmgDealer.dealDamage(collidingSprites);
     }

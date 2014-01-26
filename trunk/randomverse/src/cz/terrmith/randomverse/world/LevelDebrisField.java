@@ -18,7 +18,7 @@ public class LevelDebrisField extends World {
      * @param spriteCollection sprite collection
      */
     public LevelDebrisField(SpriteCollection spriteCollection) {
-        super(spriteCollection, 1, 15);
+        super(spriteCollection, 1, 1);
     }
 
     @Override

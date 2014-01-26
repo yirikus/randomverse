@@ -30,8 +30,8 @@ public class CollisionTester {
 		List<Destructible> collidingDestructibles = new ArrayList<Destructible>();
 		for (Sprite s : spriteCollection.getSprites(spriteLayer)) {
 			if (s instanceof Destructible) {
-				List<Sprite> collidingDprites = s.collidesWith(dmgDealer);
-				for (Sprite cs : collidingDprites ) {
+				List<Sprite> collidingSprites = s.collidesWith(dmgDealer);
+				for (Sprite cs : collidingSprites ) {
 					if (cs instanceof Destructible) {
 						collidingDestructibles.add((Destructible)cs);
 					}
