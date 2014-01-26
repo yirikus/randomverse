@@ -17,6 +17,7 @@ import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.sprite.ShipPart;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -148,7 +149,7 @@ public class GameState implements State {
                 }
             }
 
-            // delete inactive sprites
+            // update active, add loot
             if (npcSprite.isActive()) {
                 npcSprite.updateSprite();
             } else {
@@ -156,18 +157,18 @@ public class GameState implements State {
                 if (DefaultSpriteStatus.DEAD.name().equals(npcSprite.getStatus()) && npcSprite instanceof Lootable) {
                     stateMachine.getSpriteCollection().put(SpriteLayer.ITEM, ((Lootable) npcSprite).getLootSprite());
                 }
-                iterator.remove();
             }
         }
+        stateMachine.getSpriteCollection().removeInactive(SpriteLayer.NPC);
     }
 
 
     private void updateProjectiles() {
-        Iterator<Sprite> iterator = stateMachine.getSpriteCollection().getSprites(SpriteLayer.PROJECTILE).iterator();
+        Collection<Sprite> sprites = stateMachine.getSpriteCollection().getSprites(SpriteLayer.PROJECTILE);
         Boundary b = stateMachine.getSpriteCollection().getBoundary(SpriteLayer.PROJECTILE);
-        while (iterator.hasNext()) {
-            Sprite s = iterator.next();
-
+        //update
+        // must be separated
+        for (Sprite s : sprites) {
             // set sprites that are not within as inactive
             Position spritePos = new Position(s.getXPosn(), s.getYPosn());
             if (!b.withinBoundary(spritePos)) {
@@ -180,10 +181,10 @@ public class GameState implements State {
                     DamageDealer d = (DamageDealer) s;
                     dealDamage(d);
                 }
-            } else {
-                iterator.remove();
             }
         }
+        //remove
+        stateMachine.getSpriteCollection().removeInactive(SpriteLayer.PROJECTILE);
     }
 
     /**

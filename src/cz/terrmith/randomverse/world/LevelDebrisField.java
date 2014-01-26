@@ -18,12 +18,12 @@ public class LevelDebrisField extends World {
      * @param spriteCollection sprite collection
      */
     public LevelDebrisField(SpriteCollection spriteCollection) {
-        super(spriteCollection, 1, 1);
+        super(spriteCollection, 1, 15);
     }
 
     @Override
     protected void createSprites() {
-        Debris enemy = new Debris(random.nextInt() % 600 + 100, -100);
+        Debris enemy = new Debris(random.nextInt() % 600 + 100, -100, getSpriteCollection());
         getSpriteCollection().put(SpriteLayer.NPC, enemy);
         enemy.setStep(0, enemy.getSpeed());
     }

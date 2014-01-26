@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.sprite.enemy.debris;
 
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 
@@ -15,17 +16,18 @@ import java.util.Random;
 public class Debris extends MultiSprite implements Destructible{
 
     private static Random r = new Random();
-	private double speed;
+    private final SpriteCollection spriteCollection;
+    private double speed;
 
 	/**
      * Creates random asteroid at given position
      * @param x x position
      * @param y y position
      */
-    public Debris(int x, int y) {
+    public Debris(int x, int y, SpriteCollection spriteCollection) {
         super(x, y);
         generateAsteroid(5);
-
+        this.spriteCollection = spriteCollection;
     }
 
     /**
@@ -124,5 +126,9 @@ public class Debris extends MultiSprite implements Destructible{
             DebrisPart sprite = (DebrisPart)t.getSprite();
             sprite.updateSpriteStatus(new GridLocation(t.getTileX(), t.getTileY()));
         }
+    }
+
+    public SpriteCollection getSpriteCollection() {
+        return spriteCollection;
     }
 }
