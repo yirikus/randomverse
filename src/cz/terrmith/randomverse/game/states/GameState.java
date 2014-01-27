@@ -168,7 +168,7 @@ public class GameState implements State {
         Collection<Sprite> sprites = stateMachine.getSpriteCollection().getSprites(SpriteLayer.PROJECTILE);
         Boundary b = stateMachine.getSpriteCollection().getBoundary(SpriteLayer.PROJECTILE);
         //update
-        // must be separated
+        // NOTE: update and remove must be separated (concurrency)
         for (Sprite s : sprites) {
             // set sprites that are not within as inactive
             Position spritePos = new Position(s.getXPosn(), s.getYPosn());
@@ -179,6 +179,7 @@ public class GameState implements State {
             if (s.isActive()) {
                 s.updateSprite();
                 if (s instanceof DamageDealer) {
+	                System.out.println("dealing damage");
                     DamageDealer d = (DamageDealer) s;
                     dealDamage(d);
                 }
