@@ -17,6 +17,7 @@ import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.sprite.ShipPart;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -193,20 +194,25 @@ public class GameState implements State {
      * @param dmgDealer damage dealer
      */
     private void dealDamage(DamageDealer dmgDealer) {
-        List<Destructible> collidingSprites;
+        List<Destructible> collidingSprites = new ArrayList<Destructible>();
         // non player collision
         if (Damage.DamageType.NPC.equals(dmgDealer.getDamage().getType())
                 || Damage.DamageType.BOTH.equals(dmgDealer.getDamage().getType())) {
 
             collidingSprites = stateMachine.getCollisionTester().findCollisions(dmgDealer, SpriteLayer.NPC);
-            // player collision
-        } else {
+	        dmgDealer.dealDamage(collidingSprites);
+        }
+	    collidingSprites.clear();
+	    // player collision
+	    if (Damage.DamageType.PLAYER.equals(dmgDealer.getDamage().getType())
+	      || Damage.DamageType.BOTH.equals(dmgDealer.getDamage().getType())) {
             collidingSprites = stateMachine.getCollisionTester().findCollisions(dmgDealer, SpriteLayer.SHIELD);
             if (collidingSprites.isEmpty()) {
                 collidingSprites = stateMachine.getCollisionTester().findCollisions(dmgDealer, SpriteLayer.PLAYER);
             }
+		    dmgDealer.dealDamage(collidingSprites);
         }
-        dmgDealer.dealDamage(collidingSprites);
+
     }
 
     @Override
