@@ -141,10 +141,10 @@ public class GameState implements State {
                                 ((Destructible) s).reduceHealth(solidPlayerPart.getImpactDamage());
                             }
 
+                            //obtain damage
                             if (c.getSprite() instanceof Destructible) {
                                 ((Destructible) c.getSprite()).reduceHealth(((Solid) s).getImpactDamage());
                             }
-                            //obtain damage
                         }
                     }
                 }
@@ -179,14 +179,37 @@ public class GameState implements State {
             if (s.isActive()) {
                 s.updateSprite();
                 if (s instanceof DamageDealer) {
-	                System.out.println("dealing damage");
                     DamageDealer d = (DamageDealer) s;
                     dealDamage(d);
+                }
+                if (s instanceof Solid) {
+                    dealImpactDamage((Solid) s);
                 }
             }
         }
         //remove
         stateMachine.getSpriteCollection().removeInactive(SpriteLayer.PROJECTILE);
+    }
+
+    /**
+     * Finds collision of solid sprite and deals damage to destructibles
+     * @param solid solid sprite
+     */
+    private void dealImpactDamage(Solid solid) {
+        List<Destructible> npcCollisions = stateMachine.getCollisionTester().findCollisions(solid, SpriteLayer.NPC);
+        for (Destructible d : npcCollisions) {
+            d.reduceHealth(solid.getImpactDamage());
+            if (d instanceof Solid && solid instanceof Destructible) {
+                ((Destructible) solid).reduceHealth(((Solid) d).getImpactDamage());
+            }
+        }
+        List<Destructible> playerCollisions = stateMachine.getCollisionTester().findCollisions(solid, SpriteLayer.PLAYER);
+        for (Destructible d : playerCollisions) {
+            d.reduceHealth(solid.getImpactDamage());
+            if (d instanceof Solid && solid instanceof Destructible) {
+                ((Destructible) solid).reduceHealth(((Solid) d).getImpactDamage());
+            }
+        }
     }
 
     /**

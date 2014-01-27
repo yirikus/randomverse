@@ -59,8 +59,8 @@ public class ShipPartFactory {
             //SpriteCollection spriteCollection, int rateOfFire, Damage damage, ImageLocation imageLocation
             case 0:  return (ShipPart) createGun(new ImageLocation("sideGun", 0), 1, 2, 8, new ProjectileFactory(new Damage(1, damageType)));//return new SimpleGun(spriteCollection,8,new Damage(1, damageType),new ImageLocation("sideGun",0),1,2);
             case 1:  return (ShipPart) createGun(new ImageLocation("sideGun", 1), 1, 8, 4, new ProjectileFactory(new Damage(2, damageType)));//return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1,8);
-            case 2:  return (ShipPart) createGun(new ImageLocation("sideGun", 2), 1, 6, 8, new ProjectileFactory(new Damage(3, damageType)));//return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1,6);
-            case 3: return (ShipPart) createGun(new ImageLocation("sideGun", 3), 2, 4, 12, new MissileFactory(new Damage(4, damageType), this.spriteCollection));
+            case 2:  return (ShipPart) createGun(new ImageLocation("sideGun", 3), 1, 6, 8, new ProjectileFactory(new Damage(4, damageType)));//return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1,6);
+            case 3: return (ShipPart) createGun(new ImageLocation("sideGun", 2), 2, 4, 12, new MissileFactory(new Damage(3, damageType), this.spriteCollection));
             case 4: return createCockpit(new ImageLocation("cockpit",0),2, 2);
             case 5: return createCockpit(new ImageLocation("cockpit",1),3, 4);
             case 6: return createCockpit(new ImageLocation("cockpit",2),4, 6);
