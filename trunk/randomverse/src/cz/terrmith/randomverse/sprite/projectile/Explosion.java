@@ -68,4 +68,11 @@ public class Explosion extends SimpleSprite implements DamageDealer {
                     Tile.DEFAULT_SIZE * 2);
     }
 
+	@Override
+	public Rectangle getBoundingBox() {
+		return new Rectangle((int)getXPosn() - Tile.DEFAULT_SIZE/2,
+							  (int)getYPosn() - Tile.DEFAULT_SIZE/2,
+							  Tile.DEFAULT_SIZE * 2,
+							  Tile.DEFAULT_SIZE * 2);
+	}
 }
