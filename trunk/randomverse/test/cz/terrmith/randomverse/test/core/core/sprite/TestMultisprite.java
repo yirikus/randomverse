@@ -84,7 +84,22 @@ public class TestMultisprite {
 		m.addTile(new Tile(0, -1, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null)));
 		m.addTile(new Tile(0, 1, new SimpleSprite(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null)));
 
-		Rectangle r = m.getBoundingBox();
-		int x = 0;
+		Assert.assertEquals(new Rectangle(68, 68, 96, 96),m.getBoundingBox());
+
+		m.removeTile(-1, 0);
+
+		Assert.assertEquals(new Rectangle(100, 68, 64, 96),m.getBoundingBox());
+
+		m.removeTile(1, 0);
+
+		Assert.assertEquals(new Rectangle(100, 68, 32, 96),m.getBoundingBox());
+
+		m.removeTile(0, 1);
+
+		Assert.assertEquals(new Rectangle(100, 68, 32, 64),m.getBoundingBox());
+
+		m.removeTile(0, -1);
+
+		Assert.assertEquals(new Rectangle(100, 100, 32, 32),m.getBoundingBox());
 	}
 }
