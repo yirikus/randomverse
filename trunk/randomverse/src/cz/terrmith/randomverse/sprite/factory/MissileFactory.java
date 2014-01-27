@@ -1,8 +1,10 @@
 package cz.terrmith.randomverse.sprite.factory;
 
 import cz.terrmith.randomverse.core.sprite.Sprite;
-import cz.terrmith.randomverse.core.sprite.properties.Damage;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
+import cz.terrmith.randomverse.core.sprite.properties.Damage;
+import cz.terrmith.randomverse.sprite.projectile.Missile;
 import cz.terrmith.randomverse.sprite.projectile.Projectile;
 
 /**
@@ -12,21 +14,26 @@ import cz.terrmith.randomverse.sprite.projectile.Projectile;
  * Time: 20:54
  * To change this template use File | Settings | File Templates.
  */
-public class ProjectileFactory implements SpriteFactory {
+public class MissileFactory implements SpriteFactory {
 
-    private Damage damage;
+	private final SpriteCollection spc;
+	private Damage damage;
 
-    public ProjectileFactory(Damage damage) {
+    public MissileFactory(Damage damage, SpriteCollection spc) {
         this.damage = damage;
+	    this.spc = spc;
     }
 
     @Override
     public Sprite newSprite(int x, int y) {
-        return new Projectile(x, y, damage);
+        return new Missile(x, y, damage, spc);
     }
-
 	@Override
 	public Damage getDamage() {
 		return damage;
+	}
+
+	public void setDamage(Damage damage) {
+		this.damage = damage;
 	}
 }
