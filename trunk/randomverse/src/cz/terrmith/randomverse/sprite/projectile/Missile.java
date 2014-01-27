@@ -5,8 +5,10 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.Solid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +18,7 @@ import java.util.Map;
  *
  * @author jiri.kus
  */
-public class Missile extends SimpleSprite implements Destructible {
+public class Missile extends SimpleSprite implements Solid, Destructible {
 	private static final int MAX_HEALTH = 1;
 	private final SpriteCollection spc;
 	private int health = MAX_HEALTH;
@@ -55,9 +57,14 @@ public class Missile extends SimpleSprite implements Destructible {
 		this.health -= amount;
 		if (this.health < 1) {
 			System.out.println("creating projectile: " + getXPosn() + ", " + getYPosn());
-			spc.put(SpriteLayer.PROJECTILE, new Explosion(getXPosn(), getYPosn(), this.damage));
+			spc.put(SpriteLayer.PROJECTILE, new Explosion(getXPosn() - Tile.DEFAULT_SIZE/2, getYPosn() - Tile.DEFAULT_SIZE/2, this.damage));
 			this.setActive(false);
 			setStatus(DefaultSpriteStatus.DEAD.name());
 		}
 	}
+
+    @Override
+    public int getImpactDamage() {
+        return 0;
+    }
 }
