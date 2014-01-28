@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.sprite.enemy.debris;
 
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.NHood4;
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
@@ -9,12 +10,17 @@ import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
+import cz.terrmith.randomverse.core.sprite.properties.Lootable;
 import cz.terrmith.randomverse.core.sprite.properties.Solid;
+import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.projectile.Explosion;
+import cz.terrmith.randomverse.sprite.projectile.Projectile;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Part of an asteroid
@@ -24,6 +30,7 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
     private static final int MAX_HEALTH = 3;
     private int currentHealth = MAX_HEALTH;
     private int maxHealth = MAX_HEALTH;
+    private Random random = new Random();
 
     public enum DebrisPartType {REGULAR, EXPLODING, CARGO, CLUSTER, GUN, HARD, REFLECT}
     private DebrisPartType type;
@@ -95,10 +102,43 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
                 // add explosion to projectiles
                 Explosion explosion = new Explosion(getXPosn(), getYPosn(), new Damage(3, Damage.DamageType.BOTH));
                 parent.getSpriteCollection().put(SpriteLayer.PROJECTILE, explosion);
+            } else if (type.equals(DebrisPartType.CLUSTER)) {
+
+                createClusterProjectile(0);
+                createClusterProjectile(Math.PI / 4);
+                createClusterProjectile(Math.PI / 2);
+                createClusterProjectile((3 * Math.PI) / 4);
+
+                createClusterProjectile(Math.PI);
+                createClusterProjectile((5 * Math.PI) / 4);
+                createClusterProjectile((3 * Math.PI) / 2);
+                createClusterProjectile((7 * Math.PI) / 4);
+            } else if (type.equals(DebrisPartType.CARGO)) {
+                LootSprite lootSprite = new LootSprite(0, 0, 10, 10, null, LootFactory.randomLoot(1));
+                lootSprite.setPosition(getXPosn() + getWidth() / 2, getYPosn() + getHeight() / 2);
+                parent.getSpriteCollection().put(SpriteLayer.ITEM, lootSprite);
             }
         } else if (this.currentHealth < maxHealth/2 && this.type.equals(DebrisPartType.HARD)) {
             this.setStatus(DebrisPartStatus.HARD_DAMAGED.name());
         }
+    }
+
+    /**
+     * Creates
+     * @param startingAngle
+     */
+    private void createClusterProjectile(double startingAngle){
+        Damage damage = new Damage(1, Damage.DamageType.BOTH);
+        Position center = new Position(0, 0);
+
+        Position pointOnCircle = Position.pointOnCircle(center, 2, (Math.PI / 4) * random.nextDouble() + startingAngle, true);
+        Projectile projectile = new Projectile(center.getX(), center.getY(), damage);
+        projectile.setStep(pointOnCircle.getX(), pointOnCircle.getY());
+        projectile.setPosition(this.getXPosn() + getWidth() / 2, this.getYPosn() + getHeight() / 2);
+
+        System.out.println("Created cluster projectile " + projectile.getXStep() + ", " + projectile.getYStep());
+
+        parent.getSpriteCollection().put(SpriteLayer.PROJECTILE, projectile);
     }
 
     /**
@@ -180,8 +220,6 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
     private boolean isDead(DebrisPart part) {
         return part == null || part.getStatus().equals(DebrisPartStatus.DEAD.name());
     }
-
-
 
 	@Override
 	public int getImpactDamage() {

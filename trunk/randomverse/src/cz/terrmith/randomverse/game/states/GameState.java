@@ -75,9 +75,7 @@ public class GameState implements State {
     }
 
     private void updateItems() {
-        Iterator<Sprite> iterator = stateMachine.getSpriteCollection().getSprites(SpriteLayer.ITEM).iterator();
-        while (iterator.hasNext()) {
-            Sprite s = iterator.next();
+        for (Sprite s : stateMachine.getSpriteCollection().getSprites(SpriteLayer.ITEM)) {
             s.updateSprite();
             java.util.List<Sprite> collisionList = s.collidesWith(stateMachine.getPlayer().getSprite());
             if (!collisionList.isEmpty()) {
@@ -90,12 +88,9 @@ public class GameState implements State {
                     stateMachine.getPlayer().addLoot(loot);
                 }
             }
-
-            if (!s.isActive()) {
-                iterator.remove();
-            }
-
         }
+
+        stateMachine.getSpriteCollection().removeInactive(SpriteLayer.ITEM);
     }
 
     private void updateWorld() {
@@ -156,7 +151,10 @@ public class GameState implements State {
             } else {
                 // if sprite was killed add loot to sprite collection
                 if (DefaultSpriteStatus.DEAD.name().equals(npcSprite.getStatus()) && npcSprite instanceof Lootable) {
-                    stateMachine.getSpriteCollection().put(SpriteLayer.ITEM, ((Lootable) npcSprite).getLootSprite());
+                    LootSprite loot = ((Lootable) npcSprite).getLootSprite();
+                    if (loot != null) {
+                        stateMachine.getSpriteCollection().put(SpriteLayer.ITEM, loot);
+                    }
                 }
             }
         }
