@@ -61,7 +61,9 @@ public class Debris extends MultiSprite implements Destructible{
                     case 5: type = DebrisPart.DebrisPartType.REFLECT;
                         break;
                 }
+                type = DebrisPart.DebrisPartType.CLUSTER;
             }
+
             addTile(gl.getX(), gl.getY(), new DebrisPart(0, 0, this, type));
         }
 
