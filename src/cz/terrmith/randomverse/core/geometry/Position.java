@@ -31,6 +31,31 @@ public class Position {
         return new Position(x, y);
     }
 
+    /**
+     * Computes distance from given point
+     * @return
+     */
+    public double distanceFrom(Position p) {
+        return Math.sqrt(Math.pow(this.getX() - p.getX(),2) + Math.pow(this.getY() - p.getY(),2));
+    }
+
+     /**
+     * Normalizes given vector AB.
+      * ie vector is translated to origin and
+     * @param a
+     * @param b
+     * @return
+     */
+    public static Position normalizedVector(Position a, Position b) {
+        if ( a == null || b == null) {
+            throw new IllegalArgumentException("Both vector points must not be null");
+        }
+
+        double distance = b.distanceFrom(a);
+        return new Position((b.getX() - a.getX()) / distance,
+                            (b.getY() - a.getY()) / distance);
+    }
+
     public double getY() {
         return y;
     }

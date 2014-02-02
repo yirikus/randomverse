@@ -3,6 +3,7 @@ package cz.terrmith.randomverse.inventory;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.geometry.RelativePosition;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.world.LevelDebrisField;
@@ -17,14 +18,16 @@ import java.util.Set;
  */
 public class GameMap extends GridMenu {
 
+    private final Sprite player;
     private Set<GridLocation> explored = new HashSet<GridLocation>();
 
 
-    public GameMap(int rows, int columns, int cellSize, Position position) {
+    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player) {
         super(rows, columns, cellSize, position);
         setX(rows / 2);
         setY(columns / 2);
         markExplored();
+        this.player = player;
     }
 
     /**
@@ -86,7 +89,7 @@ public class GameMap extends GridMenu {
 		if (getX() % 2 == 0) {
 			return new LevelOne(spriteCollection);
 		} else {
-			return new LevelDebrisField(spriteCollection);
+			return new LevelDebrisField(spriteCollection, this.player);
 		}
 	}
 

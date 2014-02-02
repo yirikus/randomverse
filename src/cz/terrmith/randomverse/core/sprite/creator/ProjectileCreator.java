@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.core.sprite.creator;
 
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
@@ -28,7 +29,12 @@ public class ProjectileCreator implements SpriteCreator {
 	}
 
     @Override
-    public void createSprites(double x, double y, int dx, int dy, int speed, int distanceFromOrigin) {
+    public void createSprites(Position from, Position delta, int speed, int distanceFromOrigin) {
+        createSprites(from.getX(), from.getY(), delta.getX(), delta.getY(), speed, distanceFromOrigin);
+    }
+
+    @Override
+    public void createSprites(double x, double y, double dx, double dy, int speed, int distanceFromOrigin) {
         if(dx > 1 || dx < -1 || dy > 1 || dy < -1) {
             throw new IllegalArgumentException("distance x,y must be in interval [-1,1], but was: [" + dx + ", " + dy +"]");
         }

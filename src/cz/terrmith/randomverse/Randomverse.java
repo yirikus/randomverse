@@ -43,7 +43,7 @@ public class Randomverse extends GameEngine {
         this.spriteCollection = new SpriteCollection(screenBoundary, extendedBoundary);
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
-	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100));
+	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite());
 
         addState(new GameState(this));
         addState(new MenuState(this));
