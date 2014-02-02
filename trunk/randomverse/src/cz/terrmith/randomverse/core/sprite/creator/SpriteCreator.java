@@ -1,5 +1,7 @@
 package cz.terrmith.randomverse.core.sprite.creator;
 
+import cz.terrmith.randomverse.core.geometry.Position;
+
 /**
  * SpriteCreator can create another sprite (e.g. projectile) on given spot that will travel in a given direction
  */
@@ -15,7 +17,17 @@ public interface SpriteCreator {
      * @param speed speed
      * @param distanceFromOrigin distance from origin
 	 */
-    void createSprites(double x, double y, int dx, int dy, int speed, int distanceFromOrigin);
+    void createSprites(double x, double y, double dx, double dy, int speed, int distanceFromOrigin);
+
+    /**
+     * Creates sprites. Can make use of direction which caller sprite is heading
+     *
+     * @param from position of new sprite
+     * @param delta vector
+     * @param speed speed
+     * @param distanceFromOrigin distance from origin
+     */
+    void createSprites(Position from, Position delta, int speed, int distanceFromOrigin);
 
     /**
      * flips direction of an attack horizontally

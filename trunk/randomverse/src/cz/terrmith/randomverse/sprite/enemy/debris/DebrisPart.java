@@ -1,19 +1,19 @@
 package cz.terrmith.randomverse.sprite.enemy.debris;
 
+import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.NHood4;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
-import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.*;
+import cz.terrmith.randomverse.core.sprite.creator.ProjectileCreator;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.sprite.properties.Lootable;
 import cz.terrmith.randomverse.core.sprite.properties.Solid;
 import cz.terrmith.randomverse.loot.LootFactory;
+import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
 import cz.terrmith.randomverse.sprite.projectile.Explosion;
 import cz.terrmith.randomverse.sprite.projectile.Projectile;
 
@@ -28,6 +28,9 @@ import java.util.Random;
 public class DebrisPart extends SimpleSprite implements Destructible, Solid {
 
     private static final int MAX_HEALTH = 3;
+    private final Sprite player;
+    private ProjectileCreator spriteCreator = null;
+    private RandomAttackPattern ai = null;
     private int currentHealth = MAX_HEALTH;
     private int maxHealth = MAX_HEALTH;
     private Random random = new Random();
@@ -47,8 +50,9 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
      * @param x screen position
      * @param y screen position
      * @param parent reference to a parent
+     * @param player reference to a player sprite
      */
-    public DebrisPart(double x, double y, Debris parent, DebrisPartType type) {
+    public DebrisPart(double x, double y, Debris parent, DebrisPartType type, Sprite player) {
         super(x, y, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null);
         Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
         imageForStatus.put(DebrisPartStatus.DEFAULT.name(), new ImageLocation("debris", 0));
@@ -64,6 +68,7 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
         setImageForStatus(imageForStatus);
         this.type = type;
         this.parent = parent;
+        this.player = player;
 
         if (type.equals(DebrisPartType.HARD)) {
             setStatus(DebrisPartStatus.HARD.name());
@@ -72,6 +77,9 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
         } else if (type.equals(DebrisPartType.CARGO)) {
             setStatus(DebrisPartStatus.CARGO.name());
         } else if (type.equals(DebrisPartType.GUN)) {
+            ai = new RandomAttackPattern(300);
+            ProjectileFactory spriteFactory = new ProjectileFactory(new Damage(1, Damage.DamageType.PLAYER));
+            spriteCreator = new ProjectileCreator(parent.getSpriteCollection(), spriteFactory);
             setStatus(DebrisPartStatus.GUN.name());
         } else if (type.equals(DebrisPartType.EXPLODING)) {
             setStatus(DebrisPartStatus.EXPLODING.name());
@@ -139,6 +147,20 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
         System.out.println("Created cluster projectile " + projectile.getXStep() + ", " + projectile.getYStep());
 
         parent.getSpriteCollection().put(SpriteLayer.PROJECTILE, projectile);
+    }
+
+    @Override
+    public void updateSprite() {
+        super.updateSprite();
+
+        if (isActive() && type.equals(DebrisPartType.GUN) && ai != null && ai.shouldAttack()) {
+            Position from = new Position(getXPosn() + Tile.DEFAULT_SIZE / 2, getYPosn() + Tile.DEFAULT_SIZE / 2);
+            Position vector = Position.normalizedVector(from, new Position (player.getXPosn(), player.getYPosn()));
+            spriteCreator.createSprites(from,
+                                        vector,
+                                        3,
+                                        Tile.DEFAULT_SIZE);
+        }
     }
 
     /**
