@@ -1,8 +1,10 @@
 package cz.terrmith.randomverse.core.sprite;
 
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.List;
 
 
@@ -118,5 +120,10 @@ public interface Sprite {
 	 * @return
 	 */
 	Sprite getParent();
+
+    /**
+     * Returns normalized unit vector of movement
+     */
+    Position getMovementVector();
 
 }

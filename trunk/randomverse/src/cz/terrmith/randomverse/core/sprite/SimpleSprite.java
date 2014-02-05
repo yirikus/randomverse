@@ -1,10 +1,13 @@
 package cz.terrmith.randomverse.core.sprite;
 
 import cz.terrmith.randomverse.Debug;
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +30,7 @@ public class SimpleSprite implements Sprite {
 
     // protected vars
     private double locx, locy;        // location of sprite
+    private double prevLocx, prevLocy; // previous location
     private double dx, dy;            // amount to move for each update
     // sprite status
     private String status = DefaultSpriteStatus.DEFAULT.name();
@@ -55,7 +59,11 @@ public class SimpleSprite implements Sprite {
      * @param imageForStatus Map of sprite statuses and images
      */
     public SimpleSprite(double x, double y, int w, int h, Map<String, ImageLocation> imageForStatus) {
-        locx = x; locy = y;
+        locx = x;
+        locy = y;
+        prevLocx = x;
+        prevLocy = y;
+
         dx = 0; dy = 0;
 	    this.width = w;
 	    this.height = h;
@@ -97,6 +105,11 @@ public class SimpleSprite implements Sprite {
 
     @Override
     public void setPosition(double x, double y){
+        // if new position is the same as last it is not considered as vector change
+        if (x != locx && y != locy) {
+            prevLocx = locx;
+            prevLocy = locy;
+        }
         locx = x;
         locy = y;
     }
@@ -143,8 +156,7 @@ public class SimpleSprite implements Sprite {
     @Override
     public void updateSprite() {
         if (isActive()) {
-            locx += dx;
-            locy += dy;
+            setPosition(locx + dx, locy + dy);
         }
     }
 
@@ -254,4 +266,9 @@ public class SimpleSprite implements Sprite {
 	public Sprite getParent() {
 		return this.parent;
 	}
+
+    @Override
+    public Position getMovementVector() {
+        return Position.normalizedVector(new Position(prevLocx,prevLocy), new Position(locx, locy));
+    }
 }

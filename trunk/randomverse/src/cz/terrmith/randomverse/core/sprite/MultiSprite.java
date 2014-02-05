@@ -4,7 +4,8 @@ import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -356,4 +357,11 @@ public class MultiSprite implements Sprite{
 	public Sprite getParent() {
 		throw new UnsupportedOperationException("Multisprite can not have parent");
 	}
+
+    @Override
+    public Position getMovementVector() {
+        //movement vector is the same for all tiles
+        Sprite sprite = tiles.get(0).getSprite();
+        return sprite.getMovementVector();
+    }
 }
