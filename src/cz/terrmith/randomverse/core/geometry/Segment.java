@@ -46,12 +46,19 @@ public class Segment {
 
     /**
      * Returns inetrsection segment from border of the first rectangle.
-     * If two segments are in the result, the larger is returned
+     *
      * @param rectA first rectangle
-     * @param rectA second rectangle
-     * @return
+     * @param rectB second rectangle
+     * @return If two segments are in the intersection, the larger is returned
      */
     public static Segment rectangleIntersection(Rectangle rectA, Rectangle rectB) {
+        if (rectA == null || rectB == null) {
+            throw new IllegalArgumentException("both rectangles must not be null, but was: A=" + rectA + ", B=" + rectB);
+        }
+
+        if (!rectA.intersects(rectB)) {
+            return null;
+        }
         Rectangle intersection = rectA.intersection(rectB);
         /* p4 - p3
            |     |
