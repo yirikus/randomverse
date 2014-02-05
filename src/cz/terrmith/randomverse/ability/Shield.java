@@ -8,7 +8,6 @@ import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author jiri.kus
@@ -56,7 +55,7 @@ public class Shield extends Ability implements Destructible {
 		super.updateSprite();
         if (isActive() && parent != null) {
             Rectangle rectangle = parent.getBoundingBox();
-            setPosition(rectangle.getX(), rectangle.getY());
+              setPosition(rectangle.getX(), rectangle.getY());
         }
         if (health < HEALTH_MAX && !isActive()) {
             long now = System.currentTimeMillis();
