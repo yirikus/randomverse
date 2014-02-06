@@ -129,4 +129,9 @@ public class GameMap extends GridMenu {
                    (int) getPosition().getY() + getY() * getCellSize() + 1,
                     getCellSize() - 1, getCellSize() - 1);
     }
+
+    public void reset() {
+        explored = new HashSet<GridLocation>();
+        markExplored();
+    }
 }

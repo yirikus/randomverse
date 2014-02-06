@@ -88,4 +88,6 @@ public abstract class GameEngine extends StateMachine {
 	 * If game is paused, this method is called to check if the game should be unpaused
 	 */
 	public abstract void waitForUnpause();
+
+    public abstract void resetGame();
 }
