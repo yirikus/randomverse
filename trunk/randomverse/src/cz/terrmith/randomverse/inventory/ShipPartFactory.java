@@ -6,14 +6,20 @@ import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
-import cz.terrmith.randomverse.sprite.ExtensionPoint;
-import cz.terrmith.randomverse.sprite.ShieldPart;
-import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.factory.MissileFactory;
 import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
-import cz.terrmith.randomverse.sprite.gun.SimpleGun;
+import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
+import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
+import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
+import cz.terrmith.randomverse.sprite.ship.part.shield.ShieldPart;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Factory class that creates ship part instances

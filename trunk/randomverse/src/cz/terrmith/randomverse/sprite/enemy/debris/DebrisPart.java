@@ -4,14 +4,18 @@ import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.NHood4;
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.geometry.Segment;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.*;
+import cz.terrmith.randomverse.core.sprite.SimpleSprite;
+import cz.terrmith.randomverse.core.sprite.Sprite;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.creator.ProjectileCreator;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
-import cz.terrmith.randomverse.core.sprite.properties.Lootable;
 import cz.terrmith.randomverse.core.sprite.properties.Solid;
+import cz.terrmith.randomverse.core.sprite.properties.SpritePropertyHelper;
 import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
 import cz.terrmith.randomverse.sprite.projectile.Explosion;
@@ -86,6 +90,8 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
         } else if (type.equals(DebrisPartType.CLUSTER)) {
             setStatus(DebrisPartStatus.CLUSTER.name());
         } else if (type.equals(DebrisPartType.REFLECT)) {
+            ProjectileFactory spriteFactory = new ProjectileFactory(new Damage(1, Damage.DamageType.PLAYER));
+            spriteCreator = new ProjectileCreator(parent.getSpriteCollection(), spriteFactory);
             setStatus(DebrisPartStatus.REFLECT.name());
         }
     }
@@ -247,4 +253,25 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
 	public int getImpactDamage() {
 		return 1;
 	}
+
+    @Override
+    public void collide(Sprite s) {
+        super.collide(s);
+
+        SpritePropertyHelper.dealDamage(this,s);
+        SpritePropertyHelper.dealImpactDamage(this,s);
+
+        if (DebrisPartType.REFLECT.equals(type)) {
+            Segment segment = Segment.rectangleIntersection(getBoundingBox(), s.getBoundingBox());
+            Position vector = s.getMovementVector();
+            final Position reflected;
+            if ((int)segment.getA().getX() == (int)segment.getB().getX()) {
+                reflected = new Position(-vector.getX(), vector.getY());
+            } else {
+                reflected = new Position( vector.getX(), -vector.getY());
+            }
+
+            spriteCreator.createSprites(s.getXPosn(), s.getYPosn(), reflected.getX(), reflected.getY(), 5, Tile.DEFAULT_SIZE / 4);
+        }
+    }
 }

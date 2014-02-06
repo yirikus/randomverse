@@ -1,18 +1,18 @@
-package cz.terrmith.randomverse.sprite.gun;
+package cz.terrmith.randomverse.sprite.ship.part.gun;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.creator.ProjectileCreator;
+import cz.terrmith.randomverse.core.sprite.creator.SpriteCreator;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
-import cz.terrmith.randomverse.core.sprite.creator.ProjectileCreator;
-import cz.terrmith.randomverse.core.sprite.creator.SpriteCreator;
-import cz.terrmith.randomverse.sprite.ExtensionPoint;
-import cz.terrmith.randomverse.sprite.ShipPart;
 import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
+import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
+import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
 import java.util.HashSet;
 

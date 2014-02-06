@@ -126,4 +126,10 @@ public interface Sprite {
      */
     Position getMovementVector();
 
+    /**
+     * Applies all effects resulting from collision with given sprite
+     * note: This method should not apply collision effects on given sprite, that sprite should handle it himself
+     * @param s
+     */
+    void collide(Sprite s);
 }

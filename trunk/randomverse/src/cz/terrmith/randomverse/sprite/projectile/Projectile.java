@@ -42,9 +42,9 @@ public class Projectile extends SimpleSprite implements DamageDealer {
 	@Override
 	public void dealDamage(List<Destructible> targets) {
 		if(targets != null && !targets.isEmpty()) {
-			targets.get(0).reduceHealth(getDamage().getAmount());
+//			targets.get(0).reduceHealth(getDamage().getAmount());
+            targets.get(0).collide(this);
 			setActive(false);
 		}
-
 	}
 }

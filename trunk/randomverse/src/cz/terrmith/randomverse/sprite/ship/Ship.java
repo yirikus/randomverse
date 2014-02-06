@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.sprite;
+package cz.terrmith.randomverse.sprite.ship;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
@@ -11,6 +11,7 @@ import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.sprite.properties.Lootable;
 import cz.terrmith.randomverse.core.sprite.properties.ProvidesAbility;
+import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
 import java.util.List;
 import java.util.Map;
