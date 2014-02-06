@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.sprite;
+package cz.terrmith.randomverse.sprite.ship.part;
 
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
@@ -8,7 +8,9 @@ import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import cz.terrmith.randomverse.core.sprite.properties.Loot;
 import cz.terrmith.randomverse.core.sprite.properties.Solid;
+import cz.terrmith.randomverse.core.sprite.properties.SpritePropertyHelper;
 import cz.terrmith.randomverse.loot.LootType;
+import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -167,5 +169,12 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
         }
     }
 
+    @Override
+    public void collide(Sprite s) {
+        super.collide(s);
 
+        SpritePropertyHelper.dealDamage(this,s);
+        SpritePropertyHelper.dealImpactDamage(this, s);
+
+    }
 }

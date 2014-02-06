@@ -8,7 +8,7 @@ import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Loot;
 import cz.terrmith.randomverse.inventory.ShipPartFactory;
 import cz.terrmith.randomverse.loot.LootType;
-import cz.terrmith.randomverse.sprite.Ship;
+import cz.terrmith.randomverse.sprite.ship.Ship;
 
 /**
  * Wraps player sprite

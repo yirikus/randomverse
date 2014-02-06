@@ -9,14 +9,22 @@ import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.properties.*;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
+import cz.terrmith.randomverse.core.sprite.properties.Damage;
+import cz.terrmith.randomverse.core.sprite.properties.DamageDealer;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.Loot;
+import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
+import cz.terrmith.randomverse.core.sprite.properties.Lootable;
+import cz.terrmith.randomverse.core.sprite.properties.Solid;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
-import cz.terrmith.randomverse.sprite.ShipPart;
+import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -123,6 +131,7 @@ public class GameState implements State {
             }
 
             // test collision with player
+            //TODO move to ship/multisprite ?
             List<Collision> collisions = stateMachine.getPlayer().getSprite().findCollisionCollections(npcSprite);
             //deal damage
             for (Collision c : collisions) {
@@ -130,17 +139,11 @@ public class GameState implements State {
                 if (c.getSprite() instanceof Solid) {
                     Solid solidPlayerPart = (Solid) c.getSprite();
                     for (Sprite s : c.getCollidingSprites()) {
-                        if (s instanceof Solid) {
-                            //deal damage
-                            if (s instanceof Destructible) {
-                                ((Destructible) s).reduceHealth(solidPlayerPart.getImpactDamage());
-                            }
+                        //deal damage
+                        s.collide(solidPlayerPart);
 
-                            //obtain damage
-                            if (c.getSprite() instanceof Destructible) {
-                                ((Destructible) c.getSprite()).reduceHealth(((Solid) s).getImpactDamage());
-                            }
-                        }
+                        //obtain damage
+                        c.getSprite().collide(s);
                     }
                 }
             }
@@ -170,18 +173,20 @@ public class GameState implements State {
         for (Sprite s : sprites) {
             // set sprites that are not within as inactive
             Position spritePos = new Position(s.getXPosn(), s.getYPosn());
+            // mark projectiles outside boundary for deletion
             if (!b.withinBoundary(spritePos)) {
                 s.setActive(false);
             }
 
             if (s.isActive()) {
                 s.updateSprite();
+
+                //TODO change damageDealer.dealDamage to collide
                 if (s instanceof DamageDealer) {
                     DamageDealer d = (DamageDealer) s;
                     dealDamage(d);
-                }
-                if (s instanceof Solid) {
-                    dealImpactDamage((Solid) s);
+                } else if ( s instanceof Solid){
+                    dealImpactDamage((Solid)s);
                 }
             }
         }
@@ -196,17 +201,13 @@ public class GameState implements State {
     private void dealImpactDamage(Solid solid) {
         List<Destructible> npcCollisions = stateMachine.getCollisionTester().findCollisions(solid, SpriteLayer.NPC);
         for (Destructible d : npcCollisions) {
-            d.reduceHealth(solid.getImpactDamage());
-            if (d instanceof Solid && solid instanceof Destructible) {
-                ((Destructible) solid).reduceHealth(((Solid) d).getImpactDamage());
-            }
+            d.collide(solid);
+            solid.collide(d);
         }
         List<Destructible> playerCollisions = stateMachine.getCollisionTester().findCollisions(solid, SpriteLayer.PLAYER);
         for (Destructible d : playerCollisions) {
-            d.reduceHealth(solid.getImpactDamage());
-            if (d instanceof Solid && solid instanceof Destructible) {
-                ((Destructible) solid).reduceHealth(((Solid) d).getImpactDamage());
-            }
+            d.collide(solid);
+            solid.collide(d);
         }
     }
 

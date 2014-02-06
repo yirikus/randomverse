@@ -33,8 +33,12 @@ public class Segment {
      * @return segment or null
      */
     public static Segment max(Segment s1, Segment s2){
-        if (s2 == null || s1 == null) {
+        if (s2 == null) {
             return s1;
+        }
+
+        if (s1 == null) {
+            return s2;
         }
 
         if (s1.length() > s2.length()) {

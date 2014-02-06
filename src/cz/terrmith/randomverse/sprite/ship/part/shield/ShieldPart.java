@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.sprite;
+package cz.terrmith.randomverse.sprite.ship.part.shield;
 
 import cz.terrmith.randomverse.ability.AbilityGroup;
 import cz.terrmith.randomverse.ability.Shield;
@@ -9,8 +9,11 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.properties.Ability;
 import cz.terrmith.randomverse.core.sprite.properties.ProvidesAbility;
+import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
+import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

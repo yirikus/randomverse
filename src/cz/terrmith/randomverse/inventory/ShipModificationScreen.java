@@ -4,17 +4,26 @@ import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.Plane;
 import cz.terrmith.randomverse.core.image.ImageLoader;
-import cz.terrmith.randomverse.core.sprite.*;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
+import cz.terrmith.randomverse.core.sprite.SimpleSprite;
+import cz.terrmith.randomverse.core.sprite.Sprite;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
-import cz.terrmith.randomverse.sprite.ExtensionPoint;
-import cz.terrmith.randomverse.sprite.Ship;
-import cz.terrmith.randomverse.sprite.ShipPart;
-import cz.terrmith.randomverse.sprite.gun.SimpleGun;
+import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
+import cz.terrmith.randomverse.sprite.ship.Ship;
+import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
+import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

@@ -1,6 +1,4 @@
-package cz.terrmith.randomverse.sprite;
-
-import javax.swing.plaf.basic.BasicSplitPaneUI;
+package cz.terrmith.randomverse.sprite.ship;
 
 /**
  * @author jiri.kus

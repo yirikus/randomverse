@@ -3,12 +3,14 @@ package cz.terrmith.randomverse.sprite.projectile;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 import cz.terrmith.randomverse.core.sprite.properties.Solid;
+import cz.terrmith.randomverse.core.sprite.properties.SpritePropertyHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,5 +68,14 @@ public class Missile extends SimpleSprite implements Solid, Destructible {
     @Override
     public int getImpactDamage() {
         return 0;
+    }
+
+    @Override
+    public void collide(Sprite s) {
+        super.collide(s);
+
+        SpritePropertyHelper.dealDamage(this, s);
+        SpritePropertyHelper.dealImpactDamage(this, s);
+
     }
 }

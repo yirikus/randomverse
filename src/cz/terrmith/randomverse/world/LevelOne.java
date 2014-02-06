@@ -4,17 +4,25 @@ import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
 import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.*;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
+import cz.terrmith.randomverse.core.sprite.Sprite;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteFormationFactory;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.loot.LootFactory;
-import cz.terrmith.randomverse.sprite.ExtensionPoint;
-import cz.terrmith.randomverse.sprite.Ship;
-import cz.terrmith.randomverse.sprite.ShipPart;
-import cz.terrmith.randomverse.sprite.gun.SimpleGun;
+import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
+import cz.terrmith.randomverse.sprite.ship.Ship;
+import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
+import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Testing level

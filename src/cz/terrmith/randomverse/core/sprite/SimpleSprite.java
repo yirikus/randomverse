@@ -271,4 +271,9 @@ public class SimpleSprite implements Sprite {
     public Position getMovementVector() {
         return Position.normalizedVector(new Position(prevLocx,prevLocy), new Position(locx, locy));
     }
+
+    @Override
+    public void collide(Sprite s) {
+        // does nothing
+    }
 }

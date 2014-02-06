@@ -364,4 +364,9 @@ public class MultiSprite implements Sprite{
         Sprite sprite = tiles.get(0).getSprite();
         return sprite.getMovementVector();
     }
+
+    @Override
+    public void collide(Sprite s) {
+        throw new UnsupportedOperationException("Collide should be called on tiles, not on parent multisprite");
+    }
 }

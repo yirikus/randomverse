@@ -2,17 +2,17 @@ package cz.terrmith.randomverse.sprite.projectile;
 
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.DamageDealer;
 import cz.terrmith.randomverse.core.sprite.properties.Destructible;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Projectile - sprite that is fired by a gun
@@ -43,7 +43,8 @@ public class Explosion extends SimpleSprite implements DamageDealer {
 	public void dealDamage(List<Destructible> targets) {
 		if(targets != null && !targets.isEmpty() && !hit) {
 			for (Destructible d : targets) {
-                d.reduceHealth(getDamage().getAmount());
+                  d.collide(this);
+//                d.reduceHealth(getDamage().getAmount());
             }
 			this.hit = true;
 		}

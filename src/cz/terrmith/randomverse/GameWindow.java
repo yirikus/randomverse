@@ -45,15 +45,16 @@ public class GameWindow extends JFrame implements Runnable{
     private AnimationEngine animationEngine;
     private Thread animator;
     private Command systemCommand;
+    private boolean fullscreen = false;
 
     /**
      * Constructor - creates new game window in a fullscreen mode
      */
     public GameWindow(){
         super(WINDOW_NAME); // window name
-        this.setAlwaysOnTop(true);
+        //this.setAlwaysOnTop(true);
         this.systemCommand = new Command();
-        initFullscreen();
+        initWindow(false);
         ImageLoader iml =  new ImageLoader("/image_config.txt","/images/");
         GameEngine gameEngine = new Randomverse(systemCommand, SCREEN_W, SCREEN_H);
         GraphicEngine graphicEngine = createGraphicEngine(systemCommand, iml, gameEngine);
@@ -107,30 +108,38 @@ public class GameWindow extends JFrame implements Runnable{
 
     /**
      * Switches application to fullscreen
-     *
+     * @param fullscreen if true, application will run in fullscreen exclusive mode
      */
-    private void initFullscreen() {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        graphicsDevice = ge.getDefaultScreenDevice();
+    private void initWindow(boolean fullscreen) {
 
-        setUndecorated(true);    // no menu bar, borders, etc. or Swing components
-        setIgnoreRepaint(true);  // turn off all paint events since doing active rendering
+        // turn off all paint events since doing active rendering
+        setIgnoreRepaint(true);
         setResizable(false);
+        this.fullscreen = fullscreen;
+        if (fullscreen) {
+            // no menu bar, borders, etc. or Swing components
+            setUndecorated(true);
 
-        if (!graphicsDevice.isFullScreenSupported()) {
-            System.out.println("Full-screen exclusive mode not supported");
-            System.exit(0);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            graphicsDevice = ge.getDefaultScreenDevice();
+
+            if (!graphicsDevice.isFullScreenSupported()) {
+                System.out.println("Full-screen exclusive mode not supported");
+                System.exit(0);
+            }
+            // switch on full-screen exclusive mode
+            graphicsDevice.setFullScreenWindow(this);
+            // we can now adjust the display modes, if we wish
+            showCurrentMode();
+            //setDisplayMode(Global.SCREEN_X, Global.SCREEN_Y, 32);   // or try 8 bits
+            //setDisplayMode(1024, 768, 16);
+            setDisplayMode(SCREEN_W, SCREEN_H, SCREEN_BIT_DEPTH);
+
+            // reportCapabilities();
+        } else {
+            setVisible(true);
+            setSize(SCREEN_W, SCREEN_H);
         }
-        graphicsDevice.setFullScreenWindow(this); // switch on full-screen exclusive mode
-
-        // we can now adjust the display modes, if we wish
-        showCurrentMode();
-
-        //setDisplayMode(Global.SCREEN_X, Global.SCREEN_Y, 32);   // or try 8 bits
-        //setDisplayMode(1024, 768, 16);
-        setDisplayMode(SCREEN_W, SCREEN_H, SCREEN_BIT_DEPTH);
-
-        // reportCapabilities();
     }
 
     /**
@@ -272,12 +281,14 @@ public class GameWindow extends JFrame implements Runnable{
      * display mode if it's been changed.
      */
     private void restoreScreen(){
-        Window window = graphicsDevice.getFullScreenWindow();
-        if (window != null) {
-            window.dispose();
+        if(this.fullscreen) {
+            Window window = graphicsDevice.getFullScreenWindow();
+            if (window != null) {
+                window.dispose();
+            }
+            graphicsDevice.setFullScreenWindow(null);
         }
-        graphicsDevice.setFullScreenWindow(null);
-    } // end of restoreScreen()
+    }
 
     /**
      *Hides mouse cursor
