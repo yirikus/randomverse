@@ -54,7 +54,6 @@ public class MenuState implements State {
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
             if (menu.getSelected().equals("start")) {
                 stateMachine.setCurrentState(StateName.GAME.name());
-
             } else if (menu.getSelected().equals("options")) {
 
             } if (menu.getSelected().equals("exit")) {
@@ -77,6 +76,6 @@ public class MenuState implements State {
 
     @Override
     public void deactivate(State nextState) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        stateMachine.resetGame();
     }
 }

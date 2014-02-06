@@ -31,8 +31,8 @@ public class Randomverse extends GameEngine {
     private int screenHeight;
     private final CollisionTester collisionTester;
     private final Player player;
-    private SpriteCollection spriteCollection;
-	private GameMap map;
+    private final SpriteCollection spriteCollection;
+	private final GameMap map;
 
     public Randomverse (Command cmd, int screenWidth, int screenHeight) {
         this.command = cmd;
@@ -91,6 +91,14 @@ public class Randomverse extends GameEngine {
                 command.clear();
             }
         }
+    }
+
+    @Override
+    public void resetGame() {
+        player.reset();
+        map.reset();
+        spriteCollection.clear();
+        command.clear();
     }
 
     /**

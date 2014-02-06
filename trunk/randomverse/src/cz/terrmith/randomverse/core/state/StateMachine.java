@@ -38,10 +38,10 @@ public class StateMachine {
         if (nextState == null) {
             throw new IllegalArgumentException("State machine does not know state with name '" + stateName + "'");
         }
-        nextState.activate(currentState);
         if (currentState != null) {
             currentState.deactivate(nextState);
         }
+        nextState.activate(currentState);
 
         currentState = nextState;
     }
