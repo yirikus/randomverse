@@ -369,4 +369,12 @@ public class MultiSprite implements Sprite{
     public void collide(Sprite s) {
         throw new UnsupportedOperationException("Collide should be called on tiles, not on parent multisprite");
     }
+
+    /**
+     * Iterates over tiles and recomputes sprite positions
+     */
+    public void revalidatePosition() {
+        Position p = Tile.getZeroSpritePosition(tiles.get(0));
+        setPosition(p.getX(), p.getY());
+    }
 }
