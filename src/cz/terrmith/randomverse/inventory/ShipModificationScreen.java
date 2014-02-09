@@ -51,8 +51,14 @@ public class ShipModificationScreen {
     private List<ShipPart> parts;
 
     public ShipModificationScreen(Player player, SpriteCollection spriteCollection) {
+        for (Tile t: player.getSprite().getTiles()) {
+            System.out.println(t + ", ");
+        }
         this.ship = new Ship(player.getSprite());
         this.playerRef = player;
+        for (Tile t: playerRef.getSprite().getTiles()) {
+            System.out.println(t + ", ");
+        }
         this.parts = new ArrayList<ShipPart>();
         factory = new ShipPartFactory(spriteCollection, Damage.DamageType.NPC);
 	    for (Tile t : ship.getTiles()) {
@@ -188,10 +194,15 @@ public class ShipModificationScreen {
                } else  if (partBeingReplaced != null && (replacementPartTotalPrice - replacementPartPrice) > 0) {
                    playerRef.setMoney(playerRef.getMoney() - (replacementPartTotalPrice - replacementPartPrice) );
                    partBeingReplaced.reduceHealth(partBeingReplaced.getCurrentHealth() - partBeingReplaced.getTotalHealth());
+                   //part might have been dead, revalidate positions by setting position.
+                   playerRef.getSprite().revalidatePosition();
                    ShipPart mirrorPart = (ShipPart)Tile.findTile(ship.getTiles(), shipX, shipY).getSprite();
                    mirrorPart.reduceHealth(partBeingReplaced.getCurrentHealth() - partBeingReplaced.getTotalHealth());
                    partX = 0;
                    partY = 0;
+                   for (Tile t: playerRef.getSprite().getTiles()) {
+                       System.out.println(t + ", ");
+                   }
                }
 
                break;
@@ -201,12 +212,17 @@ public class ShipModificationScreen {
     public void clear() {
         switch (mode) {
             case SHIP:
-                removeExtensionPoints(Tile.findTile(ship.getTiles(), shipX, shipY));
-                // change/add ship part to local copy
-                ship.removeTile(shipX, shipY);
-                // change/add ship part to player reference
-                playerRef.getSprite().removeTile(shipX, shipY);
-
+                Tile tileBeingReplaced = Tile.findTile(ship.getTiles(), shipX, shipY);
+                if (tileBeingReplaced != null) {
+                    int moneyBack = ((ShipPart)tileBeingReplaced.getSprite()).getComputedPrice();
+                    removeExtensionPoints(tileBeingReplaced);
+                    // change/add ship part to local copy
+                    ship.removeTile(shipX, shipY);
+                    // change/add ship part to player reference
+                    playerRef.getSprite().removeTile(shipX, shipY);
+                    //add money
+                    playerRef.setMoney(playerRef.getMoney() + moneyBack);
+                }
                 break;
             case PART:
                 mode = Mode.SHIP;
@@ -300,7 +316,7 @@ public class ShipModificationScreen {
                 BufferedImage image = iml.getImage("repair");
                 g.drawImage(image, initX + i * column,  initY + i * row, null);
                 // darken if no reason to repair
-                if (tileBeignReplaced != null && (replacementTileTotalPrice - replacementTilePrice) > 0) {
+                if (tileBeignReplaced == null || (replacementTileTotalPrice - replacementTilePrice) <= 0) {
                     g.setColor(new Color(0,0,0,125));
                     g.fillRect(initX + i * column * Tile.DEFAULT_SIZE,
                                 initY + i * row * Tile.DEFAULT_SIZE,
