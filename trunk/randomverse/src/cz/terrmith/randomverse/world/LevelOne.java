@@ -2,7 +2,9 @@ package cz.terrmith.randomverse.world;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
+import cz.terrmith.randomverse.core.ai.movement.MovementPattern;
 import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
+import cz.terrmith.randomverse.core.ai.movement.WaveMovement;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
@@ -32,11 +34,11 @@ public class LevelOne extends World {
     private SpriteFormationFactory formationFactory;
 
     public LevelOne(final SpriteCollection spriteCollection) {
-        super(spriteCollection,3,10);
+        super(spriteCollection,3,100);
         this.formationFactory = new SpriteFormationFactory(spriteCollection) {
             @Override
             protected Sprite createEnemy(int x, int y) {
-                ArtificialIntelligence ai = new ArtificialIntelligence(new TopDownMovement(),new RandomAttackPattern(64));
+                ArtificialIntelligence ai = new ArtificialIntelligence(getMovementPattern(), new RandomAttackPattern(64));
                 Ship enemy = new Ship(x,y,null,ai);
 	            //ShipPartFactory factory = new ShipPartFactory(spriteCollection, Damage.DamageType.PLAYER);
                 if (random.nextBoolean()) {
@@ -68,6 +70,11 @@ public class LevelOne extends World {
 
     @Override
     protected void createSprites() {
+	    int amplitude = 100 + random.nextInt(300);
+	    int frequency = 100 + random.nextInt(300);
+
+	    formationFactory.setMovementPattern(new WaveMovement(amplitude, frequency));
+
         if (getUpdateCount() < 2 || (getUpdateCount() > 6)) {
             formationFactory.createBoxFormation(random.nextInt(600), random.nextInt(3) + 1, random.nextInt(3) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         } else if (getUpdateCount() < 4) {

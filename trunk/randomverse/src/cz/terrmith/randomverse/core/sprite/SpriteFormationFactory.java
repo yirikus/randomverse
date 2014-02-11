@@ -1,5 +1,7 @@
 package cz.terrmith.randomverse.core.sprite;
 
+import cz.terrmith.randomverse.core.ai.movement.MovementPattern;
+
 /**
  * Created with IntelliJ IDEA.
  * User: TERRMITh
@@ -10,6 +12,7 @@ package cz.terrmith.randomverse.core.sprite;
 public abstract class SpriteFormationFactory {
 
     private SpriteCollection spriteCollection;
+	private MovementPattern movementPattern;
 
     protected SpriteFormationFactory(SpriteCollection spriteCollection) {
         this.spriteCollection = spriteCollection;
@@ -32,4 +35,20 @@ public abstract class SpriteFormationFactory {
     }
 
     protected abstract Sprite createEnemy(int xPos, int i);
+
+	public SpriteCollection getSpriteCollection() {
+		return spriteCollection;
+	}
+
+	public void setSpriteCollection(SpriteCollection spriteCollection) {
+		this.spriteCollection = spriteCollection;
+	}
+
+	public MovementPattern getMovementPattern() {
+		return movementPattern;
+	}
+
+	public void setMovementPattern(MovementPattern movementPattern) {
+		this.movementPattern = movementPattern;
+	}
 }

@@ -20,7 +20,7 @@ public class LevelDebrisField extends World {
      * @param spriteCollection sprite collection
      */
     public LevelDebrisField(SpriteCollection spriteCollection, Sprite player) {
-        super(spriteCollection, 1, 100);
+        super(spriteCollection, 1, 10);
         this.player = player;
     }
 

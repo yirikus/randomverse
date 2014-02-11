@@ -86,7 +86,7 @@ public class GameMap extends GridMenu {
 	 * @param spriteCollection sprite collection
 	 */
 	public World createLevel(SpriteCollection spriteCollection) {
-		if (getX() % 2 == 0) {
+		if (getX() % 2 == 1) {
 			return new LevelOne(spriteCollection);
 		} else {
 			return new LevelDebrisField(spriteCollection, this.player);
