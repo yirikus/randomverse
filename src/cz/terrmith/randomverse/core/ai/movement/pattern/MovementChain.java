@@ -53,6 +53,15 @@ public class MovementChain implements MovementPattern {
             startPosition = currentPosition;
             startTime = System.currentTimeMillis();
         }
+
         return currentChainLink.getMovementPattern().nextPosition(currentPosition, speed);
+    }
+
+    /**
+     * Returns true if movement chain has reached the last chain link
+     */
+    public boolean lastChainLinkReached() {
+        return this.links.size() == index + 1;
+
     }
 }
