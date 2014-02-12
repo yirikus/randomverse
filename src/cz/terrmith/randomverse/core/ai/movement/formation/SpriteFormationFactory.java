@@ -1,6 +1,9 @@
-package cz.terrmith.randomverse.core.sprite;
+package cz.terrmith.randomverse.core.ai.movement.formation;
 
-import cz.terrmith.randomverse.core.ai.movement.MovementPattern;
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
+import cz.terrmith.randomverse.core.sprite.Sprite;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,7 +1,7 @@
 package cz.terrmith.randomverse.core.ai;
 
 import cz.terrmith.randomverse.core.ai.attack.AttackPattern;
-import cz.terrmith.randomverse.core.ai.movement.MovementPattern;
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
