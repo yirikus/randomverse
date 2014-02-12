@@ -9,8 +9,9 @@ import cz.terrmith.randomverse.core.geometry.Position;
  */
 public class MovementChainLink {
     private MovementPattern movementPattern;
+    private MovementChain previousChain;
 
-    private enum TargetType {POSITION, TIME, DISTANCE}
+    private enum TargetType {POSITION, TIME, DISTANCE, CHAIN}
 
     private Position targetPosition;
     private long targetTime;
@@ -78,7 +79,7 @@ public class MovementChainLink {
      * @param distance distance to travel
      * @return
      */
-    public static MovementChainLink distanceddLink(MovementPattern mp, double distance) {
+    public static MovementChainLink distancedLink(MovementPattern mp, double distance) {
         if (mp instanceof MovementChain) {
             throw new IllegalArgumentException("It is not possible to put MovementChain into MovementChain");
         }
@@ -91,6 +92,30 @@ public class MovementChainLink {
         newInstance.movementPattern = mp;
         newInstance.targetDistance = distance;
         newInstance.targetType = TargetType.DISTANCE;
+
+        return newInstance;
+    }
+
+    /**
+     * Creates new movement chain link that will end when last phase (last chain link) of given chain is reached
+     *
+     * @param mp       movement
+     * @param previousChain movement chain that has to reach last phase
+     * @return
+     */
+    public static MovementChainLink continuedLink(MovementPattern mp, MovementChain previousChain) {
+        if (mp instanceof MovementChain) {
+            throw new IllegalArgumentException("It is not possible to put MovementChain into MovementChain");
+        }
+
+        if (mp == null) {
+            throw  new IllegalArgumentException("MovementPattern must not be null, target would be unreachable");
+        }
+
+        MovementChainLink newInstance = new MovementChainLink();
+        newInstance.movementPattern = mp;
+        newInstance.previousChain = previousChain;
+        newInstance.targetType = TargetType.CHAIN;
 
         return newInstance;
     }
@@ -111,9 +136,11 @@ public class MovementChainLink {
                 return targetPosition.equals(p);
             case TIME:
                 return time >= targetTime;
+            case CHAIN:
+                return previousChain.lastChainLinkReached();
         }
 
-        throw new IllegalStateException("");
+        throw new IllegalStateException("Target type was not set");
     }
 
     public MovementPattern getMovementPattern() {

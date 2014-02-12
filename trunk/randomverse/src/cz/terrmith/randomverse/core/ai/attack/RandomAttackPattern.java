@@ -15,7 +15,7 @@ public class RandomAttackPattern implements AttackPattern {
     private double attackProbability;
     private int maxWaitTime;
     private int timeWaited;
-    private Random random;
+    private static Random random = new Random(System.currentTimeMillis());
 
     /**
      * Constructor
@@ -29,7 +29,6 @@ public class RandomAttackPattern implements AttackPattern {
 
         this.attackProbability = attackProbability;
         this.maxWaitTime = maxWaitTime;
-        random = new Random(System.currentTimeMillis());
     }
 
     @Override
