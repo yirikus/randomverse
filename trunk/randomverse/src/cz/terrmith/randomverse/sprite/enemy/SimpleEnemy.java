@@ -1,6 +1,6 @@
 package cz.terrmith.randomverse.sprite.enemy;
 
-import cz.terrmith.randomverse.core.ai.movement.MovementPattern;
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 
 /**

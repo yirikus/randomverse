@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core.ai.movement;
+package cz.terrmith.randomverse.core.ai.movement.pattern;
 
 import cz.terrmith.randomverse.core.geometry.Position;
 

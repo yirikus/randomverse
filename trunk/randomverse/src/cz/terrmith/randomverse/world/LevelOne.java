@@ -2,14 +2,15 @@ package cz.terrmith.randomverse.world;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
-import cz.terrmith.randomverse.core.ai.movement.MovementPattern;
-import cz.terrmith.randomverse.core.ai.movement.TopDownMovement;
-import cz.terrmith.randomverse.core.ai.movement.WaveMovement;
+import cz.terrmith.randomverse.core.ai.movement.formation.SpriteFormationFactory;
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementChain;
+import cz.terrmith.randomverse.core.ai.movement.pattern.TopDownMovement;
+import cz.terrmith.randomverse.core.ai.movement.pattern.WaveMovement;
+import cz.terrmith.randomverse.core.ai.movement.pattern.chain.MovementChainLink;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteFormationFactory;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
@@ -72,8 +73,12 @@ public class LevelOne extends World {
     protected void createSprites() {
 	    int amplitude = 100 + random.nextInt(300);
 	    int frequency = 100 + random.nextInt(300);
+        WaveMovement wave = new WaveMovement(amplitude, frequency);
 
-	    formationFactory.setMovementPattern(new WaveMovement(amplitude, frequency));
+        MovementChain movementChain = new MovementChain(MovementChainLink.timedLink(wave,1000));
+        movementChain.addChainLink(MovementChainLink.timedLink(new TopDownMovement(),1000));
+
+        formationFactory.setMovementPattern(movementChain);
 
         if (getUpdateCount() < 2 || (getUpdateCount() > 6)) {
             formationFactory.createBoxFormation(random.nextInt(600), random.nextInt(3) + 1, random.nextInt(3) + 1, Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
