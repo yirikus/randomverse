@@ -15,4 +15,10 @@ public interface MovementPattern {
      * @return
      */
     Position nextPosition(Position position, int speed);
+
+    /**
+     * returns copy of MovementPattern (new != this, but this.equals(new) )
+     * @return
+     */
+    MovementPattern copy();
 }

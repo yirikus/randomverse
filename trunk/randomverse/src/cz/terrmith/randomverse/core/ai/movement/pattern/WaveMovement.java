@@ -29,4 +29,9 @@ public class WaveMovement implements MovementPattern {
 
 		return new Position(position.getX() - prevSinx + sinx, position.getY() + speed);
 	}
+
+    @Override
+    public MovementPattern copy() {
+        return new WaveMovement(this.amplitude, this.frequency);
+    }
 }
