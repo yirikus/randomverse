@@ -10,4 +10,9 @@ public class StopMovement implements MovementPattern {
     public Position nextPosition(Position position, int speed) {
         return position;
     }
+
+    @Override
+    public MovementPattern copy() {
+        return new StopMovement();
+    }
 }

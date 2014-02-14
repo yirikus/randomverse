@@ -16,4 +16,9 @@ public class TopDownMovement implements MovementPattern{
     public Position nextPosition(Position position, int speed) {
         return new Position(position.getX(), position.getY() + speed);
     }
+
+    @Override
+    public MovementPattern copy() {
+        return new TopDownMovement();
+    }
 }

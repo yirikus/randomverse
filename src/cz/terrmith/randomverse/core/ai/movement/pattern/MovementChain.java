@@ -4,6 +4,7 @@ import cz.terrmith.randomverse.core.ai.movement.pattern.chain.MovementChainLink;
 import cz.terrmith.randomverse.core.geometry.Position;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,6 +17,10 @@ public class MovementChain implements MovementPattern {
 
     private Position startPosition;
     private long startTime;
+
+    public MovementChain (List<MovementChainLink> links) {
+        this.links = links;
+    }
 
     public MovementChain(MovementChainLink mp) {
         if (mp == null) {
@@ -57,11 +62,19 @@ public class MovementChain implements MovementPattern {
         return currentChainLink.getMovementPattern().nextPosition(currentPosition, speed);
     }
 
+    @Override
+    public MovementPattern copy() {
+        return new MovementChain(new ArrayList<MovementChainLink>(getLinks()));
+    }
+
     /**
      * Returns true if movement chain has reached the last chain link
      */
     public boolean lastChainLinkReached() {
         return this.links.size() == index + 1;
+    }
 
+    public List<MovementChainLink> getLinks() {
+        return Collections.unmodifiableList(links);
     }
 }
