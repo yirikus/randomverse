@@ -5,12 +5,7 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.properties.Ability;
-import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
-import cz.terrmith.randomverse.core.sprite.properties.Destructible;
-import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
-import cz.terrmith.randomverse.core.sprite.properties.Lootable;
-import cz.terrmith.randomverse.core.sprite.properties.ProvidesAbility;
+import cz.terrmith.randomverse.core.sprite.properties.*;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
 import java.util.List;
@@ -26,7 +21,7 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 	private LootSprite lootSprite;
 
 	public Ship(int x, int y) {
-        this(x, y, null, null);
+        this(x, y, null);
     }
 
 
@@ -44,9 +39,8 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
      * Constructor
      * @param x  intial x position
      * @param y initial y position
-     * @param ai null if player controlled, otherwise ai has to be provided
      */
-    public Ship(int x, int y, List<Tile> tiles, ArtificialIntelligence ai) {
+    public Ship(int x, int y, List<Tile> tiles) {
         super(x, y, tiles);
         this.ai = ai;
 
@@ -90,11 +84,6 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 
 	    // find connected
 	    setConnectionToCore(core);
-
-        //if AI is present use it
-        if (ai != null) {
-            ai.updateSprite(this);
-        }
 
         super.updateSprite();
 

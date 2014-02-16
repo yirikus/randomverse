@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.game.states;
 
 import cz.terrmith.randomverse.Randomverse;
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.dialog.DialogCallback;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
@@ -10,21 +11,13 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
-import cz.terrmith.randomverse.core.sprite.properties.Damage;
-import cz.terrmith.randomverse.core.sprite.properties.DamageDealer;
-import cz.terrmith.randomverse.core.sprite.properties.Destructible;
-import cz.terrmith.randomverse.core.sprite.properties.Loot;
-import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
-import cz.terrmith.randomverse.core.sprite.properties.Lootable;
-import cz.terrmith.randomverse.core.sprite.properties.Solid;
+import cz.terrmith.randomverse.core.sprite.properties.*;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,6 +30,7 @@ public class GameState implements State {
     // reference to command
     private final Command command;
     private final Randomverse stateMachine;
+    private final ArtificialIntelligence ai;
 
     //represent current level
     private World world;
@@ -44,6 +38,7 @@ public class GameState implements State {
     public GameState(Randomverse stateMachine) {
         this.command = stateMachine.getCommand();
         this.stateMachine = stateMachine;
+        this.ai = stateMachine.getAi();
     }
 
     @Override
@@ -161,6 +156,7 @@ public class GameState implements State {
                 }
             }
         }
+        ai.updateSprites();
         stateMachine.getSpriteCollection().removeInactive(SpriteLayer.NPC);
     }
 

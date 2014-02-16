@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.core.geometry;
 
-import java.awt.Rectangle;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 /**
  * Line Segment is defined by two points.
@@ -46,6 +47,13 @@ public class Segment {
         }
 
         return s2;
+    }
+
+    public boolean containsPosition(Position p) {
+        double res = Line2D.ptSegDist(a.getX(), a.getY(),
+                                      b.getX(), b.getY(),
+                                      p.getX(), p.getY());
+        return res == 0.0;
     }
 
     /**

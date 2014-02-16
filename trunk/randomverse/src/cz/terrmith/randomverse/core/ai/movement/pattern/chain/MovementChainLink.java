@@ -3,6 +3,7 @@ package cz.terrmith.randomverse.core.ai.movement.pattern.chain;
 import cz.terrmith.randomverse.core.ai.movement.pattern.MovementChain;
 import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.geometry.Segment;
 
 /**
  * Movement pattern that is limited by time, space or target position
@@ -128,12 +129,13 @@ public class MovementChainLink {
      * @param distance distance traveled in this movement pattern
      * @return
      */
-    public boolean targetMet(Position p, long time, double distance) {
+    public boolean targetMet(Position p, long time, double distance, int speed) {
         switch (targetType) {
             case DISTANCE:
                 return distance >= targetDistance;
             case POSITION:
-                return targetPosition.equals(p);
+                Segment segment = new Segment(p, movementPattern.nextPosition(p, speed));
+                return segment.containsPosition(targetPosition);
             case TIME:
                 return time >= targetTime;
             case CHAIN:

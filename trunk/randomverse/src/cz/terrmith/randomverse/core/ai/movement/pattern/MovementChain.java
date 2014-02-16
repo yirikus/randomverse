@@ -50,9 +50,11 @@ public class MovementChain implements MovementPattern {
         double distanceTraveled = startPosition.distanceFrom(currentPosition);
 
         if (links.size() > index + 1
-                && currentChainLink.targetMet(currentPosition, timeTraveled, distanceTraveled)) {
+                && currentChainLink.targetMet(currentPosition, timeTraveled, distanceTraveled, speed)) {
             index++;
             currentChainLink = links.get(index);
+
+            //TODO targetPosition speed correction
 
             //set new starting points
             startPosition = currentPosition;
