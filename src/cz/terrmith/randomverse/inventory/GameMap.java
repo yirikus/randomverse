@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.inventory;
 
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.geometry.RelativePosition;
@@ -19,11 +20,13 @@ import java.util.Set;
 public class GameMap extends GridMenu {
 
     private final Sprite player;
+    private final ArtificialIntelligence ai;
     private Set<GridLocation> explored = new HashSet<GridLocation>();
 
 
-    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player) {
+    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player, ArtificialIntelligence ai) {
         super(rows, columns, cellSize, position);
+        this.ai = ai;
         setX(rows / 2);
         setY(columns / 2);
         markExplored();
@@ -87,7 +90,7 @@ public class GameMap extends GridMenu {
 	 */
 	public World createLevel(SpriteCollection spriteCollection) {
 		if (getX() % 2 == 1) {
-			return new LevelOne(spriteCollection);
+			return new LevelOne(spriteCollection, ai);
 		} else {
 			return new LevelDebrisField(spriteCollection, this.player);
 		}

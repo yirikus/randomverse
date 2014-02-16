@@ -1,6 +1,8 @@
 package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.core.GameEngine;
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
+import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
@@ -27,6 +29,7 @@ import java.awt.*;
 public class Randomverse extends GameEngine {
 
     private final Command command;
+    private final ArtificialIntelligence ai;
     private int screenWidth;
     private int screenHeight;
     private final CollisionTester collisionTester;
@@ -43,7 +46,8 @@ public class Randomverse extends GameEngine {
         this.spriteCollection = new SpriteCollection(screenBoundary, extendedBoundary);
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
-	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite());
+        this.ai = new ArtificialIntelligence(new RandomAttackPattern(64));
+	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai);
 
         addState(new GameState(this));
         addState(new MenuState(this));
@@ -142,4 +146,8 @@ public class Randomverse extends GameEngine {
 	public GameMap getMap() {
 		return map;
 	}
+
+    public ArtificialIntelligence getAi() {
+        return ai;
+    }
 }

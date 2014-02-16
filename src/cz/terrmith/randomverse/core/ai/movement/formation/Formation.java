@@ -5,17 +5,19 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- *  represents positions where should be put enemies to create desired Formation
+ * represents positions where should be put enemies to create desired Formation
  */
 public class Formation {
 
-    List<Position> positions;
+    private List<Position> positions;
 
     /**
      * Creates precomputed formation
+     *
      * @param positions
      */
     public Formation(List<Position> positions) {
@@ -24,51 +26,45 @@ public class Formation {
 
     /**
      * creates new box formation of size ROWS x COLUMNS
-     * @param rows rows
-     * @param columns columns
+     *
+     * @param rows          rows
+     * @param columns       columns
      * @param startPosition bottom left corner
-     * @param width space between columns
-     * @param height space between rows
+     * @param width         space between columns
+     * @param height        space between rows
      * @return
      */
     public static Formation BoxFormation(int rows, int columns, Position startPosition, int width, int height) {
         List<Position> formationPositions = new ArrayList<Position>();
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-//                MovementPattern mp = createMovementPattern();
-//                Sprite enemy = createEnemy(xPos, -100, mp);
-//                enemy.translate(x * width, -y * height);
-//                this.spriteCollection.put(SpriteLayer.NPC, enemy);
                 formationPositions.add(new Position(x * width + startPosition.getX(),
-                                                   -y * height + startPosition.getY()));
-
+                        -y * height + startPosition.getY()));
             }
         }
         return new Formation(formationPositions);
     }
 
+    /**
+     * Returns all positions of this formation
+     *
+     * @return
+     */
     public List<Position> getPositions() {
-        return positions;
+        return Collections.unmodifiableList(positions);
     }
 
     /**
-     * Creates new sprites in this formation
+     * Creates new sprites in this formation using factory
+     * TODO delete ? will this be useful ?
      * @param sf sprite factory
      * @return sprites in a formation
      */
     public List<Sprite> createSpriteFormation(SpriteFactory sf) {
         List<Sprite> ret = new ArrayList<Sprite>();
         for (Position p : positions) {
-            sf.newSprite((int)p.getX(), (int)p.getY());
+            sf.newSprite((int) p.getX(), (int) p.getY());
         }
         return ret;
-    }
-
-    /**
-     * Translates given sprites to positions defined by this formation
-     * @param sprites list of sprites, size must be <= size of formation positions
-     */
-    public void applyFormation(List<Sprite> sprites) {
-
     }
 }
