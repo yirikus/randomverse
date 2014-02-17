@@ -65,10 +65,8 @@ public class FormationMovement {
         List<Position> positions = formations.get(0).getPositions();
         for (int i = 0; i < sprites.size(); i ++) {
             Sprite sprite = sprites.get(i);
-            if (positions.size() > sprites.size()) {
-                Position p = positions.get(sprites.size() - 1);
-                sprite.setPosition(p.getX(), p.getY());
-            }
+            Position p = positions.get(i);
+            sprite.setPosition(p.getX(), p.getY());
         }
         createFormationMovementChain(formations.get(0));
     }
