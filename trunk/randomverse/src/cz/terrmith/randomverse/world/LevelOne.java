@@ -6,7 +6,11 @@ import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteFormationFactory;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.*;
+import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
+import cz.terrmith.randomverse.core.sprite.Sprite;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
+import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
@@ -16,7 +20,13 @@ import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Testing level
@@ -34,9 +44,9 @@ public class LevelOne extends World {
     @Override
     protected void createSprites() {
         if (getUpdateCount() < 2 ) {
-            Formation formation1 = Formation.BoxFormation(3, 3, new Position(200, 200), Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE);
-            Formation formation2 = Formation.BoxFormation(2, 5, new Position(200, 400), Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE);
-            Formation formation3 = Formation.BoxFormation(1, 9, new Position(200, 800), Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE);
+            Formation formation1 = Formation.BoxFormation(3, 3, new Position(200, 200), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation2 = Formation.BoxFormation(2, 5, new Position(200, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation3 = Formation.BoxFormation(1, 9, new Position(200, 800), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
 
             List<Formation> formations = new ArrayList<Formation>(3);
             formations.add(formation1);
