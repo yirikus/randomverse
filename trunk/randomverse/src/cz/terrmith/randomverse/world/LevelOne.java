@@ -44,14 +44,19 @@ public class LevelOne extends World {
     @Override
     protected void createSprites() {
         if (getUpdateCount() < 2 ) {
-            Formation formation1 = Formation.BoxFormation(3, 3, new Position(200, 200), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-            Formation formation2 = Formation.BoxFormation(2, 5, new Position(200, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-            Formation formation3 = Formation.BoxFormation(1, 9, new Position(200, 800), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation1 = Formation.BoxFormation(1, 9, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation2 = Formation.BoxFormation(1, 9, new Position(0, 150), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation3 = Formation.BoxFormation(3, 3, new Position(300, 300), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation4 = Formation.BoxFormation(3, 4, new Position(250, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation5 = Formation.BoxFormation(1, 9, new Position(0, 800), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+
 
             List<Formation> formations = new ArrayList<Formation>(3);
             formations.add(formation1);
             formations.add(formation2);
             formations.add(formation3);
+            formations.add(formation4);
+            formations.add(formation5);
 
             List<Sprite> enemies = new ArrayList<Sprite>(9);
             for(int i = 0; i < 9; i++) {
@@ -62,8 +67,10 @@ public class LevelOne extends World {
             }
 
             List<Integer[]> orders = new ArrayList<Integer[]>();
-            orders.add(new Integer[]{1, 1, 1, 2, 2, 2, 3, 3, 3});
             orders.add(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
+            orders.add(new Integer[]{1, 1, 1, 2, 2, 2, 3, 3, 3});
+            orders.add(new Integer[]{1, 2, 1, 1, 2, 1, 2, 1, 2});
+            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
 
             FormationMovement formationMovement = new FormationMovement(enemies, formations,orders);
             ai.registerFormation(formationMovement);

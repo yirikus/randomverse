@@ -1,6 +1,6 @@
 package cz.terrmith.randomverse.core.geometry;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 
 /**
@@ -22,11 +22,96 @@ public class Segment {
     }
 
     /**
+     * Returnes normalized vector as segment,
+     * @see Position.normalizedVector(a,b)
+     * @param ab
+     * @return
+     */
+    public static Segment normalizedVector(Segment ab) {
+        return new Segment(new Position(0,0), Position.normalizedVector(ab));
+    }
+
+    /**
+     * Returns segment translated to [0,0] (A is [0,0])
+     * @param ab
+     * @return
+     */
+    public static Segment zeroBased(Segment ab){
+        return new Segment(new Position(0,0),
+                           Position.difference(ab.getB(), ab.getA()));
+    }
+
+    /**
+     * Return segment perpendicular to this segment (CCW 90 degree rotation)
+     * @param a segment
+     * @return perpendicular segment
+     */
+    public static Segment perpendicularSegment(Segment ab) {
+        // translate to [0,0]
+        Position zeroBased = Position.difference(ab.getB(), ab.getA());
+        Position perpendicular = new Position(-zeroBased.getY(),
+                                              zeroBased.getX());
+        //move back to original position
+        return new Segment(ab.getA(), Position.sum(perpendicular, ab.getA()));
+    }
+
+    /**
+     * Returns: true if this segment intersects line defined by given segment
+     * @param line line defined as segment
+     * @return true if intersects
+     */
+    public boolean intersectsLine(Segment line) {
+
+
+        int ay = (int) lineEquation(a.getX(), a.getY(), line);
+        int by = (int) lineEquation(b.getX(), b.getY(), line);
+
+
+        // one of the points lies on line
+        if (ay == 0.0 || by == 0.0) {
+            return true;
+        }
+        // XOR
+        return ( ay < 0) ^ (by < 0);
+    }
+
+    /**
      * Return lenght of the segment
      * @return
      */
     public double length() {
         return a.distanceFrom(b);
+    }
+
+    /**
+     * assignes given x to the line equation created from given segment and returns y
+     * @param x x to assign
+     * @param line line defined by segment
+     * @return y or 0.0 if ll points lie in one horizontal line
+     */
+    public static double lineEquation(double x, double y, Segment line) {
+        if (line == null || line.getA().equals(line.getB())) {
+            throw new IllegalArgumentException("line must not be null and bot segment points must not be equal, was: " + line);
+        }
+        // all points lie in one horizontal line
+        if ((int)x == (int)line.a.getX() && (int)x == (int)line.b.getX()) {
+            return 0.0;
+        }
+
+        double y0 = line.a.getY();
+        double y1 = line.b.getY();
+        double x0 = line.a.getX();
+        double x1 = line.b.getX();
+        double zeroCoef = 0.0;
+        // avoids zero division
+        if (x1 == x0){
+            zeroCoef = 0.00001;
+        }
+
+
+       // return (y0 + ((y1 - y0)/(x1 - x0 + zeroCoef)) * (x - x0)) - y;
+        //(Bx - Ax) * (Cy - Ay) - (By - Ay) * (Cx - Ax)
+        return (x1 - x0) * (y - y0) - (y1 - y0)*(x - x0);
     }
 
     /**

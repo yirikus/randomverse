@@ -23,10 +23,19 @@ public class VectorMovement implements MovementPattern{
 
     /**
      * Cretes movement that is directed towards given point
-     * @param vector
+     * @param vector vector starting at [0,0]
      */
     public VectorMovement(Position vector) {
         this.vector = Position.normalizedVector(new Position(0, 0), vector);
+    }
+
+    /**
+     * Cretes movement that is directed towards given point
+     * @param start
+     * @param end
+     */
+    public VectorMovement(Position start, Position end) {
+        this.vector = Position.normalizedVector(start, end);
     }
 
     @Override

@@ -134,8 +134,14 @@ public class MovementChainLink {
             case DISTANCE:
                 return distance >= targetDistance;
             case POSITION:
-                Segment segment = new Segment(p, movementPattern.nextPosition(p, speed));
-                return segment.containsPosition(targetPosition);
+                Position np = movementPattern.nextPosition(p, speed);
+                Segment vector = new Segment(p, np);
+                Segment perpendicular = Segment.perpendicularSegment(vector);
+                Segment zeroBased = Segment.zeroBased(perpendicular);
+                Segment perpendicularIntersectingTarget
+                        = new Segment(targetPosition, Position.sum(zeroBased.getB(), targetPosition));
+
+                return vector.intersectsLine(perpendicularIntersectingTarget);
             case TIME:
                 return time >= targetTime;
             case CHAIN:

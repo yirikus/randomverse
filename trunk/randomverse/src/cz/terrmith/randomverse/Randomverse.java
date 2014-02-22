@@ -17,7 +17,9 @@ import cz.terrmith.randomverse.game.states.MapState;
 import cz.terrmith.randomverse.game.states.MenuState;
 import cz.terrmith.randomverse.inventory.GameMap;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,7 +48,7 @@ public class Randomverse extends GameEngine {
         this.spriteCollection = new SpriteCollection(screenBoundary, extendedBoundary);
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
-        this.ai = new ArtificialIntelligence(new RandomAttackPattern(64));
+        this.ai = new ArtificialIntelligence(new RandomAttackPattern(1000));
 	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai);
 
         addState(new GameState(this));

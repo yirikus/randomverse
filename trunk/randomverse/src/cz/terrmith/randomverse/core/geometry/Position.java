@@ -13,6 +13,28 @@ public class Position {
     }
 
     /**
+     * Returns new position that is sum of given positions
+     * @param a
+     * @param b
+     * @return
+     */
+    public static Position sum(Position a, Position b){
+        return new Position (a.getX() + b.getX(),
+                             a.getY() + b.getY());
+    }
+
+    /**
+     * Returns new position that is difference of given positions (A - B)
+     * @param a
+     * @param b
+     * @return
+     */
+    public static Position difference(Position a, Position b){
+        return new Position (a.getX() - b.getX(),
+                             a.getY() - b.getY());
+    }
+
+    /**
      * Returns point on a circle
      * @param center circle center point
      * @param radius circle radius
@@ -54,6 +76,16 @@ public class Position {
         double distance = b.distanceFrom(a);
         return new Position((b.getX() - a.getX()) / distance,
                             (b.getY() - a.getY()) / distance);
+    }
+
+    /**
+     * Normalizes given vector AB.
+     * ie vector is translated to origin and
+     * @param ab
+     * @return
+     */
+    public static Position normalizedVector(Segment ab) {
+       return normalizedVector(ab.getA(), ab.getB());
     }
 
     public double getY() {
