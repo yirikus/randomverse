@@ -31,8 +31,9 @@ public class FormationMovement {
      * When moving to next formation is done, these patterns will be replaced
      */
     private List<MovementChain> movementChains = new ArrayList<MovementChain>();
-    private int currentFormationIndex;
+    private int targetFormationIndex;
     private int currentOrderNo;
+    private Integer[] order;
     /**
      * True if all movements for CURRENT FORMATION were finished
      */
@@ -60,6 +61,8 @@ public class FormationMovement {
         this.sprites = Collections.unmodifiableList(sprites);
         this.formations = Collections.unmodifiableList(formations);
         this.orders = Collections.unmodifiableList(orders);
+        this.order = orders.get(0);
+        this.targetFormationIndex = 1;
 
         //reposition sprites to match first formation
         List<Position> positions = formations.get(0).getPositions();
@@ -68,21 +71,22 @@ public class FormationMovement {
             Position p = positions.get(i);
             sprite.setPosition(p.getX(), p.getY());
         }
-        createFormationMovementChain(formations.get(0));
+        createFormationMovementChain(formations.get(0), formations.get(1));
     }
 
     /**
      * Creates movements necessary to reach next formation
-     * @param formation formation to be reached
+     * @param first starting formation
+     * @param second formation to be reached
      */
-    private void createFormationMovementChain(Formation formation) {
-        List<Position> positions = formation.getPositions();
+    private void createFormationMovementChain(Formation first, Formation second) {
+        List<Position> positionsFirst = first.getPositions();
+        List<Position> positionsSecond = second.getPositions();
         movementChains.clear();
-        for (int i = 0; i < positions.size(); i++) {
-            MovementChainLink firstLink = MovementChainLink.timedLink(new StopMovement(), 0);
+        for (int i = 0; i < sprites.size(); i++) {
+            MovementChainLink firstLink = MovementChainLink.positionedLink(new VectorMovement(positionsFirst.get(i), positionsSecond.get(i)), positionsSecond.get(i));
             final MovementChain movementChain = new MovementChain(firstLink);
-            movementChain.addChainLink(MovementChainLink.positionedLink(new VectorMovement(positions.get(i)), positions.get(i)));
-            movementChain.addChainLink(MovementChainLink.timedLink(new StopMovement(),0));
+            movementChain.addChainLink(MovementChainLink.timedLink(new StopMovement(), 0));
 
             movementChains.add(movementChain);
         }
@@ -92,47 +96,49 @@ public class FormationMovement {
      * Move sprites to next formation
      */
     public void updateSprites() {
-        if (formationMovementFinished && currentFormationIndex >= (formations.size() - 1)) {
+        if (formationMovementFinished && targetFormationIndex >= (formations.size())) {
             //all movements finished
             return;
         }
-        int newOrderNo = currentOrderNo;
-        Integer[] order = orders.get(currentFormationIndex);
+        System.out.println("formation movement: " + targetFormationIndex);
+
         boolean orderMovementFinished = true;
 
         //update movement
         for (int i = 0; i < sprites.size(); i++) {
             int ithOrderNo = order[i];
             if (ithOrderNo == currentOrderNo) {
-                orderMovementFinished = orderMovementFinished && updateMovement(i);
+                boolean  singleMovementFinished = updateMovement(i);
+                orderMovementFinished = orderMovementFinished && singleMovementFinished;
             }
         }
 
+        // find next order no (minimum of following order numbers)
+        int newOrderNo = order[order.length - 1];
         if (orderMovementFinished) {
-
-            // find next order no (minimum of following order numbers)
             for (int i = 0; i < sprites.size(); i++) {
                 int ithOrderNo = order[i];
-                if ((newOrderNo == currentOrderNo
-                        || (ithOrderNo > currentOrderNo && ithOrderNo < newOrderNo))) {
+                if (ithOrderNo > currentOrderNo && ithOrderNo < newOrderNo) {
                     newOrderNo = ithOrderNo;
                 }
             }
+            formationMovementFinished = currentOrderNo == Collections.max(Arrays.asList(order));
             currentOrderNo = newOrderNo;
-        }
-        formationMovementFinished = orderMovementFinished && currentOrderNo == Collections.max(Arrays.asList(order));
 
-        if (formationMovementFinished) {
-            // move to next formation
-            currentFormationIndex++;
-            if (currentFormationIndex >= (formations.size() - 1)) {
-                //movement finished
-                return;
+            if (formationMovementFinished) {
+                System.out.println("formation movement finished: " + targetFormationIndex);
+                // move to next formation
+                targetFormationIndex += 1;
+                if (targetFormationIndex < (formations.size())) {
+                    //update orders
+                    order = orders.get(targetFormationIndex -1);
+                    currentOrderNo = Collections.min(Arrays.asList(order));
+                    // replace movement patterns
+                    createFormationMovementChain(formations.get(targetFormationIndex - 1), formations.get(targetFormationIndex));
+                    formationMovementFinished = false;
+                }
+
             }
-
-            // replace movement patterns
-            createFormationMovementChain(formations.get(currentFormationIndex + 1));
-            orderMovementFinished = false;
         }
     }
 
@@ -143,6 +149,9 @@ public class FormationMovement {
      */
     private boolean updateMovement(int i) {
         Sprite sprite = sprites.get(i);
+        if (!sprite.isActive()) {
+            return true;
+        }
         MovementChain mp = movementChains.get(i);
         Position currentPos = new Position(sprite.getXPosn(), sprite.getYPosn());
         Position nextPosition = mp.nextPosition(currentPos, 3);
