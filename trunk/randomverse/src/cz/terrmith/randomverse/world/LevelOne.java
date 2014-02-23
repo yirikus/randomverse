@@ -4,6 +4,8 @@ import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteFormationFactory;
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
+import cz.terrmith.randomverse.core.ai.movement.pattern.WaveMovement;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
@@ -43,12 +45,47 @@ public class LevelOne extends World {
 
     @Override
     protected void createSprites() {
+        formation2();
+    }
+
+    private void formation2() {
+        if (getUpdateCount() < 2 ) {
+            Formation formation1 = Formation.BoxFormation(2, 5, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            int amplitude = 100 + random.nextInt(300);
+            int frequency = 200;// + random.nextInt(300);
+            WaveMovement waveMovement = new WaveMovement(amplitude, frequency);
+            Formation formation2 = Formation.MovementSimulation(formation1, waveMovement,400);
+            Formation formation3 = Formation.BoxFormation(1, 9, new Position(0, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+
+            List<Formation> formations = new ArrayList<Formation>(3);
+            formations.add(formation1);
+            formations.add(formation2);
+            formations.add(formation3);
+
+            List<Sprite> enemies = new ArrayList<Sprite>(9);
+            for(int i = 0; i < 9; i++) {
+                // position has no meaning, it will be repositioned upon FormationMovement creation
+                Sprite sprite = createEnemy(0, 0);
+                enemies.add(sprite);
+                getSpriteCollection().put(SpriteLayer.NPC, sprite);
+            }
+
+            List<Integer[]> orders = new ArrayList<Integer[]>();
+            orders.add(new Integer[]{1, 2, 1, 2, 1, 2, 1, 2, 1});
+            orders.add(new Integer[]{1, 1, 1, 2, 2, 2, 3, 3, 3});
+
+            FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, new MovementPattern[] {waveMovement, null});
+            ai.registerFormation(formationMovement);
+        }
+    }
+
+    private void formation1() {
         if (getUpdateCount() < 2 ) {
             Formation formation1 = Formation.BoxFormation(1, 9, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
             Formation formation2 = Formation.BoxFormation(1, 9, new Position(0, 150), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
             Formation formation3 = Formation.BoxFormation(3, 3, new Position(300, 300), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
             Formation formation4 = Formation.BoxFormation(3, 4, new Position(250, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-            Formation formation5 = Formation.BoxFormation(1, 9, new Position(0, 800), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation5 = Formation.BoxFormation(1, 9, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
 
 
             List<Formation> formations = new ArrayList<Formation>(3);
@@ -72,7 +109,7 @@ public class LevelOne extends World {
             orders.add(new Integer[]{1, 2, 1, 1, 2, 1, 2, 1, 2});
             orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
 
-            FormationMovement formationMovement = new FormationMovement(enemies, formations,orders);
+            FormationMovement formationMovement = new FormationMovement(enemies, formations,orders, null);
             ai.registerFormation(formationMovement);
         }
     }
