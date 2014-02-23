@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.core.ai.movement.formation;
 
 import cz.terrmith.randomverse.core.ai.movement.pattern.MovementChain;
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
 import cz.terrmith.randomverse.core.ai.movement.pattern.StopMovement;
 import cz.terrmith.randomverse.core.ai.movement.pattern.VectorMovement;
 import cz.terrmith.randomverse.core.ai.movement.pattern.chain.MovementChainLink;
@@ -20,6 +21,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class FormationMovement {
+    private final MovementPattern[] customMovementPatterns;
     private List<Formation> formations;
     /**
      * Each entry is a list of rder number for a formation with corresponding index
@@ -45,10 +47,15 @@ public class FormationMovement {
      * @param sprites
      * @param formations
      * @param orders orders in which sprites will move (if all numbers are the same, they will move simultaneously)
+     * @param customMovementPatterns custom movement patterns to be used instead of VectorMovemement
      */
-    public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<Integer[]> orders) {
+    public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<Integer[]> orders, MovementPattern[] customMovementPatterns) {
         if (orders.size() != (formations.size() - 1)) {
             throw new IllegalArgumentException("Formation movement orders must be (number of formation - 1), formations: " + formations.size() + ", orders: " + orders.size());
+        }
+
+        if (customMovementPatterns != null && customMovementPatterns.length != orders.size()) {
+            throw new IllegalArgumentException("Custom movement size must be equal to formation size - 1, should be: " + orders.size() + ", was: " + customMovementPatterns.length);
         }
 
         if (sprites == null || formations == null) {
@@ -63,6 +70,7 @@ public class FormationMovement {
         this.orders = Collections.unmodifiableList(orders);
         this.order = orders.get(0);
         this.targetFormationIndex = 1;
+        this.customMovementPatterns = customMovementPatterns;
 
         //reposition sprites to match first formation
         List<Position> positions = formations.get(0).getPositions();
@@ -71,7 +79,7 @@ public class FormationMovement {
             Position p = positions.get(i);
             sprite.setPosition(p.getX(), p.getY());
         }
-        createFormationMovementChain(formations.get(0), formations.get(1));
+        createFormationMovementChain(formations.get(0), formations.get(1), customMovementPatterns != null ? customMovementPatterns[0] : null);
     }
 
     /**
@@ -79,12 +87,18 @@ public class FormationMovement {
      * @param first starting formation
      * @param second formation to be reached
      */
-    private void createFormationMovementChain(Formation first, Formation second) {
+    private void createFormationMovementChain(Formation first, Formation second, MovementPattern customMovement) {
         List<Position> positionsFirst = first.getPositions();
         List<Position> positionsSecond = second.getPositions();
         movementChains.clear();
         for (int i = 0; i < sprites.size(); i++) {
-            MovementChainLink firstLink = MovementChainLink.positionedLink(new VectorMovement(positionsFirst.get(i), positionsSecond.get(i)), positionsSecond.get(i));
+            final MovementPattern mp;
+            if (customMovement != null) {
+                mp = customMovement;
+            } else {
+                mp = new VectorMovement(positionsFirst.get(i), positionsSecond.get(i));
+            }
+            MovementChainLink firstLink = MovementChainLink.positionedLink(mp, positionsSecond.get(i));
             final MovementChain movementChain = new MovementChain(firstLink);
             movementChain.addChainLink(MovementChainLink.timedLink(new StopMovement(), 0));
 
@@ -114,7 +128,7 @@ public class FormationMovement {
         }
 
         // find next order no (minimum of following order numbers)
-        int newOrderNo = order[order.length - 1];
+        int newOrderNo = Collections.max(Arrays.asList(order));
         if (orderMovementFinished) {
             for (int i = 0; i < sprites.size(); i++) {
                 int ithOrderNo = order[i];
@@ -134,7 +148,9 @@ public class FormationMovement {
                     order = orders.get(targetFormationIndex -1);
                     currentOrderNo = Collections.min(Arrays.asList(order));
                     // replace movement patterns
-                    createFormationMovementChain(formations.get(targetFormationIndex - 1), formations.get(targetFormationIndex));
+                    createFormationMovementChain(formations.get(targetFormationIndex - 1),
+                                                 formations.get(targetFormationIndex),
+                                                 customMovementPatterns != null ? customMovementPatterns[targetFormationIndex - 1] : null);
                     formationMovementFinished = false;
                 }
 

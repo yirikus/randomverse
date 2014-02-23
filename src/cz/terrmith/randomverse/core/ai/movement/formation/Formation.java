@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.core.ai.movement.formation;
 
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
@@ -44,6 +45,19 @@ public class Formation {
         }
         return new Formation(formationPositions);
     }
+
+    /**
+     * Simulates movement and computes end positions
+     * @return
+     */
+    public static Formation MovementSimulation(Formation startingFormation, MovementPattern mp, int distance) {
+        List<Position> formationPositions = new ArrayList<Position>();
+        for(Position p : startingFormation.getPositions()) {
+            formationPositions.add(mp.nextPosition(p, distance));
+        }
+        return new Formation(formationPositions);
+    }
+
 
     /**
      * Returns all positions of this formation
