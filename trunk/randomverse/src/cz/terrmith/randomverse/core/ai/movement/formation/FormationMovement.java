@@ -14,11 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: TERRMITh
- * Date: 13.2.14
- * Time: 0:22
- * To change this template use File | Settings | File Templates.
+ * Represents sequence of formations
  */
 public class FormationMovement {
     private final MovementPattern[] customMovementPatterns;
@@ -27,7 +23,7 @@ public class FormationMovement {
     /**
      * Each entry is a list of rder number for a formation with corresponding index
      */
-    private List<Integer[]> orders;
+    private List<FormationOrder> orders;
     private List<Sprite> sprites;
     /**
      * Movement patterns revelant for current formation index.
@@ -36,7 +32,11 @@ public class FormationMovement {
     private List<MovementChain> movementChains = new ArrayList<MovementChain>();
     private int targetFormationIndex;
     private int currentOrderNo;
-    private Integer[] order;
+    private FormationOrder order;
+    private enum MovementStatus {FINISHED, NOT_STARTED, IN_PROGRESS}
+    private Long movementStartTime;
+    private MovementStatus[] movementStatus;
+
     /**
      * True if all movements for CURRENT FORMATION were finished
      */
@@ -49,7 +49,7 @@ public class FormationMovement {
      * @param orders orders in which sprites will move (if all numbers are the same, they will move simultaneously)
      * @param customMovementPatterns custom movement patterns to be used instead of VectorMovemement
      */
-    public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<Integer[]> orders, MovementPattern[] customMovementPatterns) {
+    public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<FormationOrder> orders, MovementPattern[] customMovementPatterns) {
         this(sprites, formations, orders, customMovementPatterns, -1);
     }
 
@@ -60,8 +60,9 @@ public class FormationMovement {
      * @param orders orders in which sprites will move (if all numbers are the same, they will move simultaneously)
      * @param customMovementPatterns custom movement patterns to be used instead of VectorMovemement
      * @param repeatFrom [0, formation.size] or negative if not desired
+     *
      */
-    public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<Integer[]> orders, MovementPattern[] customMovementPatterns, int repeatFrom) {
+    public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<FormationOrder> orders, MovementPattern[] customMovementPatterns, int repeatFrom) {
         if ((repeatFrom < 0 && orders.size() != (formations.size() - 1))
             || (repeatFrom >= 0 && orders.size() != formations.size())) {
             throw new IllegalArgumentException("Formation movement orders must be (number of formation - 1), or equal to formations size if repeatFrom >= 0, formations: " + formations.size() + ", orders: " + orders.size());
@@ -83,6 +84,10 @@ public class FormationMovement {
         }
 
         this.sprites = Collections.unmodifiableList(sprites);
+        this.movementStatus = new MovementStatus[sprites.size()];
+        for (int i = 0 ;i < sprites.size(); i++) {
+            movementStatus[i] = (MovementStatus.NOT_STARTED);
+        }
         this.formations = Collections.unmodifiableList(formations);
         this.orders = Collections.unmodifiableList(orders);
         this.order = orders.get(0);
@@ -128,6 +133,8 @@ public class FormationMovement {
      * Move sprites to next formation
      */
     public void updateSprites() {
+        final long currentTime = System.currentTimeMillis();
+        final Integer maxOrder = Collections.max(Arrays.asList(order.getOrders()));
         if (formationMovementFinished && targetFormationIndex >= (formations.size())) {
             //all movements finished
             return;
@@ -137,32 +144,45 @@ public class FormationMovement {
 
         //update movement
         for (int i = 0; i < sprites.size(); i++) {
-            int ithOrderNo = order[i];
-            if (ithOrderNo == currentOrderNo) {
+            int ithOrderNo = order.getOrders()[i];
+            if (ithOrderNo == currentOrderNo || movementStatus[i] == MovementStatus.IN_PROGRESS) {
+                if(order.getWaitTime() != null && movementStartTime == null) {
+                    movementStartTime = currentTime;
+                }
                 boolean  singleMovementFinished = updateMovement(i);
-                orderMovementFinished = orderMovementFinished && singleMovementFinished;
+                if (singleMovementFinished) {
+                    movementStatus[i] = MovementStatus.FINISHED;
+                } else {
+                    movementStatus[i] = MovementStatus.IN_PROGRESS;
+                }
+                orderMovementFinished = orderMovementFinished && (singleMovementFinished || timePassed(currentTime, maxOrder));
             }
         }
 
-        // find next order no (minimum of following order numbers)
-        int newOrderNo = Collections.max(Arrays.asList(order));
+        int newOrderNo = maxOrder;
         if (orderMovementFinished) {
+            // find next order no (minimum of following order numbers)
             for (int i = 0; i < sprites.size(); i++) {
-                int ithOrderNo = order[i];
+                int ithOrderNo = order.getOrders()[i];
                 if (ithOrderNo > currentOrderNo && ithOrderNo < newOrderNo) {
                     newOrderNo = ithOrderNo;
                 }
             }
-            formationMovementFinished = currentOrderNo == Collections.max(Arrays.asList(order));
+            formationMovementFinished = currentOrderNo == maxOrder;
             currentOrderNo = newOrderNo;
+            movementStartTime = System.currentTimeMillis();
 
             if (formationMovementFinished) {
+                //reset movement status
+                for (int i = 0; i < movementStatus.length; i++) {
+                    movementStatus[i] = MovementStatus.NOT_STARTED;
+                }
                 // move to next formation
                 targetFormationIndex += 1;
                 if (targetFormationIndex < (formations.size())) {
                     //update orders
                     order = orders.get(targetFormationIndex -1);
-                    currentOrderNo = Collections.min(Arrays.asList(order));
+                    currentOrderNo = Collections.min(Arrays.asList(order.getOrders()));
                     // replace movement patterns
                     createFormationMovementChain(formations.get(targetFormationIndex - 1),
                                                  formations.get(targetFormationIndex),
@@ -173,7 +193,7 @@ public class FormationMovement {
                     targetFormationIndex = repeatFrom;
 
                     order = orders.get(orders.size() - 1);
-                    currentOrderNo = Collections.min(Arrays.asList(order));
+                    currentOrderNo = Collections.min(Arrays.asList(order.getOrders()));
                     // replace movement patterns
                     createFormationMovementChain(formations.get(formations.size() - 1),
                             formations.get(targetFormationIndex),
@@ -183,6 +203,22 @@ public class FormationMovement {
 
             }
         }
+    }
+
+    /**
+     * Returns true if enough time passed to move to next orderNo
+     * Returns always false if maxOrder == currentOrderNo, or waitTime for current order is not set
+     *
+     * @param currentTime provide current time to prevent repeated computation
+     * @param maxOrder provide max order of current order to prevent repeated computation
+     * @return
+     */
+    private boolean timePassed(long currentTime, int maxOrder) {
+        if (order.getWaitTime() == null) {
+            return false;
+        }
+        long timePassed = currentTime - movementStartTime;
+        return currentOrderNo != maxOrder && timePassed >= order.getWaitTime();
     }
 
     /**
