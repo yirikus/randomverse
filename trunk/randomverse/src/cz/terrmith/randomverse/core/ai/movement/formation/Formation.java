@@ -35,7 +35,7 @@ public class Formation {
      * @param height        space between rows
      * @return
      */
-    public static Formation BoxFormation(int rows, int columns, Position startPosition, int width, int height) {
+    public static Formation boxFormation(int rows, int columns, Position startPosition, int width, int height) {
         List<Position> formationPositions = new ArrayList<Position>();
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
@@ -50,12 +50,41 @@ public class Formation {
      * Simulates movement and computes end positions
      * @return
      */
-    public static Formation MovementSimulation(Formation startingFormation, MovementPattern mp, int distance) {
+    public static Formation movementSimulation(Formation startingFormation, MovementPattern mp, int distance) {
         List<Position> formationPositions = new ArrayList<Position>();
         for(Position p : startingFormation.getPositions()) {
             formationPositions.add(mp.nextPosition(p, distance));
         }
         return new Formation(formationPositions);
+    }
+
+    /**
+     * Distributes given number of positions evenly on a circle
+     * @param c center
+     * @param radius radius
+     * @param positionCount number of positions
+     * @return new formation
+     */
+    public static Formation circle(Position c, int radius, int positionCount, int startingPosition){
+        List<Position> formationPositions = new ArrayList<Position>();
+        double delta = (2 * Math.PI) / positionCount;
+        double angle = 0.0 + startingPosition * delta;
+        for (int i = 0; i < positionCount; i++) {
+            formationPositions.add(Position.pointOnCircle(c, (double)radius, angle, true));
+            angle += delta;
+        }
+        return new Formation(formationPositions);
+    }
+
+    /**
+     * Distributes given number of positions evenly on a circle
+     * @param c center
+     * @param radius radius
+     * @param positionCount number of positions
+     * @return new formation
+     */
+    public static Formation circle(Position c, int radius, int positionCount){
+        return circle(c, radius, positionCount, 0);
     }
 
 
