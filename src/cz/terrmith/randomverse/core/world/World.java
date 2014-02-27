@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.core.world;
 
+import cz.terrmith.randomverse.core.ai.movement.formation.FormationObserver;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 
 import java.util.concurrent.TimeUnit;
@@ -7,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Endless world that creates sprites just activate active screen based on time and number of updates
  */
-public abstract class World {
+public abstract class World implements FormationObserver{
 
     private long startTime;
     private long period;
@@ -16,8 +17,10 @@ public abstract class World {
     private boolean paused;
     private long pausedTime;
 	private long wavesToDefeat = 0;
+    private long wavesDefeated = 0;
+    private boolean waitForNotification = false;
 
-	/**
+    /**
      *
      * @param spriteCollection
      * @param period time to wait between updates in seconds
@@ -33,15 +36,17 @@ public abstract class World {
      * updates sprite collection if enough time was waited
      */
     public void update() {
-        if (!paused && (period * updateCount) < (System.currentTimeMillis() - startTime)) {
+        if (!paused && !waitForNotification && (period * updateCount) < (System.currentTimeMillis() - startTime)) {
+//            System.out.println("beforeUpdate " + !paused + " | " + !waitForNotification +" | " + (period * updateCount) + " | " + (System.currentTimeMillis() - startTime));
             updateCount++;
+            System.out.println("updateCount: " + updateCount);
             createSprites();
         }
     }
-	
-	public boolean completed() {
-		return updateCount >= wavesToDefeat;
-	}
+
+    public boolean completed() {
+        return getWavesDefeated() >= getWavesToDefeat();
+    }
 
     public long getUpdateCount() {
         return updateCount;
@@ -67,5 +72,31 @@ public abstract class World {
         } else {
             this.startTime += (System.currentTimeMillis() - pausedTime);
         }
+    }
+
+    public long getWavesToDefeat() {
+        return wavesToDefeat;
+    }
+
+    public long getWavesDefeated() {
+        return wavesDefeated;
+    }
+
+    public void incrementWavesDefeated() {
+        wavesDefeated++;
+    }
+
+    @Override
+    public void waveDestroyedNotification() {
+        incrementWavesDefeated();
+        System.out.println("booyah " + wavesDefeated + "/" + wavesToDefeat);
+        this.waitForNotification = false;
+    }
+
+    /**
+     * World will not be updated until waveDestroyedNotification is received
+     */
+    protected void waitForInactivation(){
+        this.waitForNotification = true;
     }
 }

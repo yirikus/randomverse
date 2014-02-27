@@ -89,6 +89,7 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 
 	    if(DefaultSpriteStatus.DEAD.name().equals(core.getSprite().getStatus())) {
 		    this.setStatus(DefaultSpriteStatus.DEAD.name());
+            System.out.println("Aaaah YE KILLED ME");
 		    setActive(false);
 	    }
     }

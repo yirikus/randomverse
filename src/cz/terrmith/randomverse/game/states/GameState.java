@@ -146,13 +146,12 @@ public class GameState implements State {
             // update active, add loot
             if (npcSprite.isActive()) {
                 npcSprite.updateSprite();
-            } else {
-                // if sprite was killed add loot to sprite collection
-                if (DefaultSpriteStatus.DEAD.name().equals(npcSprite.getStatus()) && npcSprite instanceof Lootable) {
-                    LootSprite loot = ((Lootable) npcSprite).getLootSprite();
-                    if (loot != null) {
-                        stateMachine.getSpriteCollection().put(SpriteLayer.ITEM, loot);
-                    }
+            }
+            // if sprite was killed add loot to sprite collection
+            if (DefaultSpriteStatus.DEAD.name().equals(npcSprite.getStatus()) && npcSprite instanceof Lootable) {
+                LootSprite loot = ((Lootable) npcSprite).getLootSprite();
+                if (loot != null) {
+                    stateMachine.getSpriteCollection().put(SpriteLayer.ITEM, loot);
                 }
             }
         }

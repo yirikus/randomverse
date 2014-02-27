@@ -33,6 +33,8 @@ public class FormationMovement {
     private int targetFormationIndex;
     private int currentOrderNo;
     private FormationOrder order;
+    private boolean hasNotified;
+
     private enum MovementStatus {FINISHED, NOT_STARTED, IN_PROGRESS}
     private Long movementStartTime;
     private MovementStatus[] movementStatus;
@@ -41,6 +43,11 @@ public class FormationMovement {
      * True if all movements for CURRENT FORMATION were finished
      */
     private boolean formationMovementFinished;
+
+    /**
+     *  observers of this formation movement
+     */
+    private final List<FormationObserver> observers = new ArrayList<FormationObserver>();
 
     /**
      *
@@ -133,6 +140,7 @@ public class FormationMovement {
      * Move sprites to next formation
      */
     public void updateSprites() {
+        notifyAboutInactiveFormation();
         final long currentTime = System.currentTimeMillis();
         final Integer maxOrder = Collections.max(Arrays.asList(order.getOrders()));
         if (formationMovementFinished && targetFormationIndex >= (formations.size())) {
@@ -200,9 +208,33 @@ public class FormationMovement {
                             customMovementPatterns != null ? customMovementPatterns[formations.size() - 1] : null);
                     formationMovementFinished = false;
                 }
-
             }
         }
+    }
+
+    /**
+     * Notifies all observers that formation is no longer active if so
+     * TODO notify that player destroyed whole formation
+     */
+    private void notifyAboutInactiveFormation() {
+        if (hasNotified) {
+            return;
+        }
+
+        boolean inactive = true;
+        for (Sprite s : sprites) {
+            inactive &= !s.isActive();
+        }
+
+        if (inactive) {
+            for (FormationObserver o : observers) {
+                o.waveDestroyedNotification();
+
+            }
+            hasNotified = true;
+        }
+
+
     }
 
     /**
@@ -242,5 +274,9 @@ public class FormationMovement {
 
     public List<Sprite> getSprites() {
         return sprites;
+    }
+
+    public void registerObserver(FormationObserver obs) {
+        observers.add(obs);
     }
 }
