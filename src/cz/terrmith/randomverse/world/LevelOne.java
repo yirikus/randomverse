@@ -3,6 +3,7 @@ package cz.terrmith.randomverse.world;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
+import cz.terrmith.randomverse.core.ai.movement.formation.FormationOrder;
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteFormationFactory;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
@@ -48,21 +49,22 @@ public class LevelOne extends World {
 
     private void formation2() {
         if (getUpdateCount() < 2 ) {
-            Formation formation1 = Formation.boxFormation(1, 9, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            int formationSize = 9;
+            Formation formation1 = Formation.boxFormation(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
             int amplitude = 100 + random.nextInt(300);
             int frequency = 200;// + random.nextInt(300);
 //            MovementPattern waveMovement = new WaveMovement(amplitude, frequency);
 //            MovementPattern waveMovement = new VectorMovement(new Position(0,1));
 
 //            Formation formation2 = Formation.movementSimulation(formation1, waveMovement, 400);
-            Formation formation2 = Formation.boxFormation(1, 9, new Position(0, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-            Formation formation3 = Formation.circle(new Position(400,100), 50, 9);
-            Formation formation4 = Formation.circle(new Position(400, 100), 100, 9, 1);
-            Formation formation5 = Formation.circle(new Position(400,200), 100, 9, 2);
-            Formation formation6 = Formation.circle(new Position(400,200), 150, 9, 3);
-            Formation formation7 = Formation.circle(new Position(400,200), 100, 9, 4);
-            Formation formation8 = Formation.circle(new Position(400,200), 200, 9, 5);
-            Formation formation9 = Formation.circle(new Position(400,200), 100, 9, 4);
+            Formation formation2 = Formation.boxFormation(1, formationSize, new Position(0, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+            Formation formation3 = Formation.circle(new Position(400,100), 50, formationSize);
+            Formation formation4 = Formation.circle(new Position(400, 100), 100, formationSize, 1);
+            Formation formation5 = Formation.circle(new Position(400,200), 100, formationSize, 2);
+            Formation formation6 = Formation.circle(new Position(400,200), 150, formationSize, 3);
+            Formation formation7 = Formation.circle(new Position(400,200), 50, formationSize, 4);
+            Formation formation8 = Formation.circle(new Position(400,200), 200, formationSize, 5);
+            Formation formation9 = Formation.circle(new Position(400,200), 100, formationSize, 4);
 
             List<Formation> formations = new ArrayList<Formation>(3);
             formations.add(formation1);
@@ -75,24 +77,24 @@ public class LevelOne extends World {
             formations.add(formation8);
             formations.add(formation9);
 
-            List<Sprite> enemies = new ArrayList<Sprite>(9);
-            for(int i = 0; i < 9; i++) {
+            List<Sprite> enemies = new ArrayList<Sprite>(formationSize);
+            for(int i = 0; i < formationSize; i++) {
                 // position has no meaning, it will be repositioned upon FormationMovement creation
                 Sprite sprite = createEnemy(0, 0);
                 enemies.add(sprite);
                 getSpriteCollection().put(SpriteLayer.NPC, sprite);
             }
 
-            List<Integer[]> orders = new ArrayList<Integer[]>();
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
-            orders.add(new Integer[]{1, 2, 1, 2, 1, 2, 1, 2, 1});
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
-            orders.add(new Integer[]{1, 2, 1, 2, 1, 2, 1, 2, 1});
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
+            List<FormationOrder> orders = new ArrayList<FormationOrder>();
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1, 2, 3, 4, 5}, formationSize, 200L));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1, 2}, formationSize, null));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1}, formationSize, 100L));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+            orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
 
             FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, 2);
             ai.registerFormation(formationMovement);
@@ -123,11 +125,11 @@ public class LevelOne extends World {
                 getSpriteCollection().put(SpriteLayer.NPC, sprite);
             }
 
-            List<Integer[]> orders = new ArrayList<Integer[]>();
-            orders.add(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
-            orders.add(new Integer[]{1, 1, 1, 2, 2, 2, 3, 3, 3});
-            orders.add(new Integer[]{1, 2, 1, 1, 2, 1, 2, 1, 2});
-            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
+            List<FormationOrder> orders = new ArrayList<FormationOrder>();
+            orders.add(new FormationOrder(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9}));
+            orders.add(new FormationOrder(new Integer[]{1, 1, 1, 2, 2, 2, 3, 3, 3}));
+            orders.add(new FormationOrder(new Integer[]{1, 2, 1, 1, 2, 1, 2, 1, 2}));
+            orders.add(new FormationOrder(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1}));
 
             FormationMovement formationMovement = new FormationMovement(enemies, formations,orders, null);
             ai.registerFormation(formationMovement);
