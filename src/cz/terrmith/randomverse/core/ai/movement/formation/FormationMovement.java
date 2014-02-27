@@ -22,6 +22,7 @@ import java.util.List;
  */
 public class FormationMovement {
     private final MovementPattern[] customMovementPatterns;
+    private final int repeatFrom;
     private List<Formation> formations;
     /**
      * Each entry is a list of rder number for a formation with corresponding index
@@ -41,7 +42,6 @@ public class FormationMovement {
      */
     private boolean formationMovementFinished;
 
-
     /**
      *
      * @param sprites
@@ -50,8 +50,25 @@ public class FormationMovement {
      * @param customMovementPatterns custom movement patterns to be used instead of VectorMovemement
      */
     public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<Integer[]> orders, MovementPattern[] customMovementPatterns) {
-        if (orders.size() != (formations.size() - 1)) {
-            throw new IllegalArgumentException("Formation movement orders must be (number of formation - 1), formations: " + formations.size() + ", orders: " + orders.size());
+        this(sprites, formations, orders, customMovementPatterns, -1);
+    }
+
+    /**
+     *
+     * @param sprites
+     * @param formations formations
+     * @param orders orders in which sprites will move (if all numbers are the same, they will move simultaneously)
+     * @param customMovementPatterns custom movement patterns to be used instead of VectorMovemement
+     * @param repeatFrom [0, formation.size] or negative if not desired
+     */
+    public FormationMovement(List<Sprite> sprites, List<Formation> formations, List<Integer[]> orders, MovementPattern[] customMovementPatterns, int repeatFrom) {
+        if ((repeatFrom < 0 && orders.size() != (formations.size() - 1))
+            || (repeatFrom >= 0 && orders.size() != formations.size())) {
+            throw new IllegalArgumentException("Formation movement orders must be (number of formation - 1), or equal to formations size if repeatFrom >= 0, formations: " + formations.size() + ", orders: " + orders.size());
+        }
+
+        if (repeatFrom > (formations.size() - 1)) {
+            throw new IllegalArgumentException("Wrong parameter, repeat from should be in interval [0,formation.size - 1] or negative if not desired, was: " + repeatFrom);
         }
 
         if (customMovementPatterns != null && customMovementPatterns.length != orders.size()) {
@@ -71,6 +88,7 @@ public class FormationMovement {
         this.order = orders.get(0);
         this.targetFormationIndex = 1;
         this.customMovementPatterns = customMovementPatterns;
+        this.repeatFrom = repeatFrom;
 
         //reposition sprites to match first formation
         List<Position> positions = formations.get(0).getPositions();
@@ -114,7 +132,6 @@ public class FormationMovement {
             //all movements finished
             return;
         }
-        System.out.println("formation movement: " + targetFormationIndex);
 
         boolean orderMovementFinished = true;
 
@@ -140,7 +157,6 @@ public class FormationMovement {
             currentOrderNo = newOrderNo;
 
             if (formationMovementFinished) {
-                System.out.println("formation movement finished: " + targetFormationIndex);
                 // move to next formation
                 targetFormationIndex += 1;
                 if (targetFormationIndex < (formations.size())) {
@@ -151,6 +167,17 @@ public class FormationMovement {
                     createFormationMovementChain(formations.get(targetFormationIndex - 1),
                                                  formations.get(targetFormationIndex),
                                                  customMovementPatterns != null ? customMovementPatterns[targetFormationIndex - 1] : null);
+                    formationMovementFinished = false;
+                } else if (repeatFrom >= 0){
+                    //formation finished, but repeat is desired
+                    targetFormationIndex = repeatFrom;
+
+                    order = orders.get(orders.size() - 1);
+                    currentOrderNo = Collections.min(Arrays.asList(order));
+                    // replace movement patterns
+                    createFormationMovementChain(formations.get(formations.size() - 1),
+                            formations.get(targetFormationIndex),
+                            customMovementPatterns != null ? customMovementPatterns[formations.size() - 1] : null);
                     formationMovementFinished = false;
                 }
 

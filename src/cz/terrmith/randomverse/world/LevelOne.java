@@ -92,8 +92,9 @@ public class LevelOne extends World {
             orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
             orders.add(new Integer[]{1, 2, 1, 2, 1, 2, 1, 2, 1});
             orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
+            orders.add(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1});
 
-            FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null);
+            FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, 2);
             ai.registerFormation(formationMovement);
         }
     }
