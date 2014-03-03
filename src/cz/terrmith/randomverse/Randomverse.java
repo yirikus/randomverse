@@ -11,6 +11,7 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.CollisionTester;
 import cz.terrmith.randomverse.game.StateName;
+import cz.terrmith.randomverse.game.states.CutSceneState;
 import cz.terrmith.randomverse.game.states.GameState;
 import cz.terrmith.randomverse.game.states.InventoryState;
 import cz.terrmith.randomverse.game.states.MapState;
@@ -52,6 +53,7 @@ public class Randomverse extends GameEngine {
 	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai);
 
         addState(new GameState(this));
+        addState(new CutSceneState(this));
         addState(new MenuState(this));
         addState(new MapState(this));
         addState(new InventoryState(this));
