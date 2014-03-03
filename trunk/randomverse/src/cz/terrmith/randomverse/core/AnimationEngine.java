@@ -16,7 +16,7 @@ import cz.terrmith.randomverse.util.ConverterUtil;
  */
 public class AnimationEngine {
 
-    private static final int DEFAULT_FPS = 64;
+    public static final int DEFAULT_FPS = 64;
     // no. of frames that can be skipped in any one animation loop
     // i.e the games state is updated but not rendered
     private static final int NO_DELAYS_PER_YIELD = 16;

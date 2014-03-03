@@ -1,18 +1,15 @@
 package cz.terrmith.randomverse.game.states;
 
 import cz.terrmith.randomverse.Randomverse;
-import cz.terrmith.randomverse.core.dialog.Dialog;
-import cz.terrmith.randomverse.core.dialog.DialogCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.menu.Menu;
-import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.game.StateName;
-import cz.terrmith.randomverse.world.LevelOne;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,7 +50,7 @@ public class MenuState implements State {
             command.setDown(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
             if (menu.getSelected().equals("start")) {
-                stateMachine.setCurrentState(StateName.GAME.name());
+                stateMachine.setCurrentState(StateName.CUT_SCENE.name());
             } else if (menu.getSelected().equals("options")) {
 
             } if (menu.getSelected().equals("exit")) {

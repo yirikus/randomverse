@@ -10,4 +10,5 @@ package cz.terrmith.randomverse.game;
 public enum StateName {MAIN_MENU,
     GAME, MAP,
     SHOP,
-    INVENTORY}
+    INVENTORY,
+    CUT_SCENE}
