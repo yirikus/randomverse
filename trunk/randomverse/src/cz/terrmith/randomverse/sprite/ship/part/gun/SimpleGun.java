@@ -28,22 +28,26 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 
     /**
      * Convenience contructor with x = 0, y = 0, w,h = Tile.DEFAULT_SIZE
-     * with default projectile
+     * with default projectile and frontal=false
      *
-     * TODO tenhle konstruktor je picovina
+     * TODO tenhle konstruktor je picovina, ale pouziva se :/
      */
     public SimpleGun(SpriteCollection spriteCollection,Damage.DamageType damageType, int totalHealth, int price) {
 	    this(spriteCollection, DEFAULT_SHOOT_TIMER, new ImageLocation("sideGun", 0),
-	         totalHealth, price, new ProjectileFactory(new Damage(1, damageType)));
+	         totalHealth, price, new ProjectileFactory(new Damage(1, damageType)),false);
     }
 
     /**
      * Convenience contructor with x = 0, y = 0, w,h = Tile.DEFAULT_SIZE
      * @param rateOfFire how long to wait activate next attack
      */
-    public SimpleGun(SpriteCollection spriteCollection, int rateOfFire, ImageLocation imageLocation, int totalHealth, int price, SpriteFactory spriteFactory) {
+    public SimpleGun(SpriteCollection spriteCollection, int rateOfFire, ImageLocation imageLocation, int totalHealth, int price, SpriteFactory spriteFactory, boolean frontal) {
         super(totalHealth, null, new HashSet<ExtensionPoint>(), price);
-	    this.getExtensions().add(ExtensionPoint.RIGHT);
+	    if (frontal) {
+            this.getExtensions().add(ExtensionPoint.BOTTOM);
+        } else {
+            this.getExtensions().add(ExtensionPoint.RIGHT);
+        }
 	    this.shootTimer = rateOfFire;
 	    this.spriteFactory = spriteFactory;
 	    System.out.println("gun created " + this.spriteFactory.getClass().getName());

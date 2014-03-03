@@ -12,6 +12,7 @@ import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
+import cz.terrmith.randomverse.sprite.ship.ShipPartFactory;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 
