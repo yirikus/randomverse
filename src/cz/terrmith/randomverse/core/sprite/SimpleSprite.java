@@ -37,8 +37,9 @@ public class SimpleSprite implements Sprite {
     private boolean yFlip = false;
     private boolean xFlip = false;
 	private Sprite parent;
+    private double speed;
 
-	/**
+    /**
      * Copy constructor
      * @param sprite instance that should be copied
      */
@@ -48,6 +49,7 @@ public class SimpleSprite implements Sprite {
 	    this.xFlip = sprite.isFlippedHorizontally();
 	    this.yFlip = sprite.isFlippedVertically();
 	    this.parent = sprite.getParent();
+        this.speed = sprite.getSpeed();
     }
 
     /**
@@ -276,5 +278,15 @@ public class SimpleSprite implements Sprite {
     public void collide(Sprite s) {
         //does nothing
 //        throw new UnsupportedOperationException("Method sprite.collide() for was not overriden for class " + this.getClass().getName());
+    }
+
+    @Override
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    @Override
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }

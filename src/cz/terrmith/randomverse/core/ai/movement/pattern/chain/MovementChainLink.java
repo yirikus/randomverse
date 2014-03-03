@@ -136,6 +136,9 @@ public class MovementChainLink {
             case POSITION:
                 Position np = movementPattern.nextPosition(p, speed);
                 Segment vector = new Segment(p, np);
+                if (p.equals(np)) {
+                    throw new IllegalArgumentException("Next point is same as current point, target can not be reached.");
+                }
                 Segment perpendicular = Segment.perpendicularSegment(vector);
                 Segment zeroBased = Segment.zeroBased(perpendicular);
                 Segment perpendicularIntersectingTarget

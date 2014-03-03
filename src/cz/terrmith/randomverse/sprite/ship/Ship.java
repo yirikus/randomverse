@@ -5,7 +5,12 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.MultiSprite;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.Tile;
-import cz.terrmith.randomverse.core.sprite.properties.*;
+import cz.terrmith.randomverse.core.sprite.properties.Ability;
+import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
+import cz.terrmith.randomverse.core.sprite.properties.Lootable;
+import cz.terrmith.randomverse.core.sprite.properties.ProvidesAbility;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
 import java.util.List;
@@ -152,6 +157,7 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 		this.lootSprite = lootSprite;
 	}
 
+    @Override
 	public double getSpeed() {
 		double totalSpeed = 0;
 		for (Tile t : getTiles()) {

@@ -132,4 +132,8 @@ public interface Sprite {
      * @param s
      */
     void collide(Sprite s);
+
+    // todo move to abstract subclass? along with other core methods of Randomverse sprites ?
+    double getSpeed();
+    void setSpeed(double speed);
 }

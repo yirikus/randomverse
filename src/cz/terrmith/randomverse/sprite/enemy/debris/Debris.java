@@ -120,6 +120,7 @@ public class Debris extends MultiSprite implements Destructible{
         throw new IllegalStateException("Can not reduce health directly");
     }
 
+    @Override
 	public double getSpeed() {
 		return speed;
 	}

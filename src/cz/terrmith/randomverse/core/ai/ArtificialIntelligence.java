@@ -3,7 +3,6 @@ package cz.terrmith.randomverse.core.ai;
 import cz.terrmith.randomverse.core.ai.attack.AttackPattern;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
 import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
-import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
 
@@ -27,14 +26,14 @@ public class ArtificialIntelligence {
         this.attackPattern = attackPattern;
     }
 
-
-    private boolean shouldAttack() {
-        return attackPattern.shouldAttack();
-    }
-
-    private Position nextPosition(Position position, int speed) {
-        return movementPattern.nextPosition(position,speed);
-    }
+//
+//    private boolean shouldAttack() {
+//        return attackPattern.shouldAttack();
+//    }
+//
+//    private Position nextPosition(Position position, int speed) {
+//        return movementPattern.nextPosition(position,speed);
+//    }
 
     public void updateSprites(){
         for (FormationMovement f : formations) {

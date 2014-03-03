@@ -370,6 +370,16 @@ public class MultiSprite implements Sprite{
         throw new UnsupportedOperationException("Collide should be called on tiles, not on parent multisprite");
     }
 
+    @Override
+    public double getSpeed() {
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    @Override
+    public void setSpeed(double speed) {
+        throw new UnsupportedOperationException("not implemented yet"); //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     /**
      * Iterates over tiles and recomputes sprite positions
      */

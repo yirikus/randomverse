@@ -32,14 +32,13 @@ public class CutSceneState implements State {
 
     public CutSceneState(Randomverse stateMachine) {
         this.stateMachine = stateMachine;
-        textToDisplay.add("Where am I?");
-        textToDisplay.add("In space.");
+        textToDisplay.add("Get out of that ship!");
         textToDisplay.add("Why?");
-        textToDisplay.add("No time for that.");
-        textToDisplay.add("Who are you?");
-        textToDisplay.add("No time for that either.");
-        textToDisplay.add("Why?");
-        textToDisplay.add("They are shooting at you.");
+        textToDisplay.add("Or.. or.. we will shoot you!");
+        textToDisplay.add("You are just lab rats.");
+        textToDisplay.add("This is not a joke!");
+        textToDisplay.add("Since when science vessels have guns?");
+        textToDisplay.add("G-G-Get him!!!");
     }
 
     @Override
@@ -49,7 +48,8 @@ public class CutSceneState implements State {
 
     @Override
     public void update() {
-        if (!Debug.PLAY_INTRO) {
+
+        if (!Debug.PLAY_INTRO || stateMachine.getCommand().isAnyKey()) {
             stateMachine.setCurrentState(StateName.GAME.name());
             return;
         }

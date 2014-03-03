@@ -1,8 +1,10 @@
 package cz.terrmith.randomverse.core.world;
 
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationObserver;
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 
+import java.awt.Graphics;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,6 +21,7 @@ public abstract class World implements FormationObserver{
 	private long wavesToDefeat = 0;
     private long wavesDefeated = 0;
     private boolean waitForNotification = false;
+    private String activationKey;
 
     /**
      *
@@ -87,16 +90,21 @@ public abstract class World implements FormationObserver{
     }
 
     @Override
-    public void waveDestroyedNotification() {
+    public void waveDestroyedNotification(String activationKey) {
         incrementWavesDefeated();
         System.out.println("booyah " + wavesDefeated + "/" + wavesToDefeat);
-        this.waitForNotification = false;
+        if (this.activationKey.equals(activationKey)) {
+            this.waitForNotification = false;
+        }
     }
 
     /**
      * World will not be updated until waveDestroyedNotification is received
      */
-    protected void waitForInactivation(){
+    protected void waitForInactivation(String activationKey){
         this.waitForNotification = true;
+        this.activationKey = activationKey;
     }
+
+    public abstract void drawMapIcon(Graphics g, Position position, int size);
 }

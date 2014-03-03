@@ -11,13 +11,21 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
-import cz.terrmith.randomverse.core.sprite.properties.*;
+import cz.terrmith.randomverse.core.sprite.properties.Damage;
+import cz.terrmith.randomverse.core.sprite.properties.DamageDealer;
+import cz.terrmith.randomverse.core.sprite.properties.Destructible;
+import cz.terrmith.randomverse.core.sprite.properties.Loot;
+import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
+import cz.terrmith.randomverse.core.sprite.properties.Lootable;
+import cz.terrmith.randomverse.core.sprite.properties.Solid;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -251,16 +259,16 @@ public class GameState implements State {
             stateMachine.getSpriteCollection().clear();
             stateMachine.getSpriteCollection().put(SpriteLayer.PLAYER, stateMachine.getPlayer().getSprite());
             //obtain level from map
-	        this.world = stateMachine.getMap().createLevel(this.stateMachine.getSpriteCollection());
+	        this.world = stateMachine.getMap().createLevel();
             command.clear();
             DialogCallback callback = new DialogCallback() {
                 @Override
                 public void onClose() {
                 }
             };
-            cz.terrmith.randomverse.core.dialog.Dialog dialog
-                    = new cz.terrmith.randomverse.core.dialog.Dialog("GAME START",200,200,400,200,callback);
-            stateMachine.showDialog(dialog);
+//            cz.terrmith.randomverse.core.dialog.Dialog dialog
+//                    = new cz.terrmith.randomverse.core.dialog.Dialog("GAME START",200,200,400,200,callback);
+//            stateMachine.showDialog(dialog);
         }
     }
 

@@ -79,7 +79,7 @@ public class ShipPartFactory {
             case 13: return createBottomEngine(new ImageLocation("bottomEngines",1), 6, 1, 4);
             case 14: return createBottomEngine(new ImageLocation("bottomEngines",2), 8, 1, 6);
             case 15: return createBottomEngine(new ImageLocation("bottomEngines",3), 10, 1, 8);
-            case 16:  return (ShipPart) createGun(new ImageLocation("topGun", 0), 1, 2, 8, new ProjectileFactory(new Damage(1, damageType)),true);
+            case 16:  return (ShipPart) createGun(new ImageLocation("topGun", 0), 4, 2, 24, new ProjectileFactory(new Damage(4, damageType)),true);
             case 17:  return (ShipPart) createGun(new ImageLocation("topGun", 1), 1, 8, 4, new ProjectileFactory(new Damage(2, damageType)),true);
             case 18:  return (ShipPart) createGun(new ImageLocation("topGun", 3), 1, 6, 8, new ProjectileFactory(new Damage(4, damageType)),true);
             case 19: return (ShipPart) createGun(new ImageLocation("topGun", 2), 2, 4, 12, new MissileFactory(new Damage(3, damageType), this.spriteCollection),true);
