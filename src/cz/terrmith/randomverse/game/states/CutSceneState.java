@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.game.states;
 
+import cz.terrmith.randomverse.Debug;
 import cz.terrmith.randomverse.GameWindow;
 import cz.terrmith.randomverse.Randomverse;
 import cz.terrmith.randomverse.core.AnimationEngine;
@@ -48,6 +49,11 @@ public class CutSceneState implements State {
 
     @Override
     public void update() {
+        if (!Debug.PLAY_INTRO) {
+            stateMachine.setCurrentState(StateName.GAME.name());
+            return;
+        }
+        //TODO add timer and press any key
         if (progress > PROGRESS_MAX) {
             currentIndex++;
             progress = 0;

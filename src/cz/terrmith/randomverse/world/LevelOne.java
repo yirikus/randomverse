@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.world;
 
+import cz.terrmith.randomverse.GameWindow;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
@@ -15,6 +16,7 @@ import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.loot.LootFactory;
+import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
@@ -30,25 +32,50 @@ import java.util.Set;
 
 /**
  * Testing level
+ *
+ * todo refactor formation movement creation - abstract method
  */
 public class LevelOne extends World {
     private final ArtificialIntelligence ai;
     private Random random = new Random();
 
     public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
-        super(spriteCollection,1,2);
+        super(spriteCollection,1,1);
         this.ai = ai;
     }
 
     @Override
     protected void createSprites() {
-        if (getUpdateCount() == 1 ) {
-            System.out.println("create sprites 1");
-            formation2();
-        } else {
-            System.out.println("create sprites 2");
-            formation1();
+        randomBoxFormation();
+    }
+
+    private void randomBoxFormation() {
+        waitForInactivation();
+        //todo compute size by screen dimensions
+        int formationSize = 18;
+        int cellSize = Tile.DEFAULT_SIZE * 3;
+        int cols = GameWindow.SCREEN_W / cellSize;
+        Formation formation1 = Formation.randomBoxFormation(formationSize, cols,
+                                                            new Position(0, 0), // -(Tile.DEFAULT_SIZE * 3) * formationSize),
+                                                            cellSize, cellSize);
+        List<Formation> formations = new ArrayList<Formation>(3);
+        formations.add(formation1);
+        formations.add(formation1.translate(0,GameWindow.SCREEN_H * 3));
+
+        List<Sprite> enemies = new ArrayList<Sprite>(formationSize);
+        for(int i = 0; i < formationSize; i++) {
+            // position has no meaning, it will be repositioned upon FormationMovement creation
+            Sprite sprite = createSimpleEnemy(0, 0, null);
+            enemies.add(sprite);
+            getSpriteCollection().put(SpriteLayer.NPC, sprite);
         }
+
+        List<FormationOrder> orders = new ArrayList<FormationOrder>();
+        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+
+        FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, -1);
+        formationMovement.registerObserver(this);
+        ai.registerFormation(formationMovement);
     }
 
     private void formation2() {
@@ -138,6 +165,32 @@ public class LevelOne extends World {
         FormationMovement formationMovement = new FormationMovement(enemies, formations,orders, null);
         formationMovement.registerObserver(this);
         ai.registerFormation(formationMovement);
+    }
+
+    private Sprite createSimpleEnemy(int x, int y, SimpleEnemy.EnemyType enemyType) {
+        if (enemyType == null) {
+            enemyType = randomEnemyType();
+        }
+        SimpleEnemy enemy = new SimpleEnemy(x,y, enemyType, getSpriteCollection());
+        return enemy;
+    }
+
+    private SimpleEnemy.EnemyType randomEnemyType() {
+        int enemyRandomizer= random.nextInt(3);
+        final SimpleEnemy.EnemyType enemyType;
+        switch (enemyRandomizer) {
+            case 0:
+                enemyType = SimpleEnemy.EnemyType.SINGLE;
+                break;
+            case 1:
+                enemyType = SimpleEnemy.EnemyType.DOUBLE;
+                break;
+            default:
+                enemyType = SimpleEnemy.EnemyType.KAMIKAZE;
+                break;
+
+        }
+        return enemyType;
     }
 
     private Sprite createEnemy(int x, int y) {
