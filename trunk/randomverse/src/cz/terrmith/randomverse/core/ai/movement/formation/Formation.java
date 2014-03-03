@@ -8,6 +8,7 @@ import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * represents positions where should be put enemies to create desired Formation
@@ -15,6 +16,7 @@ import java.util.List;
 public class Formation {
 
     private List<Position> positions;
+    private static Random random = new Random();
 
     /**
      * Creates precomputed formation
@@ -44,6 +46,33 @@ public class Formation {
             }
         }
         return new Formation(formationPositions);
+    }
+
+    public static Formation randomBoxFormation(int rows, int columns, Position startPosition, int width, int height) {
+        List<Position> formationPositions = new ArrayList<Position>();
+        for (int y = 0; y < rows; y++) {
+            int chosen = random.nextInt(columns);
+            for (int x = 0; x < columns; x++) {
+                if (chosen == x) {
+                    formationPositions.add(new Position(x * width + startPosition.getX(),
+                            -y * height + startPosition.getY()));
+                }
+            }
+        }
+        return new Formation(formationPositions);
+    }
+
+    /**
+     * Returns translated formation
+     * @return
+     */
+    public Formation translate(int dx, int dy) {
+        List<Position> translated = new ArrayList<Position>();
+        for (Position p : this.getPositions()) {
+            translated.add(new Position(p.getX() + dx, p.getY() + dy));
+        }
+        return new Formation(translated);
+
     }
 
     /**

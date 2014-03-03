@@ -274,6 +274,7 @@ public class SimpleSprite implements Sprite {
 
     @Override
     public void collide(Sprite s) {
-        // does nothing
+        //does nothing
+//        throw new UnsupportedOperationException("Method sprite.collide() for was not overriden for class " + this.getClass().getName());
     }
 }

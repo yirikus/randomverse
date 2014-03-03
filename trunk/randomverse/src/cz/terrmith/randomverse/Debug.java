@@ -3,8 +3,9 @@ package cz.terrmith.randomverse;
 /**
  * Static utility class with debug utilities and constants
  */
-public class Debug {
-    public static final boolean DEBUG_COLLISIONS =false;
+public final class Debug {
+    public static final boolean DEBUG_COLLISIONS = true;
+    public static final boolean PLAY_INTRO = false;
 
     /**
      * Static utility class, not intended for instantiation
