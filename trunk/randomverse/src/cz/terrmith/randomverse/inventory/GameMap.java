@@ -10,8 +10,10 @@ import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.world.LevelDebrisField;
 import cz.terrmith.randomverse.world.LevelOne;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -21,11 +23,17 @@ public class GameMap extends GridMenu {
 
     private final Sprite player;
     private final ArtificialIntelligence ai;
+    private final SpriteCollection spriteCollection;
     private Set<GridLocation> explored = new HashSet<GridLocation>();
+    private GridLocation currentLocation;
+    private World[][] worlds;
+    private static Random random = new Random();
 
 
-    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player, ArtificialIntelligence ai) {
+    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player, ArtificialIntelligence ai, SpriteCollection spc) {
         super(rows, columns, cellSize, position);
+        this.spriteCollection = spc;
+        this.worlds = generateGameMap(rows, columns);
         this.ai = ai;
         setX(rows / 2);
         setY(columns / 2);
@@ -33,11 +41,28 @@ public class GameMap extends GridMenu {
         this.player = player;
     }
 
+    private World[][] generateGameMap(int rows, int columns) {
+        World[][] worldArray = new World[columns][rows];
+        for (int c = 0; c < columns; c++) {
+            for (int r = 0; r < rows; r++) {
+                if (random.nextInt(2) == 1) {
+                    worldArray[c][r] = new LevelOne(spriteCollection, ai);
+                } else {
+                    worldArray[c][r] = new LevelDebrisField(spriteCollection, this.player);
+                }
+            }
+        }
+        worldArray[getX()][getY()] = new LevelOne(spriteCollection,ai);
+
+        return worldArray;
+    }
+
     /**
      * Marks current position as explored
      */
     public void markExplored() {
-        explored.add(new GridLocation(getX(), getY()));
+        currentLocation = new GridLocation(getX(), getY());
+        explored.add(currentLocation);
     }
 
     /**
@@ -88,12 +113,8 @@ public class GameMap extends GridMenu {
 	 * @return level to be played
 	 * @param spriteCollection sprite collection
 	 */
-	public World createLevel(SpriteCollection spriteCollection) {
-		if (getX() % 2 == 1) {
-			return new LevelOne(spriteCollection, ai);
-		} else {
-			return new LevelDebrisField(spriteCollection, this.player);
-		}
+	public World createLevel() {
+        return worlds[getX()][getY()];
 	}
 
     @Override
@@ -106,24 +127,25 @@ public class GameMap extends GridMenu {
                 if (relativePosition.equals(RelativePosition.NEIGHBOURHOOD_4)
                     || relativePosition.equals(RelativePosition.CONTAINS)) {
 
-	                if (i % 2 == 0) {
-		                g.setColor(new Color(112, 146, 190));
-	                }  else {
-		                g.setColor(new Color(185, 122, 87));
-	                }
-	                g.fillRect((int)getPosition().getX() + i * getCellSize() + 1,
-	                           (int)getPosition().getY() + j * getCellSize() + 1,
-	                           getCellSize() - 1, getCellSize() - 1);
+                    Position position = Position.sum (getPosition(),
+                                                      new Position(i * getCellSize() + 1, j * getCellSize() + 1));
+                    worlds[i][j].drawMapIcon(g, position, getCellSize() - 1);
 
 	                if (relativePosition.equals(RelativePosition.CONTAINS)) {
-		                g.setColor(Color.WHITE);
+
 	                } else if (relativePosition.equals(RelativePosition.NEIGHBOURHOOD_4)) {
-		                g.setColor(Color.DARK_GRAY);
+		                //g.setColor(Color.DARK_GRAY);
+                        g.setColor(new Color(100, 135, 177, 100));
+                        g.fillRect((int)getPosition().getX() + i * getCellSize() + 1,
+                                (int)getPosition().getY() + j * getCellSize() + 1,
+                                getCellSize() - 1, getCellSize() - 1);
 	                }
-                    g.drawRect((int)getPosition().getX() + i * getCellSize() + 1,
+                    if (currentLocation.equals(new GridLocation(i,j))) {
+                        g.setColor(Color.WHITE);
+                        g.drawRect((int)getPosition().getX() + i * getCellSize() + 1,
                                (int)getPosition().getY() + j * getCellSize() + 1,
                                 getCellSize() - 1, getCellSize() - 1);
-
+                    }
                 }
             }
         }
@@ -135,6 +157,9 @@ public class GameMap extends GridMenu {
 
     public void reset() {
         explored = new HashSet<GridLocation>();
+        setX(getRows() / 2);
+        setY(getColumns() / 2);
+        worlds = generateGameMap(getRows(), getColumns());
         markExplored();
     }
 }

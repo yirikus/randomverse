@@ -8,5 +8,5 @@ public interface FormationObserver {
     /**
      * Notifies observer that all sprites in formation were destroyed
      */
-    void waveDestroyedNotification();
+    void waveDestroyedNotification(String activationKey);
 }

@@ -22,6 +22,8 @@ import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,21 +39,53 @@ import java.util.Set;
  */
 public class LevelOne extends World {
     private final ArtificialIntelligence ai;
+    private final Color[] starColours;
+    private final Position[] starCoordinates;
     private Random random = new Random();
 
     public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
-        super(spriteCollection,1,1);
+        super(spriteCollection, 7, 1);
         this.ai = ai;
+        int stars = random.nextInt(5);
+        this.starColours = new Color[stars];
+        this.starCoordinates = new Position[stars];
+        for (int i = 0; i < starColours.length; i++) {
+            starColours[i] = new Color(255,255,155 + random.nextInt(100));
+            starCoordinates[i] = new Position(random.nextDouble(), random.nextDouble());
+        }
     }
 
     @Override
     protected void createSprites() {
-        randomBoxFormation();
+        if (getUpdateCount() == 1) {
+//            randomBoxFormation("1");
+//        } else if (getUpdateCount() == 2){
+//            lineFormation("2");
+//        } else if (getUpdateCount() == 3){
+            surroundedFormation("3");
+        }
     }
 
-    private void randomBoxFormation() {
-        waitForInactivation();
-        //todo compute size by screen dimensions
+    @Override
+    public void drawMapIcon(Graphics g, Position position, int size) {
+
+        //background
+        g.setColor(Color.BLACK);
+        g.fillRect((int) position.getX(),
+                (int) position.getY(),
+                size, size);
+        //stars
+        for (int i =0; i < starColours.length; i++) {
+            g.setColor(starColours[i]);
+            int x = (int)position.getX() + (int)(starCoordinates[i].getX() * size);
+            int y = (int)position.getY() + (int)(starCoordinates[i].getY() * size);
+            g.drawLine(x, y, x, y);
+        }
+
+
+    }
+
+    private void randomBoxFormation(String name) {
         int formationSize = 18;
         int cellSize = Tile.DEFAULT_SIZE * 3;
         int cols = GameWindow.SCREEN_W / cellSize;
@@ -62,6 +96,58 @@ public class LevelOne extends World {
         formations.add(formation1);
         formations.add(formation1.translate(0,GameWindow.SCREEN_H * 3));
 
+        List<Sprite> enemies = createSprites(formationSize);
+
+        List<FormationOrder> orders = new ArrayList<FormationOrder>();
+        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+
+        FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, -1);
+        formationMovement.registerObserver(this, name);
+        ai.registerFormation(formationMovement);
+    }
+
+    private void surroundedFormation(String name) {
+        waitForInactivation(name);
+        int formationSize = 8;
+        Formation formation1 = Formation.circle(new Position(400,400), 500, formationSize);
+        Formation formation2 = Formation.circle(new Position(350,300), 50, formationSize);
+
+        List<Formation> formations = new ArrayList<Formation>(3);
+        formations.add(formation1);
+        formations.add(formation2);
+
+        List<Sprite> enemies = createSprites(formationSize);
+
+        List<FormationOrder> orders = new ArrayList<FormationOrder>();
+        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+
+        FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, 0);
+        formationMovement.registerObserver(this, name);
+        ai.registerFormation(formationMovement);
+    }
+
+    private void lineFormation(String name) {
+        waitForInactivation(name);
+        int formationSize = 9;
+        Formation formation1 = Formation.boxFormation(1,formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 2, Tile.DEFAULT_SIZE * 2);
+
+        List<Formation> formations = new ArrayList<Formation>(2);
+        formations.add(formation1);
+        formations.add(formation1.translate(0,GameWindow.SCREEN_H));
+
+        List<Sprite> enemies = createSprites(formationSize);
+
+        List<FormationOrder> orders = new ArrayList<FormationOrder>();
+        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+
+        FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, 0);
+        formationMovement.registerObserver(this, name);
+        ai.registerFormation(formationMovement);
+    }
+
+    private List<Sprite> createSprites(int formationSize) {
         List<Sprite> enemies = new ArrayList<Sprite>(formationSize);
         for(int i = 0; i < formationSize; i++) {
             // position has no meaning, it will be repositioned upon FormationMovement creation
@@ -69,17 +155,11 @@ public class LevelOne extends World {
             enemies.add(sprite);
             getSpriteCollection().put(SpriteLayer.NPC, sprite);
         }
-
-        List<FormationOrder> orders = new ArrayList<FormationOrder>();
-        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
-
-        FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, -1);
-        formationMovement.registerObserver(this);
-        ai.registerFormation(formationMovement);
+        return enemies;
     }
 
-    private void formation2() {
-        waitForInactivation();
+    private void formation2(String name) {
+        waitForInactivation(name);
         int formationSize = 9;
         Formation formation1 = Formation.boxFormation(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         int amplitude = 100 + random.nextInt(300);
@@ -108,13 +188,7 @@ public class LevelOne extends World {
         formations.add(formation8);
         formations.add(formation9);
 
-        List<Sprite> enemies = new ArrayList<Sprite>(formationSize);
-        for(int i = 0; i < formationSize; i++) {
-            // position has no meaning, it will be repositioned upon FormationMovement creation
-            Sprite sprite = createEnemy(0, 0);
-            enemies.add(sprite);
-            getSpriteCollection().put(SpriteLayer.NPC, sprite);
-        }
+        List<Sprite> enemies = createSprites(formationSize);
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
         orders.add(FormationOrder.repeatedSequence(new Integer[]{1, 2, 3, 4, 5}, formationSize, 200L));
@@ -128,12 +202,12 @@ public class LevelOne extends World {
         orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
 
         FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, 2);
-        formationMovement.registerObserver(this);
+        formationMovement.registerObserver(this, name);
         ai.registerFormation(formationMovement);
     }
 
-    private void formation1() {
-        waitForInactivation();
+    private void formation1(String name) {
+        waitForInactivation(name);
         Formation formation1 = Formation.boxFormation(1, 9, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         Formation formation2 = Formation.boxFormation(1, 9, new Position(0, 150), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         Formation formation3 = Formation.boxFormation(3, 3, new Position(300, 300), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
@@ -148,13 +222,7 @@ public class LevelOne extends World {
         formations.add(formation4);
         formations.add(formation5);
 
-        List<Sprite> enemies = new ArrayList<Sprite>(9);
-        for(int i = 0; i < 9; i++) {
-            // position has no meaning, it will be repositioned upon FormationMovement creation
-            Sprite sprite = createEnemy(0, 0);
-            enemies.add(sprite);
-            getSpriteCollection().put(SpriteLayer.NPC, sprite);
-        }
+        List<Sprite> enemies = createSprites(9);
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
         orders.add(new FormationOrder(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9}));
@@ -163,7 +231,7 @@ public class LevelOne extends World {
         orders.add(new FormationOrder(new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1}));
 
         FormationMovement formationMovement = new FormationMovement(enemies, formations,orders, null);
-        formationMovement.registerObserver(this);
+        formationMovement.registerObserver(this, name);
         ai.registerFormation(formationMovement);
     }
 

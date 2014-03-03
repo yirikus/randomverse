@@ -2,7 +2,6 @@ package cz.terrmith.randomverse;
 
 import cz.terrmith.randomverse.ability.AbilityGroup;
 import cz.terrmith.randomverse.core.input.Command;
-import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.Loot;
@@ -84,12 +83,12 @@ public class Player {
 		Ship ship = new Ship(300, 300);
 		ShipPartFactory factory = new ShipPartFactory(spriteCollection, Damage.DamageType.NPC);
 
-		ship.addTile(-1, 0, factory.create(ShipPartFactory.Item.GUN_1.ordinal()));
-		SimpleSprite gun2 = factory.create(ShipPartFactory.Item.GUN_1.ordinal());
-		gun2.flipHorizontal();
-		ship.addTile(1, 0, gun2);
+//		ship.addTile(-1, 0, factory.create(ShipPartFactory.Item.GUN_1.ordinal()));
+//		SimpleSprite gun2 = factory.create(ShipPartFactory.Item.GUN_1.ordinal());
+//		gun2.flipHorizontal();
+//		ship.addTile(1, 0, gun2);
 
-		ship.addTile(0, -1, factory.create(ShipPartFactory.Item.COCKPIT_1.ordinal()));
+		ship.addTile(0, -1, factory.create(ShipPartFactory.Item.TOPGUN_1.ordinal()));
 		ship.addTile(0, 0, factory.create(ShipPartFactory.Item.MID_1.ordinal()));
 		ship.addTile(0, 1, factory.create(ShipPartFactory.Item.ENGINE_1.ordinal()));
 

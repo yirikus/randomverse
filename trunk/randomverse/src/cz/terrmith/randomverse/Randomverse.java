@@ -50,7 +50,7 @@ public class Randomverse extends GameEngine {
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
         this.ai = new ArtificialIntelligence(new RandomAttackPattern(1000));
-	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai);
+	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai, spriteCollection);
 
         addState(new GameState(this));
         addState(new CutSceneState(this));

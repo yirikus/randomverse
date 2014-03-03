@@ -31,6 +31,7 @@ import java.util.Map;
  */
 public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible, Lootable, Solid {
     public static final int IMPACT_DAMAGE = 1;
+    public static final int SPEED = 2;
     private final int totalHealth = 4;
     private int currentHealth = totalHealth;
     private LootSprite lootSprite;
@@ -53,7 +54,8 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
      * Creates empty multisprites, tiles are expected to be added by calling provided methods
      */
     public SimpleEnemy(int x, int y, EnemyType enemyType, SpriteCollection spc) {
-        super(x, y, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, null);
+        super(x, y, Tile.DEFAULT_SIZE * 2, Tile.DEFAULT_SIZE * 2, null);
+        setSpeed(2);
         //image
         Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
         imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("enemies", enemyType.ordinal()));
@@ -61,6 +63,7 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
         setImageForStatus(imageForStatus);
         //CanAttack
         this.spriteCreator = new ProjectileCreator(spc, new ProjectileFactory(new Damage(1, Damage.DamageType.PLAYER)));
+        this.spriteCreator.flipVertical();
         //5 seconds
         shootTimer = AnimationEngine.DEFAULT_FPS * 5;
         switch (enemyType) {
@@ -145,7 +148,7 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
         if (this.currentHealth < 1) {
             this.setStatus(DefaultSpriteStatus.DEAD.name());
             setActive(false);
-        } else if (this.currentHealth < (this.totalHealth / 2)) {
+        } else if (this.currentHealth <= (this.totalHealth / 2)) {
             this.setStatus(DefaultSpriteStatus.DAMAGED.name());
             setActive(true);
         } else {

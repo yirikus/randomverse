@@ -34,6 +34,7 @@ public class FormationMovement {
     private int currentOrderNo;
     private FormationOrder order;
     private boolean hasNotified;
+    private String activationKey;
 
     private enum MovementStatus {FINISHED, NOT_STARTED, IN_PROGRESS}
     private Long movementStartTime;
@@ -228,7 +229,7 @@ public class FormationMovement {
 
         if (inactive) {
             for (FormationObserver o : observers) {
-                o.waveDestroyedNotification();
+                o.waveDestroyedNotification(this.activationKey);
 
             }
             hasNotified = true;
@@ -265,7 +266,7 @@ public class FormationMovement {
         }
         MovementChain mp = movementChains.get(i);
         Position currentPos = new Position(sprite.getXPosn(), sprite.getYPosn());
-        Position nextPosition = mp.nextPosition(currentPos, 3);
+        Position nextPosition = mp.nextPosition(currentPos, (int) sprite.getSpeed());
         sprite.setPosition(nextPosition.getX(), nextPosition.getY());
 
         return mp.lastChainLinkReached();
@@ -276,7 +277,8 @@ public class FormationMovement {
         return sprites;
     }
 
-    public void registerObserver(FormationObserver obs) {
+    public void registerObserver(FormationObserver obs, String activationKey) {
+        this.activationKey = activationKey;
         observers.add(obs);
     }
 }
