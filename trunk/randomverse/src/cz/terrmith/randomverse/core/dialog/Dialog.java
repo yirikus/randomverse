@@ -1,12 +1,10 @@
 package cz.terrmith.randomverse.core.dialog;
 
-import cz.terrmith.randomverse.core.image.ImageLoader;
+import cz.terrmith.randomverse.core.input.Command;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Modal window with a callback action
@@ -15,7 +13,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Dialog{
 
-	private String text;
+    private final DynamicText dynamicText;
+
 	private int posX;
 	private int posY;
 	private int width;
@@ -33,15 +32,29 @@ public class Dialog{
 	 * @param callback callback that will be called at certain time like on close operation (can be null)
 	 */
 	public Dialog(String text, int posX, int posY, int width, int height, DialogCallback callback) {
-		System.out.println("new dialog: " + text);
-		this.text = text;
-		this.posX = posX;
-		this.posY = posY;
-		this.width = width;
-		this.height = height;
-		this.callback = callback;
-		timer = System.currentTimeMillis();
+		this(new DynamicText(text), posX, posY, width, height, callback);
 	}
+
+    /**
+     *
+     * @param text message to write into dialog
+     * @param posX x
+     * @param posY y
+     * @param width width
+     * @param height height
+     * @param callback callback that will be called at certain time like on close operation (can be null)
+     * @param menu menu with options to choose from
+     */
+    public Dialog(DynamicText text, int posX, int posY, int width, int height, DialogCallback callback) {
+        System.out.println("new dialog: " + text.getNavigableText().getMessage());
+        this.dynamicText = text;
+        this.posX = posX;
+        this.posY = posY;
+        this.width = width;
+        this.height = height;
+        this.callback = callback;
+        timer = System.currentTimeMillis();
+    }
 
 	/**
 	 * Closes dialog window
@@ -58,28 +71,47 @@ public class Dialog{
 		return true;
 	}
 
+    public void update(Command command){
+        if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
+            command.setUp(false);
+            dynamicText.prevOption();
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getDown())) {
+            command.setDown(false);
+            dynamicText.nextOption();
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getLeft())) {
+            command.setLeft(false);
+            dynamicText.prevOption();
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getRight())) {
+            command.setRight(false);
+            dynamicText.nextOption();
+        } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
+            command.setAction1(false);
+            dynamicText.navigate();
+        }
+    }
 
 	public void drawDialog(Graphics g) {
-
+        //draw box
 		g.setColor(new Color(0, 0, 0, 200));
 		g.fillRect((int) getPosX(), (int) getPosY(), getWidth(), getHeight());
 		g.setColor(Color.WHITE);
 		g.drawRect((int) getPosX(), (int) getPosY(), getWidth(), getHeight());
 
-		Font font = new Font("system", Font.BOLD, 40);
-		g.setFont(font);
-		FontMetrics metrics = g.getFontMetrics();
-		int dx = (getWidth() - metrics.stringWidth(text)) / 2;
-		g.setColor(Color.WHITE);
-		g.drawString(getText(),
-		             getPosX() + dx,
-		             getPosY() + getHeight() / 2);
+        //draw string
+		Font font = new Font("system", Font.BOLD, 15);
+        g.setFont(font);
+//        FontMetrics metrics = g.getFontMetrics();
+//        int dx = (getWidth() - metrics.stringWidth(text)) / 2;
+//        g.setColor(Color.WHITE);
+//        g.drawString(getText(),
+//                getPosX() + dx,
+//                getPosY() + getHeight() / 2);
+
+        dynamicText.draw(g, getPosX(), getPosY(), getWidth());
+
+        //draw menu
 	}
 
-
-	public String getText() {
-		return text;
-	}
 
 	public int getHeight() {
 		return height;

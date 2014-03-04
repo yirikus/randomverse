@@ -2,6 +2,8 @@ package cz.terrmith.randomverse.core.input;
 
 /**
  * Set of commands to controll the game
+ *
+ * TODO singleton
  */
 public class Command {
 

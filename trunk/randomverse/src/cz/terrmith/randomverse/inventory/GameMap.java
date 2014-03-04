@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.inventory;
 
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
+import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.geometry.RelativePosition;
@@ -9,10 +10,12 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.world.LevelDebrisField;
 import cz.terrmith.randomverse.world.LevelOne;
+import cz.terrmith.randomverse.world.events.EventResult;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -24,14 +27,17 @@ public class GameMap extends GridMenu {
     private final Sprite player;
     private final ArtificialIntelligence ai;
     private final SpriteCollection spriteCollection;
+    private final Map<EventResult, NavigableTextCallback> callbacks;
     private Set<GridLocation> explored = new HashSet<GridLocation>();
     private GridLocation currentLocation;
     private World[][] worlds;
     private static Random random = new Random();
 
 
-    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player, ArtificialIntelligence ai, SpriteCollection spc) {
+    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player, ArtificialIntelligence ai,
+                   SpriteCollection spc, Map<EventResult, NavigableTextCallback> callbacks) {
         super(rows, columns, cellSize, position);
+        this.callbacks = callbacks;
         this.spriteCollection = spc;
         this.worlds = generateGameMap(rows, columns);
         this.ai = ai;
@@ -46,13 +52,13 @@ public class GameMap extends GridMenu {
         for (int c = 0; c < columns; c++) {
             for (int r = 0; r < rows; r++) {
                 if (random.nextInt(2) == 1) {
-                    worldArray[c][r] = new LevelOne(spriteCollection, ai);
+                    worldArray[c][r] = new LevelOne(spriteCollection, ai, callbacks);
                 } else {
-                    worldArray[c][r] = new LevelDebrisField(spriteCollection, this.player, ai);
+                    worldArray[c][r] = new LevelDebrisField(spriteCollection, this.player, ai, callbacks);
                 }
             }
         }
-        worldArray[getX()][getY()] = new LevelOne(spriteCollection,ai);
+        worldArray[getX()][getY()] = new LevelOne(spriteCollection,ai, callbacks);
 
         return worldArray;
     }
@@ -113,7 +119,7 @@ public class GameMap extends GridMenu {
 	 * @return level to be played
 	 * @param spriteCollection sprite collection
 	 */
-	public World createLevel() {
+	public World getCurrentWorld() {
         return worlds[getX()][getY()];
 	}
 
@@ -155,6 +161,9 @@ public class GameMap extends GridMenu {
                     getCellSize() - 1, getCellSize() - 1);
     }
 
+    /**
+     * TODO remove reset or turn to singleton
+     */
     public void reset() {
         explored = new HashSet<GridLocation>();
         setX(getRows() / 2);
