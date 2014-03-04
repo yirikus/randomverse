@@ -259,13 +259,13 @@ public class GameState implements State {
             stateMachine.getSpriteCollection().clear();
             stateMachine.getSpriteCollection().put(SpriteLayer.PLAYER, stateMachine.getPlayer().getSprite());
             //obtain level from map
-	        this.world = stateMachine.getMap().createLevel();
+	        this.world = stateMachine.getMap().getCurrentWorld();
             command.clear();
-            DialogCallback callback = new DialogCallback() {
-                @Override
-                public void onClose() {
-                }
-            };
+//            DialogCallback callback = new DialogCallback() {
+//                @Override
+//                public void onClose() {
+//                }
+//            };
 //            cz.terrmith.randomverse.core.dialog.Dialog dialog
 //                    = new cz.terrmith.randomverse.core.dialog.Dialog("GAME START",200,200,400,200,callback);
 //            stateMachine.showDialog(dialog);

@@ -1,19 +1,15 @@
 package cz.terrmith.randomverse.game.states;
 
 import cz.terrmith.randomverse.Randomverse;
-import cz.terrmith.randomverse.core.dialog.*;
-import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
-import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.state.State;
+import cz.terrmith.randomverse.core.world.World;
+import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.game.StateName;
-import cz.terrmith.randomverse.inventory.GameMap;
-import cz.terrmith.randomverse.inventory.ShipModificationScreen;
-import cz.terrmith.randomverse.world.LevelOne;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 /**
  * State that represent main map on which player travels. Map does not reset and is persistent throughput one game
@@ -21,6 +17,7 @@ import java.awt.*;
 public class MapState implements State {
     private final Command command;
     private final Randomverse stateMachine;
+    private WorldEvent currentEvent;
 
     public MapState(Randomverse stateMachine) {
         this.command = stateMachine.getCommand();
@@ -34,6 +31,22 @@ public class MapState implements State {
 
     @Override
     public void update() {
+        if (currentEvent == null) {
+            updateMap();
+        } else {
+            updateWorldEvent();
+        }
+    }
+
+    private void updateWorldEvent() {
+        currentEvent.updateEvent(command);
+        if (WorldEvent.Progress.CONCLUDED == currentEvent.getProgress()) {
+            stateMachine.setCurrentState(StateName.GAME.name());
+            currentEvent = null;
+        }
+    }
+
+    private void updateMap() {
         if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
             stateMachine.getMap().selectAbove();
             command.setUp(false);
@@ -47,11 +60,8 @@ public class MapState implements State {
 	        stateMachine.getMap().selectRight();
             command.setRight(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
-            int mapx = stateMachine.getMap().getX();
-            int mapy = stateMachine.getMap().getY();
-
-            stateMachine.setCurrentState(StateName.GAME.name());
-
+            handleSelection();
+            command.setAction1(false);
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction2())) {
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction3())) {
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction4())) {
@@ -64,10 +74,25 @@ public class MapState implements State {
         }
     }
 
+    private void handleSelection() {
+        int mapx = stateMachine.getMap().getX();
+        int mapy = stateMachine.getMap().getY();
+
+        World currentWorld = stateMachine.getMap().getCurrentWorld();
+        this.currentEvent = currentWorld.getWorldEvent();
+        if (currentEvent == null) {
+            stateMachine.setCurrentState(StateName.GAME.name());
+        }
+    }
+
     @Override
     public void draw(Graphics2D g2, ImageLoader iml) {
         stateMachine.clearScreen(g2, Color.BLACK);
-	    stateMachine.getMap().drawMenu(g2);
+        stateMachine.getMap().drawMenu(g2);
+
+        if (currentEvent != null) {
+            currentEvent.drawEvent(g2);
+        }
     }
 
     @Override

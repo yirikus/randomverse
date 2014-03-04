@@ -3,6 +3,7 @@ package cz.terrmith.randomverse;
 import cz.terrmith.randomverse.core.GameEngine;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.attack.RandomAttackPattern;
+import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLoader;
@@ -17,10 +18,13 @@ import cz.terrmith.randomverse.game.states.InventoryState;
 import cz.terrmith.randomverse.game.states.MapState;
 import cz.terrmith.randomverse.game.states.MenuState;
 import cz.terrmith.randomverse.inventory.GameMap;
+import cz.terrmith.randomverse.world.events.EventResult;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,13 +54,28 @@ public class Randomverse extends GameEngine {
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
         this.ai = new ArtificialIntelligence(new RandomAttackPattern(1000));
-	    map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai, spriteCollection);
 
         addState(new GameState(this));
         addState(new CutSceneState(this));
         addState(new MenuState(this));
         addState(new MapState(this));
         addState(new InventoryState(this));
+
+        Map<EventResult, NavigableTextCallback> callbacks = new HashMap<EventResult, NavigableTextCallback>();
+        callbacks.put(EventResult.EMBARK, new NavigableTextCallback() {
+            @Override
+            public void onSelection() {
+                setCurrentState(StateName.GAME.name());
+            }
+        });
+        callbacks.put(EventResult.MOVE, new NavigableTextCallback() {
+            @Override
+            public void onSelection() {
+                map.markExplored();
+            }
+        });
+
+        map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai, spriteCollection, callbacks);
 
 
         setCurrentState(StateName.MAIN_MENU.name());

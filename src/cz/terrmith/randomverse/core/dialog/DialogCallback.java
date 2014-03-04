@@ -6,4 +6,6 @@ package cz.terrmith.randomverse.core.dialog;
 public interface DialogCallback {
 
 	void onClose();
+
+    //void onSelection(String option);
 }

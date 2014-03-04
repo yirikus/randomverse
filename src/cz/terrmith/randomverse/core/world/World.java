@@ -22,6 +22,7 @@ public abstract class World implements SpriteContainerObserver {
     private long wavesDefeated = 0;
     private boolean waitForNotification = false;
     private String activationKey;
+    private WorldEvent worldEvent;
 
     /**
      *
@@ -107,4 +108,12 @@ public abstract class World implements SpriteContainerObserver {
     }
 
     public abstract void drawMapIcon(Graphics g, Position position, int size);
+
+    public final WorldEvent getWorldEvent() {
+        return worldEvent;
+    }
+
+    public final void setWorldEvent(WorldEvent worldEvent) {
+        this.worldEvent = worldEvent;
+    }
 }

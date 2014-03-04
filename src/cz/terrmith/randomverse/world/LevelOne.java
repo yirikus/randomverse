@@ -5,6 +5,7 @@ import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationOrder;
+import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
@@ -15,12 +16,15 @@ import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
+import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
+import cz.terrmith.randomverse.world.events.DebrisFieldEvents;
+import cz.terrmith.randomverse.world.events.EventResult;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -43,7 +47,7 @@ public class LevelOne extends World {
     private final Position[] starCoordinates;
     private Random random = new Random();
 
-    public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
+    public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
         super(spriteCollection, 7, 1);
         this.ai = ai;
         int stars = random.nextInt(5);
@@ -53,6 +57,15 @@ public class LevelOne extends World {
             starColours[i] = new Color(255,255,155 + random.nextInt(100));
             starCoordinates[i] = new Position(random.nextDouble(), random.nextDouble());
         }
+
+        setWorldEvent(randomEvent(callbacks));
+    }
+
+    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
+        switch (random.nextInt(5)) {
+            default: return new WorldEvent(DebrisFieldEvents.shipwreck(callbacks));
+        }
+
     }
 
     @Override

@@ -2,7 +2,10 @@ package cz.terrmith.randomverse.core.menu;
 
 import cz.terrmith.randomverse.core.geometry.Position;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
