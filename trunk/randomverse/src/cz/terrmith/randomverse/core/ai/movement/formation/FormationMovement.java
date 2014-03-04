@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Represents sequence of formations
  */
-public class FormationMovement {
+public class FormationMovement implements SpriteContainer{
     private final MovementPattern[] customMovementPatterns;
     private final int repeatFrom;
     private List<Formation> formations;
@@ -48,7 +48,7 @@ public class FormationMovement {
     /**
      *  observers of this formation movement
      */
-    private final List<FormationObserver> observers = new ArrayList<FormationObserver>();
+    private final List<SpriteContainerObserver> observers = new ArrayList<SpriteContainerObserver>();
 
     /**
      *
@@ -140,6 +140,7 @@ public class FormationMovement {
     /**
      * Move sprites to next formation
      */
+    @Override
     public void updateSprites() {
         notifyAboutInactiveFormation();
         final long currentTime = System.currentTimeMillis();
@@ -228,7 +229,7 @@ public class FormationMovement {
         }
 
         if (inactive) {
-            for (FormationObserver o : observers) {
+            for (SpriteContainerObserver o : observers) {
                 o.waveDestroyedNotification(this.activationKey);
 
             }
@@ -272,12 +273,13 @@ public class FormationMovement {
         return mp.lastChainLinkReached();
     }
 
-
+    @Override
     public List<Sprite> getSprites() {
         return sprites;
     }
 
-    public void registerObserver(FormationObserver obs, String activationKey) {
+    @Override
+    public void registerObserver(SpriteContainerObserver obs, String activationKey) {
         this.activationKey = activationKey;
         observers.add(obs);
     }

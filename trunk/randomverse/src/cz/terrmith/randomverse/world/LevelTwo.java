@@ -37,13 +37,13 @@ import java.util.Set;
  *
  * todo refactor formation movement creation - abstract method
  */
-public class LevelOne extends World {
+public class LevelTwo extends World {
     private final ArtificialIntelligence ai;
     private final Color[] starColours;
     private final Position[] starCoordinates;
     private Random random = new Random();
 
-    public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
+    public LevelTwo(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
         super(spriteCollection, 7, 1);
         this.ai = ai;
         int stars = random.nextInt(5);

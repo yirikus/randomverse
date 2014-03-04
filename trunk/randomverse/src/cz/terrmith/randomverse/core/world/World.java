@@ -1,6 +1,6 @@
 package cz.terrmith.randomverse.core.world;
 
-import cz.terrmith.randomverse.core.ai.movement.formation.FormationObserver;
+import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainerObserver;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Endless world that creates sprites just activate active screen based on time and number of updates
  */
-public abstract class World implements FormationObserver{
+public abstract class World implements SpriteContainerObserver {
 
     private long startTime;
     private long period;
@@ -93,7 +93,7 @@ public abstract class World implements FormationObserver{
     public void waveDestroyedNotification(String activationKey) {
         incrementWavesDefeated();
         System.out.println("booyah " + wavesDefeated + "/" + wavesToDefeat);
-        if (this.activationKey.equals(activationKey)) {
+        if (this.waitForNotification && this.activationKey.equals(activationKey)) {
             this.waitForNotification = false;
         }
     }

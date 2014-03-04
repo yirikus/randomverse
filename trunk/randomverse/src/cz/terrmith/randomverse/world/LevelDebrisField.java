@@ -1,5 +1,8 @@
 package cz.terrmith.randomverse.world;
 
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
+import cz.terrmith.randomverse.core.ai.movement.formation.SimpleSpriteContainer;
+import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainer;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
@@ -20,13 +23,15 @@ public class LevelDebrisField extends World {
     private final Sprite player;
     private final Color[] starColours;
     private final Position[] starCoordinates;
+    private final ArtificialIntelligence ai;
 
     /**
      * @param spriteCollection sprite collection
      */
-    public LevelDebrisField(SpriteCollection spriteCollection, Sprite player) {
-        super(spriteCollection, 5, 3);
+    public LevelDebrisField(SpriteCollection spriteCollection, Sprite player, ArtificialIntelligence ai) {
+        super(spriteCollection, 5, 5);
         this.player = player;
+        this.ai = ai;
 
         int stars = random.nextInt(3);
         this.starColours = new Color[stars];
@@ -41,6 +46,9 @@ public class LevelDebrisField extends World {
     protected void createSprites() {
         Debris enemy = new Debris(random.nextInt() % 600 + 100, -100, getSpriteCollection(), player);
         getSpriteCollection().put(SpriteLayer.NPC, enemy);
+        SpriteContainer scn = new SimpleSpriteContainer(enemy);
+        ai.registerSpriteContainer(scn);
+        scn.registerObserver(this, String.valueOf(getUpdateCount()));
         enemy.setStep(0, enemy.getSpeed());
     }
 

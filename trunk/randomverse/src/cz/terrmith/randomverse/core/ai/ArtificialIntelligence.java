@@ -1,8 +1,7 @@
 package cz.terrmith.randomverse.core.ai;
 
 import cz.terrmith.randomverse.core.ai.attack.AttackPattern;
-import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
-import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
+import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainer;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
 
@@ -10,13 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO singleton
+ *
  * Immutable class that contains all behavioral patterns of an npc
  */
 public class ArtificialIntelligence {
 
-    private MovementPattern movementPattern;
     private AttackPattern attackPattern;
-    private List<FormationMovement> formations = new ArrayList<FormationMovement>();
+    private List<SpriteContainer> spriteContainers = new ArrayList<SpriteContainer>();
 
     /**
      * Creates new AI with given patterns and reference to a player
@@ -36,9 +36,9 @@ public class ArtificialIntelligence {
 //    }
 
     public void updateSprites(){
-        for (FormationMovement f : formations) {
-            f.updateSprites();
-            List<Sprite> sprites = f.getSprites();
+        for (SpriteContainer scn : spriteContainers) {
+            scn.updateSprites();
+            List<Sprite> sprites = scn.getSprites();
             for (Sprite sprite : sprites) {
                 if (sprite instanceof CanAttack) {
                     updateAttack((CanAttack)sprite);
@@ -54,10 +54,10 @@ public class ArtificialIntelligence {
     }
 
     /**
-     * Registers formation with this movement pattern,
-     * AI will update sprites of registered formations
+     * Registers sprite container with this ai,
+     * AI will update sprites of registered spriteContainers
      */
-    public void registerFormation(FormationMovement formation) {
-        this.formations.add(formation);
+    public void registerSpriteContainer(SpriteContainer scn) {
+        this.spriteContainers.add(scn);
     }
 }

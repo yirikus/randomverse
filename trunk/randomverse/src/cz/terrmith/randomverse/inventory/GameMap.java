@@ -48,7 +48,7 @@ public class GameMap extends GridMenu {
                 if (random.nextInt(2) == 1) {
                     worldArray[c][r] = new LevelOne(spriteCollection, ai);
                 } else {
-                    worldArray[c][r] = new LevelDebrisField(spriteCollection, this.player);
+                    worldArray[c][r] = new LevelDebrisField(spriteCollection, this.player, ai);
                 }
             }
         }
