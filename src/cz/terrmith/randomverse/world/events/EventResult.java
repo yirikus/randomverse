@@ -9,5 +9,5 @@ package cz.terrmith.randomverse.world.events;
  */
 public enum EventResult {
     MOVE,
-    SHOP, EMBARK
+    SHOP, NONE, EMBARK
 }

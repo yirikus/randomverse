@@ -51,6 +51,12 @@ public class MapState implements State {
                 currentEvent = null;
             }
         });
+        stateMachine.addCallback(EventResult.NONE, new NavigableTextCallback() {
+            @Override
+            public void onSelection() {
+                currentEvent = null;
+            }
+        });
     }
 
     @Override
