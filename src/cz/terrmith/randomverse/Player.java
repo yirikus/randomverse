@@ -122,7 +122,7 @@ public class Player {
 	}
 
 	public int getMoney() {
-		return money;
+		return 100;
 	}
 
 	public void setMoney(int money) {

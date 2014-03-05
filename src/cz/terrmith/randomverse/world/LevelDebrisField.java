@@ -50,7 +50,7 @@ public class LevelDebrisField extends World {
 
     private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
         switch (random.nextInt(5)) {
-            default: return new WorldEvent(DebrisFieldEvents.shipwreck(callbacks));
+            default: return DebrisFieldEvents.shipwreck(callbacks);
         }
 
     }

@@ -1,11 +1,11 @@
 package cz.terrmith.randomverse.inventory;
 
+import cz.terrmith.randomverse.Randomverse;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.geometry.RelativePosition;
-import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.world.LevelDebrisField;
@@ -24,27 +24,26 @@ import java.util.Set;
  */
 public class GameMap extends GridMenu {
 
-    private final Sprite player;
+//    private final Ship playerSprite;
     private final ArtificialIntelligence ai;
     private final SpriteCollection spriteCollection;
     private final Map<EventResult, NavigableTextCallback> callbacks;
+    private final Randomverse stateMachine;
     private Set<GridLocation> explored = new HashSet<GridLocation>();
     private GridLocation currentLocation;
     private World[][] worlds;
     private static Random random = new Random();
 
     //todo ugly dependency on MapState to init callbacks
-    public GameMap(int rows, int columns, int cellSize, Position position, Sprite player, ArtificialIntelligence ai,
+    public GameMap(int rows, int columns, int cellSize, Position position, Randomverse stateMachine, ArtificialIntelligence ai,
                    SpriteCollection spc, Map<EventResult, NavigableTextCallback> callbacks) {
         super(rows, columns, cellSize, position);
         this.callbacks = callbacks;
         this.spriteCollection = spc;
-        this.worlds = generateGameMap(rows, columns);
         this.ai = ai;
-        setX(rows / 2);
-        setY(columns / 2);
-        markExplored();
-        this.player = player;
+        this.stateMachine = stateMachine;
+
+        reset();
     }
 
     private World[][] generateGameMap(int rows, int columns) {
@@ -54,7 +53,7 @@ public class GameMap extends GridMenu {
                 if (random.nextInt(2) == 1) {
                     worldArray[c][r] = new LevelOne(spriteCollection, ai, callbacks);
                 } else {
-                    worldArray[c][r] = new LevelDebrisField(spriteCollection, this.player, ai, callbacks);
+                    worldArray[c][r] = new LevelDebrisField(spriteCollection, this.stateMachine.getPlayer().getSprite(), ai, callbacks);
                 }
             }
         }
@@ -159,6 +158,8 @@ public class GameMap extends GridMenu {
         g.drawRect((int) getPosition().getX() + getX() * getCellSize() + 1,
                    (int) getPosition().getY() + getY() * getCellSize() + 1,
                     getCellSize() - 1, getCellSize() - 1);
+
+        getCurrentWorld().drawScannerInfo(g, new Position(50, 500), this.stateMachine.getPlayer().getSprite().getScannerStrength());
     }
 
     /**
@@ -166,8 +167,8 @@ public class GameMap extends GridMenu {
      */
     public void reset() {
         explored = new HashSet<GridLocation>();
-        setX(getRows() / 2);
-        setY(getColumns() / 2);
+        setX(getColumns() / 2);
+        setY(getRows() / 2);
         worlds = generateGameMap(getRows(), getColumns());
         markExplored();
     }

@@ -68,7 +68,7 @@ public class Randomverse extends GameEngine {
 
         setCurrentState(StateName.MAIN_MENU.name());
 
-        map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai, spriteCollection, this.callbacks);
+        map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this, ai, spriteCollection, this.callbacks);
     }
 
     @Override

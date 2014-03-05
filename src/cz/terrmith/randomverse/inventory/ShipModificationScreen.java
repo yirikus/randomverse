@@ -14,7 +14,6 @@ import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.ShipPartFactory;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
-import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -364,21 +363,15 @@ public class ShipModificationScreen {
                             s.getHeight());
 
 	            // draw part info
-                //TODO move to shipPart
-                g.setColor(Color.GREEN);
-	            g.drawString("speed: " + ((ShipPart)s).getSpeed(),400,300);
-	            g.drawString("health: " + ((ShipPart)s).getTotalHealth(),400,320);
-	            if (s instanceof SimpleGun) {
-		            g.drawString("damage: " + ((SimpleGun)s).getDamage().getAmount(),400,340);
-		            g.drawString("attack rate: " + ((SimpleGun)s).getAttackTimer(),400,360);
-	            }
-	            g.drawString("Price: $" + ((ShipPart)s).getPrice(),400,380);
+                ((ShipPart)s).drawAttributes(g, 400, 300);
             }
 
             //todo move to ship/player
             g.setColor(Color.GREEN);
 	        g.drawString("total ship speed: " + playerRef.getSprite().getSpeed(), 400, 100);
 		    g.drawString("total money: " + playerRef.getMoney(), 400, 120);
+            g.drawString("total scanner strength: " + playerRef.getSprite().getScannerStrength(), 400, 140);
+            g.setColor(Color.RED);
 		    g.drawString("part sell price: " + replacementTilePrice, 400, 160);
 
             column++;

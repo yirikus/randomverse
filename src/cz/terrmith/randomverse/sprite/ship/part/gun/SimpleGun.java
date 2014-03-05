@@ -14,6 +14,7 @@ import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
+import java.awt.Graphics;
 import java.util.HashSet;
 
 /**
@@ -113,4 +114,12 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	public Damage getDamage() {
 		return spriteFactory.getDamage();
 	}
+
+    @Override
+    public int drawAttributes(Graphics g, int x, int y) {
+        y = super.drawAttributes(g, x, y);
+        g.drawString("damage: " + getDamage().getAmount(), x, y );
+        g.drawString("attack rate: " + getAttackTimer(), x, y + DRAW_ATTR_LINE_HEIGHT);
+        return y + 2 * DRAW_ATTR_LINE_HEIGHT;
+    }
 }

@@ -132,6 +132,16 @@ public class Ship extends MultiSprite implements CanAttack, Destructible, Lootab
 		return ((Destructible)Tile.findTile(getTiles(),0,0).getSprite()).getTotalHealth();
 	}
 
+    public int getScannerStrength() {
+        int ret = 0;
+        StringBuilder sb = new StringBuilder();
+        for (Tile t : this.getTiles()){
+            sb.append (((ShipPart)t.getSprite()).getScannerStrength() + ", ");
+            ret = Math.max(ret, ((ShipPart)t.getSprite()).getScannerStrength());
+        }
+        return ret;
+    }
+
     public ArtificialIntelligence getAi() {
         return ai;
     }

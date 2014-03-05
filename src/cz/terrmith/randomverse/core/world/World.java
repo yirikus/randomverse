@@ -3,6 +3,7 @@ package cz.terrmith.randomverse.core.world;
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainerObserver;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.util.StringUtils;
 
 import java.awt.Graphics;
 import java.util.concurrent.TimeUnit;
@@ -115,5 +116,11 @@ public abstract class World implements SpriteContainerObserver {
 
     public final void setWorldEvent(WorldEvent worldEvent) {
         this.worldEvent = worldEvent;
+    }
+
+    //todo scannerStrength in draw method is probably ugly
+    public void drawScannerInfo(Graphics g, Position position, int scannerStrenght) {
+        String scannerInfo = worldEvent.getScannerInfo(scannerStrenght);
+        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int)position.getX(), (int)position.getY(), 100);
     }
 }

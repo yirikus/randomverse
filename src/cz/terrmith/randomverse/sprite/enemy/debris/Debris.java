@@ -26,6 +26,7 @@ public class Debris extends MultiSprite implements Destructible{
      * @param x x position
      * @param y y position
      */
+    //todo refactor - ugly dependency on playerSprite because of fire aiming
     public Debris(int x, int y, SpriteCollection spriteCollection, Sprite player) {
         super(x, y);
         this.player = player;
