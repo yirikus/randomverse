@@ -50,6 +50,7 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
     public enum EnemyType {
         KAMIKAZE, SINGLE, DOUBLE
     }
+
     /**
      * Creates empty multisprites, tiles are expected to be added by calling provided methods
      */
@@ -79,8 +80,6 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
         //Lootable
         this.setLootSprite(new LootSprite(0,0,10,10,null, LootFactory.randomLoot(1)));
         //Destructible
-
-
     }
 
     @Override

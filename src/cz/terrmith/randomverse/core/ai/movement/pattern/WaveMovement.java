@@ -7,7 +7,7 @@ import cz.terrmith.randomverse.core.geometry.Position;
  *
  * @author jiri.kus
  */
-public class WaveMovement implements MovementPattern {
+public class WaveMovement extends MovementPattern {
 
 	private final int amplitude;
 	private final int frequency;
@@ -23,7 +23,7 @@ public class WaveMovement implements MovementPattern {
 	}
 
 	@Override
-	public Position nextPosition(Position position, int speed) {
+	public Position nextPosition(Position position, double speed) {
 		double prevSinx = amplitude * Math.sin(position.getY() / frequency);
 		double sinx = amplitude * Math.sin((position.getY() + speed)/ frequency);
 

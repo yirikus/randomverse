@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class Explosion extends SimpleSprite implements DamageDealer {
 
+    private final int size;
     private Damage damage;
     private boolean hit;
     private int health = 10;
@@ -30,8 +31,19 @@ public class Explosion extends SimpleSprite implements DamageDealer {
      * @param y              y position
      */
     public Explosion(double x, double y, Damage damage) {
+        this(x, y, damage, Tile.DEFAULT_SIZE * 2);
+    }
+
+    /**
+     * Creates sprite wihh initial position x, y and size w, h
+     *
+     * @param x              x position
+     * @param y              y position
+     */
+    public Explosion(double x, double y, Damage damage, int size) {
         super(x, y, 11, 22, new HashMap<String, ImageLocation>());
         this.damage = damage;
+        this.size = size;
     }
 
     @Override
@@ -63,17 +75,15 @@ public class Explosion extends SimpleSprite implements DamageDealer {
     @Override
     public void drawSprite(Graphics g, ImageLoader ims) {
         g.setColor(new Color(200, 117, 0, 0 + (20 * health)));
-        g.fillRect((int)getXPosn() - Tile.DEFAULT_SIZE/2,
-                    (int)getYPosn() - Tile.DEFAULT_SIZE/2,
-                    Tile.DEFAULT_SIZE * 2,
-                    Tile.DEFAULT_SIZE * 2);
+        g.fillRect((int)getXPosn() - size/2,
+                    (int)getYPosn() - size/2,
+                    size, size);
     }
 
-	@Override
+    @Override
 	public Rectangle getBoundingBox() {
-		return new Rectangle((int)getXPosn() - Tile.DEFAULT_SIZE/2,
-							  (int)getYPosn() - Tile.DEFAULT_SIZE/2,
-							  Tile.DEFAULT_SIZE * 2,
-							  Tile.DEFAULT_SIZE * 2);
-	}
+		return new Rectangle((int)getXPosn() - size / 2,
+							  (int)getYPosn() - size / 2,
+							  size, size);
+    }
 }

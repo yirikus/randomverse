@@ -33,6 +33,8 @@ public interface Sprite {
 
     void setPosition(double x, double y);
 
+    void setPosition(Position p);
+
     void translate(double xDist, double yDist);
 
     /**

@@ -1,5 +1,7 @@
 package cz.terrmith.randomverse.core.ai.movement.formation;
 
+import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
+import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 
 import java.util.ArrayList;
@@ -17,20 +19,31 @@ public class SimpleSpriteContainer implements SpriteContainer {
     private Set<SpriteContainerObserver> observers = new HashSet<SpriteContainerObserver>();
     private String activationKey;
     private boolean notified = false;
+    private MovementPattern mp;
 
     public SimpleSpriteContainer(Sprite sprite) {
+       this(sprite, null);
+    }
+
+    public SimpleSpriteContainer(List<Sprite> sprites) {
+        this(sprites, null);
+    }
+
+    public SimpleSpriteContainer(Sprite sprite, MovementPattern mp) {
         if (sprite == null) {
             throw new IllegalArgumentException("Sprite must not be null");
         }
         this.sprites = new ArrayList<Sprite>();
         this.sprites.add(sprite);
+        this.mp = mp;
     }
 
-    public SimpleSpriteContainer(List<Sprite> sprites) {
+    public SimpleSpriteContainer(List<Sprite> sprites, MovementPattern mp) {
         if (sprites == null || sprites.isEmpty()) {
             throw new IllegalArgumentException("Sprites must not be null or empty");
         }
         this.sprites = sprites;
+        this.mp = mp;
     }
 
     @Override
@@ -47,6 +60,10 @@ public class SimpleSpriteContainer implements SpriteContainer {
         boolean inactive = true;
         for (Sprite s : sprites) {
             s.updateSprite();
+            if (mp != null && s.isActive()) {
+                Position newPosition = mp.nextPosition(s);
+                s.setPosition(newPosition.getX(), newPosition.getY());
+            }
             inactive &= !s.isActive();
         }
         if (!notified && inactive) {

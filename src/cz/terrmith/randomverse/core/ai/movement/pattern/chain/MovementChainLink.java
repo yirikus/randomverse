@@ -129,7 +129,7 @@ public class MovementChainLink {
      * @param distance distance traveled in this movement pattern
      * @return
      */
-    public boolean targetMet(Position p, long time, double distance, int speed) {
+    public boolean targetMet(Position p, long time, double distance, double speed) {
         switch (targetType) {
             case DISTANCE:
                 return distance >= targetDistance;

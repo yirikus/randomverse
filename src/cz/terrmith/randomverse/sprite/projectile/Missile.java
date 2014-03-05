@@ -59,7 +59,9 @@ public class Missile extends SimpleSprite implements Solid, Destructible {
 		this.health -= amount;
 		if (this.health < 1) {
 			System.out.println("creating projectile: " + getXPosn() + ", " + getYPosn());
-			spc.put(SpriteLayer.PROJECTILE, new Explosion(getXPosn() - Tile.DEFAULT_SIZE/2, getYPosn() - Tile.DEFAULT_SIZE/2, this.damage));
+			spc.put(SpriteLayer.PROJECTILE, new Explosion(getXPosn() + Tile.DEFAULT_SIZE/2,
+                                                          getYPosn() + Tile.DEFAULT_SIZE/2,
+                                                          this.damage));
 			this.setActive(false);
 			setStatus(DefaultSpriteStatus.DEAD.name());
 		}

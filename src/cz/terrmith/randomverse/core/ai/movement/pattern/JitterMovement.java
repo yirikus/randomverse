@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.core.ai.movement.pattern;
 
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 
 import java.util.Random;
 
@@ -11,7 +12,7 @@ import java.util.Random;
  * WARNING: this is kind of random
  *                      - Captain Obvious
  */
-public class JitterMovement implements MovementPattern {
+public class JitterMovement extends MovementPattern {
 
     private final long seed;
     private Random random;
@@ -46,7 +47,7 @@ public class JitterMovement implements MovementPattern {
     }
 
     @Override
-    public Position nextPosition(Position start, int speed) {
+    public Position nextPosition(Position start, double speed) {
         final Position next = mp.nextPosition(start,speed);
 
         Position diff = Position.difference(next, start);
