@@ -163,6 +163,11 @@ public class MultiSprite implements Sprite{
     }
 
     @Override
+    public void setPosition(Position p) {
+        setPosition(p.getX(), p.getY());
+    }
+
+    @Override
     public void translate(double xDist, double yDist) {
         for (Tile t : tiles) {
             t.getSprite().translate(xDist, yDist);

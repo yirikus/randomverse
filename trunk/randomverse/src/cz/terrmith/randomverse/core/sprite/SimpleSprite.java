@@ -117,6 +117,11 @@ public class SimpleSprite implements Sprite {
     }
 
     @Override
+    public void setPosition(Position p) {
+        setPosition(p.getX(), p.getY());
+    }
+
+    @Override
     public void translate(double xDist, double yDist){
         locx += xDist;
         locy += yDist;

@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.core.ai.movement.pattern;
 
 import cz.terrmith.randomverse.core.ai.movement.pattern.chain.MovementChainLink;
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Stateful (!) class that represents a movement pattern
  */
-public class MovementChain implements MovementPattern {
+public class MovementChain extends MovementPattern {
 
     private List<MovementChainLink> links = new ArrayList<MovementChainLink>();
     private int index = 0;
@@ -39,7 +40,7 @@ public class MovementChain implements MovementPattern {
     }
 
     @Override
-    public Position nextPosition(Position currentPosition, int speed) {
+    public Position nextPosition(Position currentPosition, double speed) {
         if (startPosition == null) {
             startPosition = currentPosition;
             startTime = System.currentTimeMillis();
@@ -53,8 +54,6 @@ public class MovementChain implements MovementPattern {
                 && currentChainLink.targetMet(currentPosition, timeTraveled, distanceTraveled, speed)) {
             index++;
             currentChainLink = links.get(index);
-
-            //TODO targetPosition speed correction
 
             //set new starting points
             startPosition = currentPosition;

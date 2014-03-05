@@ -9,6 +9,7 @@ import cz.terrmith.randomverse.core.geometry.RelativePosition;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.world.LevelDebrisField;
+import cz.terrmith.randomverse.world.LevelMinefield;
 import cz.terrmith.randomverse.world.LevelOne;
 import cz.terrmith.randomverse.world.LevelSpaceHighWay;
 import cz.terrmith.randomverse.world.events.EventResult;
@@ -51,12 +52,15 @@ public class GameMap extends GridMenu {
         World[][] worldArray = new World[columns][rows];
         for (int c = 0; c < columns; c++) {
             for (int r = 0; r < rows; r++) {
-                switch (random.nextInt(3)) {
+                switch (random.nextInt(4)) {
                     case 0:
                         worldArray[c][r] = new LevelSpaceHighWay(spriteCollection, ai, callbacks);
                         break;
                     case 1:
                         worldArray[c][r] = new LevelDebrisField(spriteCollection, this.stateMachine.getPlayer().getSprite(), ai, callbacks);
+                        break;
+                    case 2:
+                        worldArray[c][r] = new LevelMinefield(spriteCollection, this.stateMachine.getPlayer().getSprite(), ai, callbacks);
                         break;
                     default:
                         worldArray[c][r] = new LevelOne(spriteCollection, ai, callbacks);

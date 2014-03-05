@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.core.ai.movement.pattern;
 
 
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,7 @@ import cz.terrmith.randomverse.core.geometry.Position;
  * Time: 0:04
  * To change this template use File | Settings | File Templates.
  */
-public class VectorMovement implements MovementPattern{
+public class VectorMovement extends MovementPattern{
 
     private final Position vector;
 
@@ -39,7 +40,7 @@ public class VectorMovement implements MovementPattern{
     }
 
     @Override
-    public Position nextPosition(Position position, int speed) {
+    public Position nextPosition(Position position, double speed) {
         return new Position(position.getX() + (vector.getX() * speed),
                             position.getY() + (vector.getY() * speed));
     }

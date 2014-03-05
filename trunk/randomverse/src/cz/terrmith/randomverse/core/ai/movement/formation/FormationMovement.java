@@ -104,12 +104,8 @@ public class FormationMovement implements SpriteContainer{
         this.repeatFrom = repeatFrom;
 
         //reposition sprites to match first formation
-        List<Position> positions = formations.get(0).getPositions();
-        for (int i = 0; i < sprites.size(); i ++) {
-            Sprite sprite = sprites.get(i);
-            Position p = positions.get(i);
-            sprite.setPosition(p.getX(), p.getY());
-        }
+        formations.get(0).positionSprites(sprites);
+
         createFormationMovementChain(formations.get(0), formations.get(1), customMovementPatterns != null ? customMovementPatterns[0] : null);
     }
 

@@ -6,6 +6,7 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.creator.ProjectileCreator;
 import cz.terrmith.randomverse.core.sprite.creator.SpriteCreator;
+import cz.terrmith.randomverse.core.sprite.factory.DamageDealerFactory;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.CanAttack;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
@@ -22,7 +23,7 @@ import java.util.HashSet;
  */
 public class SimpleGun extends ShipPart implements CanAttack, Destructible {
 	private static final int DEFAULT_SHOOT_TIMER = 8;
-	private final SpriteFactory spriteFactory;
+	private final DamageDealerFactory spriteFactory;
 	private int shootTimer = DEFAULT_SHOOT_TIMER;
 	private int canShootIn = shootTimer;
     private SpriteCreator spriteCreator;
@@ -42,7 +43,7 @@ public class SimpleGun extends ShipPart implements CanAttack, Destructible {
      * Convenience contructor with x = 0, y = 0, w,h = Tile.DEFAULT_SIZE
      * @param rateOfFire how long to wait activate next attack
      */
-    public SimpleGun(SpriteCollection spriteCollection, int rateOfFire, ImageLocation imageLocation, int totalHealth, int price, SpriteFactory spriteFactory, boolean frontal) {
+    public SimpleGun(SpriteCollection spriteCollection, int rateOfFire, ImageLocation imageLocation, int totalHealth, int price, DamageDealerFactory spriteFactory, boolean frontal) {
         super(totalHealth, null, new HashSet<ExtensionPoint>(), price);
 	    if (frontal) {
             this.getExtensions().add(ExtensionPoint.BOTTOM);

@@ -3,6 +3,8 @@ package cz.terrmith.randomverse.core.ai.movement.formation;
 import cz.terrmith.randomverse.core.ai.movement.pattern.MovementPattern;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 
 import java.util.ArrayList;
@@ -79,7 +81,7 @@ public class Formation {
      * Simulates movement and computes end positions
      * @return
      */
-    public static Formation movementSimulation(Formation startingFormation, MovementPattern mp, int distance) {
+    public static Formation movementSimulation(Formation startingFormation, MovementPattern mp, double distance) {
         List<Position> formationPositions = new ArrayList<Position>();
         for(Position p : startingFormation.getPositions()) {
             formationPositions.add(mp.nextPosition(p, distance));
@@ -132,11 +134,25 @@ public class Formation {
      * @param sf sprite factory
      * @return sprites in a formation
      */
-    public List<Sprite> createSpriteFormation(SpriteFactory sf) {
+    public List<Sprite> createAndPositionSprites(SpriteCollection spc, SpriteFactory sf) {
         List<Sprite> ret = new ArrayList<Sprite>();
         for (Position p : positions) {
-            sf.newSprite((int) p.getX(), (int) p.getY());
+            final Sprite sprite = sf.newSprite((int) p.getX(), (int) p.getY());
+            ret.add(sprite);
+            spc.put(SpriteLayer.NPC, sprite);
         }
         return ret;
+    }
+
+    public void positionSprites(List<Sprite> sprites) {
+        if (sprites == null) {
+            return;
+        }
+
+        List<Position> positions = getPositions();
+        for (int i = 0; i < sprites.size(); i ++) {
+            Sprite sprite = sprites.get(i);
+            sprite.setPosition(positions.get(i));
+        }
     }
 }

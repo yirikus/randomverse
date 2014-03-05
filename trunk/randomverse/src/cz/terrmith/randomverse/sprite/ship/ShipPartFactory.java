@@ -4,6 +4,7 @@ import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.factory.DamageDealerFactory;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.sprite.factory.MissileFactory;
@@ -89,7 +90,7 @@ public class ShipPartFactory {
         return null;
     }
 
-	private SimpleSprite createGun(ImageLocation imageLocation, int health, int price, int attackRate, SpriteFactory factory, boolean frontal) {
+	private SimpleSprite createGun(ImageLocation imageLocation, int health, int price, int attackRate, DamageDealerFactory factory, boolean frontal) {
         return new SimpleGun(spriteCollection, attackRate, imageLocation, health, price, factory, frontal);
 	}
 

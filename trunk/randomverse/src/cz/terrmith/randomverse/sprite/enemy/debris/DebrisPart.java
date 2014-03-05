@@ -114,7 +114,9 @@ public class DebrisPart extends SimpleSprite implements Destructible, Solid {
             parent.updateSpriteStatus();
             if (type.equals(DebrisPartType.EXPLODING)) {
                 // add explosion to projectiles
-                Explosion explosion = new Explosion(getXPosn(), getYPosn(), new Damage(3, Damage.DamageType.BOTH));
+                Explosion explosion = new Explosion(getXPosn() + Tile.DEFAULT_SIZE/2,
+                                                    getYPosn() + Tile.DEFAULT_SIZE/2,
+                                                    new Damage(3, Damage.DamageType.BOTH));
                 parent.getSpriteCollection().put(SpriteLayer.PROJECTILE, explosion);
             } else if (type.equals(DebrisPartType.CLUSTER)) {
 

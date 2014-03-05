@@ -16,3 +16,4 @@ s debris.png 4
 s debrisParts.png 7
 s enemies.png 3
 s enemies_damaged.png 3
+s mine.png 3
