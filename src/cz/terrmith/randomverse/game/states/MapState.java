@@ -43,6 +43,14 @@ public class MapState implements State {
                 currentEvent = null;
             }
         });
+        stateMachine.addCallback(EventResult.SHOP, new NavigableTextCallback() {
+            @Override
+            public void onSelection() {
+                stateMachine.getMap().markExplored();
+                stateMachine.setCurrentState(StateName.SHOP.name());
+                currentEvent = null;
+            }
+        });
     }
 
     @Override

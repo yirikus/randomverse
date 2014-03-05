@@ -23,8 +23,8 @@ import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
-import cz.terrmith.randomverse.world.events.DebrisFieldEvents;
 import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.world.events.LevelOneEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -63,7 +63,8 @@ public class LevelOne extends World {
 
     private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
         switch (random.nextInt(5)) {
-            default: return new WorldEvent(DebrisFieldEvents.shipwreck(callbacks));
+            case 1: return new WorldEvent(LevelOneEvents.shop(callbacks));
+            default: return new WorldEvent(LevelOneEvents.surrounded(callbacks));
         }
 
     }

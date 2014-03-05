@@ -17,6 +17,7 @@ import cz.terrmith.randomverse.game.states.GameState;
 import cz.terrmith.randomverse.game.states.InventoryState;
 import cz.terrmith.randomverse.game.states.MapState;
 import cz.terrmith.randomverse.game.states.MenuState;
+import cz.terrmith.randomverse.game.states.ShopState;
 import cz.terrmith.randomverse.inventory.GameMap;
 import cz.terrmith.randomverse.world.events.EventResult;
 
@@ -63,6 +64,7 @@ public class Randomverse extends GameEngine {
         addState(new MenuState(this));
         addState(new MapState(this));
         addState(new InventoryState(this));
+        addState(new ShopState(this));
 
         setCurrentState(StateName.MAIN_MENU.name());
 
