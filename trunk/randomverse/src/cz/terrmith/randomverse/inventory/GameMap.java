@@ -33,7 +33,7 @@ public class GameMap extends GridMenu {
     private World[][] worlds;
     private static Random random = new Random();
 
-
+    //todo ugly dependency on MapState to init callbacks
     public GameMap(int rows, int columns, int cellSize, Position position, Sprite player, ArtificialIntelligence ai,
                    SpriteCollection spc, Map<EventResult, NavigableTextCallback> callbacks) {
         super(rows, columns, cellSize, position);

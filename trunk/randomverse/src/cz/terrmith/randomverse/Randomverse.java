@@ -23,6 +23,7 @@ import cz.terrmith.randomverse.world.events.EventResult;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ public class Randomverse extends GameEngine {
 
     private final Command command;
     private final ArtificialIntelligence ai;
+    private final HashMap<EventResult, NavigableTextCallback> callbacks;
     private int screenWidth;
     private int screenHeight;
     private final CollisionTester collisionTester;
@@ -54,6 +56,7 @@ public class Randomverse extends GameEngine {
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
         this.ai = new ArtificialIntelligence(new RandomAttackPattern(1000));
+        this.callbacks = new HashMap<EventResult, NavigableTextCallback>();
 
         addState(new GameState(this));
         addState(new CutSceneState(this));
@@ -61,24 +64,9 @@ public class Randomverse extends GameEngine {
         addState(new MapState(this));
         addState(new InventoryState(this));
 
-        Map<EventResult, NavigableTextCallback> callbacks = new HashMap<EventResult, NavigableTextCallback>();
-        callbacks.put(EventResult.EMBARK, new NavigableTextCallback() {
-            @Override
-            public void onSelection() {
-                setCurrentState(StateName.GAME.name());
-            }
-        });
-        callbacks.put(EventResult.MOVE, new NavigableTextCallback() {
-            @Override
-            public void onSelection() {
-                map.markExplored();
-            }
-        });
-
-        map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai, spriteCollection, callbacks);
-
-
         setCurrentState(StateName.MAIN_MENU.name());
+
+        map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this.player.getSprite(), ai, spriteCollection, this.callbacks);
     }
 
     @Override
@@ -172,5 +160,13 @@ public class Randomverse extends GameEngine {
 
     public ArtificialIntelligence getAi() {
         return ai;
+    }
+
+    public Map<EventResult, NavigableTextCallback> getCallbacks() {
+        return Collections.unmodifiableMap(callbacks);
+    }
+
+    public void addCallback(EventResult key, NavigableTextCallback callback) {
+        callbacks.put(key, callback);
     }
 }

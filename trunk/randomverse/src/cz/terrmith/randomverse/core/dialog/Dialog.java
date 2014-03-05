@@ -71,7 +71,7 @@ public class Dialog{
 		return true;
 	}
 
-    public void update(Command command){
+    public boolean update(Command command){
         if (Command.State.PRESSED_RELEASED.equals(command.getUp())) {
             command.setUp(false);
             dynamicText.prevOption();
@@ -86,8 +86,9 @@ public class Dialog{
             dynamicText.nextOption();
         } else if (Command.State.PRESSED_RELEASED.equals(command.getAction1())) {
             command.setAction1(false);
-            dynamicText.navigate();
+            return dynamicText.navigate();
         }
+        return false;
     }
 
 	public void drawDialog(Graphics g) {
