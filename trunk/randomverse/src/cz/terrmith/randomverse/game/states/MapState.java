@@ -104,9 +104,6 @@ public class MapState implements State {
     }
 
     private void handleSelection() {
-        int mapx = stateMachine.getMap().getX();
-        int mapy = stateMachine.getMap().getY();
-
         World currentWorld = stateMachine.getMap().getCurrentWorld();
         this.currentEvent = currentWorld.getWorldEvent();
         if (currentEvent == null) {

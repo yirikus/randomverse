@@ -12,6 +12,8 @@ import cz.terrmith.randomverse.core.sprite.properties.SpritePropertyHelper;
 import cz.terrmith.randomverse.loot.LootType;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +25,9 @@ import java.util.Set;
  */
 public class ShipPart extends SimpleSprite implements Destructible, Solid {
 
-	private int totalHealth;
+    protected static final int DRAW_ATTR_LINE_HEIGHT = 20;
+    private final int scannerStrength;
+    private int totalHealth;
 	private int currentHealth;
 	private boolean connectedToCore;
 	private Set<ExtensionPoint> extensions;
@@ -32,22 +36,29 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
 	private int price;
 
 
-	public ShipPart(ShipPart sprite) {
-		super(sprite);
-		this.totalHealth = sprite.getTotalHealth();
-		this.currentHealth = sprite.getTotalHealth();
-		this.price = sprite.getPrice();
-		this.extensions = new HashSet<ExtensionPoint>(sprite.getExtensions());
+	public ShipPart(ShipPart that) {
+		super(that);
+		this.totalHealth = that.getTotalHealth();
+		this.currentHealth = that.getTotalHealth();
+		this.price = that.getPrice();
+		this.extensions = new HashSet<ExtensionPoint>(that.getExtensions());
+        this.scannerStrength = that.scannerStrength;
 	}
 
 	public ShipPart(int totalHealth, Map<String, ImageLocation> imageForStatus, Set<ExtensionPoint> extensions,
-	                int price) {
+	                int price, int scannerStrength) {
 		super(0, 0, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE, imageForStatus);
 		this.totalHealth = totalHealth;
 		this.currentHealth = totalHealth;
 		this.extensions = extensions;
 		this.price = price;
+        this.scannerStrength = scannerStrength;
 	}
+
+    public ShipPart(int totalHealth, Map<String, ImageLocation> imageForStatus, Set<ExtensionPoint> extensions,
+                    int price) {
+        this(totalHealth, imageForStatus, extensions, price, 0);
+    }
 
 	@Override
 	public int getTotalHealth() {
@@ -176,5 +187,25 @@ public class ShipPart extends SimpleSprite implements Destructible, Solid {
         SpritePropertyHelper.dealDamage(this,s);
         SpritePropertyHelper.dealImpactDamage(this, s);
 
+    }
+
+    public int getScannerStrength() {
+        return scannerStrength;
+    }
+
+    /**
+     *
+     * @param g
+     * @param x
+     * @param y
+     * @return next y to draw on
+     */
+    public int drawAttributes(Graphics g, int x, int y) {
+        g.setColor(Color.GREEN);
+        g.drawString("Price: $" + getPrice(), x, y);
+        g.drawString("speed: " + getSpeed(), x, y + DRAW_ATTR_LINE_HEIGHT);
+        g.drawString("health: " + getTotalHealth(), x, y + 2 * DRAW_ATTR_LINE_HEIGHT);
+        g.drawString("scanner strength: " + getScannerStrength(), x, y + 3 * DRAW_ATTR_LINE_HEIGHT);
+        return y + 4 * DRAW_ATTR_LINE_HEIGHT;
     }
 }
