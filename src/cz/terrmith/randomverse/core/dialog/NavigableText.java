@@ -65,7 +65,7 @@ public class NavigableText {
     }
 
     /**
-     * Returns true if sucessful
+     * Returns true if successful
      * @return
      */
     public boolean callback() {

@@ -17,17 +17,9 @@ import java.awt.Graphics;
 public class WorldEvent {
     private final DynamicText dynamicText;
     private Dialog dialog;
-    public enum Progress {IN_PROGRESS, CONCLUDED}
+//    public enum Progress {IN_PROGRESS, CONCLUDED}
 
-    public static class WorldEventCallback implements NavigableTextCallback {
-
-        @Override
-        public void onSelection() {
-
-        }
-    }
-
-    private Progress progress = Progress.IN_PROGRESS;
+//    private Progress progress = Progress.IN_PROGRESS;
 
     public WorldEvent(DynamicText dynamicText) {
         this.dynamicText = dynamicText;
@@ -45,16 +37,20 @@ public class WorldEvent {
         if (this.dialog == null) {
             this.dialog = new cz.terrmith.randomverse.core.dialog.Dialog(dynamicText, 200, 200, 400, 200, null);
         }
-        dialog.update(command);
+        boolean callbacked = dialog.update(command);
+        if (callbacked) {
+            dialog.close();
+            dialog = null;
+        }
     }
 
-    public Progress getProgress() {
-        return this.progress;
-    }
-
-    public void setProgress(Progress progress) {
-        this.progress = progress;
-    }
+//    public Progress getProgress() {
+//        return this.progress;
+//    }
+//
+//    public void setProgress(Progress progress) {
+//        this.progress = progress;
+//    }
 
     public void drawEvent(Graphics g) {
         if (dialog != null) {

@@ -1,12 +1,14 @@
 package cz.terrmith.randomverse.game.states;
 
 import cz.terrmith.randomverse.Randomverse;
+import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.game.StateName;
+import cz.terrmith.randomverse.world.events.EventResult;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -22,6 +24,25 @@ public class MapState implements State {
     public MapState(Randomverse stateMachine) {
         this.command = stateMachine.getCommand();
         this.stateMachine = stateMachine;
+
+        addCallbacks();
+    }
+
+    private void addCallbacks() {
+        stateMachine.addCallback(EventResult.EMBARK, new NavigableTextCallback() {
+            @Override
+            public void onSelection() {
+                stateMachine.setCurrentState(StateName.GAME.name());
+                currentEvent = null;
+            }
+        });
+        stateMachine.addCallback(EventResult.MOVE, new NavigableTextCallback() {
+            @Override
+            public void onSelection() {
+                stateMachine.getMap().markExplored();
+                currentEvent = null;
+            }
+        });
     }
 
     @Override
@@ -40,10 +61,10 @@ public class MapState implements State {
 
     private void updateWorldEvent() {
         currentEvent.updateEvent(command);
-        if (WorldEvent.Progress.CONCLUDED == currentEvent.getProgress()) {
-            stateMachine.setCurrentState(StateName.GAME.name());
-            currentEvent = null;
-        }
+//        if (WorldEvent.Progress.CONCLUDED == currentEvent.getProgress()) {
+//            stateMachine.setCurrentState(StateName.GAME.name());
+//            currentEvent = null;
+//        }
     }
 
     private void updateMap() {

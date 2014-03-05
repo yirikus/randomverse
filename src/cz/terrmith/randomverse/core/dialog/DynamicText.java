@@ -52,12 +52,13 @@ public class DynamicText {
      * Moves to navigable text under currently selected option
      * @param key
      */
-    public void navigate() {
+    public boolean navigate() {
         if (!getNavigableText().getOptions().isEmpty()) {
             navigate(getNavigableText().getOptions().get(currentOption).getKey());
+            return false;
         } else {
             System.out.println("Houston, dynamic text calls back");
-            getNavigableText().callback();
+            return getNavigableText().callback();
         }
     }
 
