@@ -32,7 +32,7 @@ import java.util.Set;
  */
 public class ShipModificationScreen {
 
-	private static final int PARTS_PER_ROW = 4;
+	private static final int PARTS_PER_ROW = 8;
     // shifts parts
     private static final int PART_SHIFT = 1;
     private final Player playerRef;
@@ -287,7 +287,12 @@ public class ShipModificationScreen {
             t.getSprite().drawSprite(g,iml);
 	        t.getSprite().setStatus(prevStatus);
         }
-        g.setColor(Color.GREEN);
+        //draw rectangle if selected
+        if (mode == Mode.SHIP) {
+            g.setColor(Color.GREEN);
+        } else {
+            g.setColor(Color.YELLOW);
+        }
         g.drawRect( (int) ship.getXPosn() + this.shipX * Tile.DEFAULT_SIZE,
                     (int) ship.getXPosn() + this.shipY * Tile.DEFAULT_SIZE,
                     Tile.DEFAULT_SIZE,
@@ -325,7 +330,8 @@ public class ShipModificationScreen {
                                 Tile.DEFAULT_SIZE);
                 }
             }
-            if ((partX + partY * PARTS_PER_ROW) == i) {
+            //if repair selected, draw rectangle around it
+            if (mode == Mode.PART && (partX + partY * PARTS_PER_ROW) == i) {
                 g.setColor(Color.GREEN);
                 g.drawRect(initX + i * column * Tile.DEFAULT_SIZE,
                            initY + i * row * Tile.DEFAULT_SIZE,
@@ -350,7 +356,7 @@ public class ShipModificationScreen {
 		    }
 
 		    // draw rectangle if selected
-		    if (column == this.partX && row == this.partY) {
+		    if (mode == Mode.PART && column == this.partX && row == this.partY) {
                 g.setColor(Color.GREEN);
                 g.drawRect( (int)s.getXPosn(),
                             (int)s.getYPosn(),
@@ -358,6 +364,8 @@ public class ShipModificationScreen {
                             s.getHeight());
 
 	            // draw part info
+                //TODO move to shipPart
+                g.setColor(Color.GREEN);
 	            g.drawString("speed: " + ((ShipPart)s).getSpeed(),400,300);
 	            g.drawString("health: " + ((ShipPart)s).getTotalHealth(),400,320);
 	            if (s instanceof SimpleGun) {
@@ -367,6 +375,8 @@ public class ShipModificationScreen {
 	            g.drawString("Price: $" + ((ShipPart)s).getPrice(),400,380);
             }
 
+            //todo move to ship/player
+            g.setColor(Color.GREEN);
 	        g.drawString("total ship speed: " + playerRef.getSprite().getSpeed(), 400, 100);
 		    g.drawString("total money: " + playerRef.getMoney(), 400, 120);
 		    g.drawString("part sell price: " + replacementTilePrice, 400, 160);
@@ -378,13 +388,23 @@ public class ShipModificationScreen {
             }
         }
 
-
 	    // draw extension points
 	    for (Map.Entry<GridLocation, Set<ExtensionPoint>> entry: extensionPoints.entrySet()) {
 			if (Tile.findTile(ship.getTiles(), entry.getKey().getX(), entry.getKey().getY()) == null) {
 				drawExtensionPoint(g, 100, 100, entry.getKey(), entry.getValue());
 			}
 	    }
+
+        //draw info
+        g.setColor(Color.YELLOW);
+        g.drawString("Ctrl: select", 50, 500);
+        if (mode == Mode.SHIP) {
+            g.drawString("Space: remove", 50, 520);
+            g.drawString("A: flip part horizontally   S: flip part vertically", 50, 540);
+        } else {
+            g.drawString("Space: back", 50, 520);
+        }
+        g.drawString("Q: leave shop", 50, 560);
 
     }
 

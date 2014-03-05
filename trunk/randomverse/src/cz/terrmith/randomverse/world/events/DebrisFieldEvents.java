@@ -20,12 +20,15 @@ public final class DebrisFieldEvents {
 
     public static DynamicText shipwreck(Map<EventResult, NavigableTextCallback> callbacks) {
         Map<String, NavigableText> map = new HashMap<String, NavigableText>();
-        map.put("1", new NavigableText("You found a shipwreck",
-                new NavigableTextOption[]{new NavigableTextOption("Investigate the shipwreck", "11"),
-                                          new NavigableTextOption("Leave", "12")}));
-        map.put("11", new NavigableText("You move closer to investigate", callbacks.get(EventResult.EMBARK)));
-        map.put("12", new NavigableText("It seems too dangerous, so you leave..", callbacks.get(EventResult.MOVE)));
-        DynamicText ret = new DynamicText(map, "1");
+        final String ENTRY = "1";
+        final String INVESTIGATE = "11";
+        final String LEAVE = "12";
+        map.put(ENTRY, new NavigableText("You found a shipwreck",
+                new NavigableTextOption[]{new NavigableTextOption("Investigate the shipwreck", INVESTIGATE),
+                        new NavigableTextOption("Leave", LEAVE)}));
+        map.put(INVESTIGATE, new NavigableText("You move closer to investigate", callbacks.get(EventResult.EMBARK)));
+        map.put(LEAVE, new NavigableText("It seems too dangerous, so you leave..", callbacks.get(EventResult.MOVE)));
+        DynamicText ret = new DynamicText(map, ENTRY);
 
         return ret;
     }
