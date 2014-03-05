@@ -257,6 +257,7 @@ public class GameState implements State {
         } else {
             //Create new world
             stateMachine.getSpriteCollection().clear();
+            stateMachine.getPlayer().resetSpritePosition();
             stateMachine.getSpriteCollection().put(SpriteLayer.PLAYER, stateMachine.getPlayer().getSprite());
             //obtain level from map
 	        this.world = stateMachine.getMap().getCurrentWorld();

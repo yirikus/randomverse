@@ -11,14 +11,12 @@ import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.loot.LootFactory;
-import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
@@ -33,7 +31,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -45,10 +42,9 @@ public class LevelOne extends World {
     private final ArtificialIntelligence ai;
     private final Color[] starColours;
     private final Position[] starCoordinates;
-    private Random random = new Random();
 
     public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
-        super(spriteCollection, 7, 1);
+        super(spriteCollection, 7, 0);
         this.ai = ai;
         int stars = random.nextInt(5);
         this.starColours = new Color[stars];
@@ -161,16 +157,7 @@ public class LevelOne extends World {
         ai.registerSpriteContainer(formationMovement);
     }
 
-    private List<Sprite> createSprites(int formationSize) {
-        List<Sprite> enemies = new ArrayList<Sprite>(formationSize);
-        for(int i = 0; i < formationSize; i++) {
-            // position has no meaning, it will be repositioned upon FormationMovement creation
-            Sprite sprite = createSimpleEnemy(0, 0, null);
-            enemies.add(sprite);
-            getSpriteCollection().put(SpriteLayer.NPC, sprite);
-        }
-        return enemies;
-    }
+
 
     private void formation2(String name) {
         waitForInactivation(name);
@@ -247,32 +234,6 @@ public class LevelOne extends World {
         FormationMovement formationMovement = new FormationMovement(enemies, formations,orders, null);
         formationMovement.registerObserver(this, name);
         ai.registerSpriteContainer(formationMovement);
-    }
-
-    private Sprite createSimpleEnemy(int x, int y, SimpleEnemy.EnemyType enemyType) {
-        if (enemyType == null) {
-            enemyType = randomEnemyType();
-        }
-        SimpleEnemy enemy = new SimpleEnemy(x,y, enemyType, getSpriteCollection());
-        return enemy;
-    }
-
-    private SimpleEnemy.EnemyType randomEnemyType() {
-        int enemyRandomizer= random.nextInt(3);
-        final SimpleEnemy.EnemyType enemyType;
-        switch (enemyRandomizer) {
-            case 0:
-                enemyType = SimpleEnemy.EnemyType.SINGLE;
-                break;
-            case 1:
-                enemyType = SimpleEnemy.EnemyType.DOUBLE;
-                break;
-            default:
-                enemyType = SimpleEnemy.EnemyType.KAMIKAZE;
-                break;
-
-        }
-        return enemyType;
     }
 
     private Sprite createEnemy(int x, int y) {

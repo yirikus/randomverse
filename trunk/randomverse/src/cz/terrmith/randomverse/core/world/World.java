@@ -2,10 +2,16 @@ package cz.terrmith.randomverse.core.world;
 
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainerObserver;
 import cz.terrmith.randomverse.core.geometry.Position;
+import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.util.StringUtils;
+import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,6 +19,8 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class World implements SpriteContainerObserver {
 
+    protected static Random random = new Random();
+    private boolean started;
     private long startTime;
     private long period;
     private long updateCount = 0;
@@ -32,7 +40,6 @@ public abstract class World implements SpriteContainerObserver {
      */
     public World(SpriteCollection spriteCollection, long period, long wavesToDefeat) {
         this.spriteCollection = spriteCollection;
-        this.startTime = System.currentTimeMillis();
         this.period = TimeUnit.SECONDS.toMillis(period);
 	    this.wavesToDefeat = wavesToDefeat;
     }
@@ -41,6 +48,10 @@ public abstract class World implements SpriteContainerObserver {
      * updates sprite collection if enough time was waited
      */
     public void update() {
+        if (!started) {
+            this.startTime = System.currentTimeMillis();
+            this.started = true;
+        }
         if (!paused && !waitForNotification && (period * updateCount) < (System.currentTimeMillis() - startTime)) {
 //            System.out.println("beforeUpdate " + !paused + " | " + !waitForNotification +" | " + (period * updateCount) + " | " + (System.currentTimeMillis() - startTime));
             updateCount++;
@@ -121,6 +132,48 @@ public abstract class World implements SpriteContainerObserver {
     //todo scannerStrength in draw method is probably ugly
     public void drawScannerInfo(Graphics g, Position position, int scannerStrenght) {
         String scannerInfo = worldEvent.getScannerInfo(scannerStrenght);
-        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int)position.getX(), (int)position.getY(), 100);
+        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int) position.getX(), (int) position.getY(), 100);
+    }
+
+    /**
+     *
+     * @param formationSize
+     * @return
+     */
+    protected List<Sprite> createSprites(int formationSize) {
+        List<Sprite> enemies = new ArrayList<Sprite>(formationSize);
+        for(int i = 0; i < formationSize; i++) {
+            // position has no meaning, it will be repositioned upon FormationMovement creation
+            Sprite sprite = createSimpleEnemy(0, 0, null);
+            enemies.add(sprite);
+            getSpriteCollection().put(SpriteLayer.NPC, sprite);
+        }
+        return enemies;
+    }
+
+    private Sprite createSimpleEnemy(int x, int y, SimpleEnemy.EnemyType enemyType) {
+        if (enemyType == null) {
+            enemyType = randomEnemyType();
+        }
+        SimpleEnemy enemy = new SimpleEnemy(x,y, enemyType, getSpriteCollection());
+        return enemy;
+    }
+
+    private SimpleEnemy.EnemyType randomEnemyType() {
+        int enemyRandomizer= random.nextInt(3);
+        final SimpleEnemy.EnemyType enemyType;
+        switch (enemyRandomizer) {
+            case 0:
+                enemyType = SimpleEnemy.EnemyType.SINGLE;
+                break;
+            case 1:
+                enemyType = SimpleEnemy.EnemyType.DOUBLE;
+                break;
+            default:
+                enemyType = SimpleEnemy.EnemyType.KAMIKAZE;
+                break;
+
+        }
+        return enemyType;
     }
 }

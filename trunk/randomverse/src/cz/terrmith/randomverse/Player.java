@@ -128,4 +128,8 @@ public class Player {
 	public void setMoney(int money) {
 		this.money = money;
 	}
+
+    public void resetSpritePosition() {
+        getSprite().setPosition(400,450);
+    }
 }
