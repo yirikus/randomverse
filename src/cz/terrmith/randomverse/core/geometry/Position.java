@@ -1,5 +1,7 @@
 package cz.terrmith.randomverse.core.geometry;
 
+import java.util.Comparator;
+
 /**
  * Position in a real space
  */
@@ -131,5 +133,23 @@ public class Position {
     @Override
     public String toString() {
         return "[" + x + ", " + y +"]";
+    }
+
+    public static Comparator<Position> xComparator() {
+        return new Comparator<Position>() {
+            @Override
+            public int compare(Position o1, Position o2) {
+                return (int)(o1.getX() - o2.getX());
+            }
+        };
+    }
+
+    public static Comparator<Position> yComparator() {
+        return new Comparator<Position>() {
+            @Override
+            public int compare(Position o1, Position o2) {
+                return (int)(o1.getY() - o2.getY());
+            }
+        };
     }
 }

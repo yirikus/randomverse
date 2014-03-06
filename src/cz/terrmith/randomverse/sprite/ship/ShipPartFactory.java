@@ -5,7 +5,6 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.SimpleSprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.factory.DamageDealerFactory;
-import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.sprite.factory.MissileFactory;
 import cz.terrmith.randomverse.sprite.factory.ProjectileFactory;
@@ -68,14 +67,14 @@ public class ShipPartFactory {
             case 1:  return (ShipPart) createGun(new ImageLocation("sideGun", 1), 1, 8, 4, new ProjectileFactory(new Damage(2, damageType)), false);//return new SimpleGun(spriteCollection,4,new Damage(2, damageType),new ImageLocation("sideGun",1),1,8);
             case 2:  return (ShipPart) createGun(new ImageLocation("sideGun", 3), 1, 6, 8, new ProjectileFactory(new Damage(4, damageType)), false);//return new SimpleGun(spriteCollection,8,new Damage(3, damageType),new ImageLocation("sideGun",2),1,6);
             case 3: return (ShipPart) createGun(new ImageLocation("sideGun", 2), 2, 4, 12, new MissileFactory(new Damage(3, damageType), this.spriteCollection), false);
-            case 4: return createCockpit(new ImageLocation("cockpit",0),2, 2, 1);
+            case 4: return createCockpit(new ImageLocation("cockpit",0),2, 2, 5);
             case 5: return createCockpit(new ImageLocation("cockpit",1),3, 4, 5);
             case 6: return createCockpit(new ImageLocation("cockpit",2),4, 6, 5);
             case 7: return createCockpit(new ImageLocation("cockpit",3),1, 3, 5);
-            case 8: return createMidPart(new ImageLocation("midParts",0),-0.5, 2, 2);
-            case 9: return createMidPart(new ImageLocation("midParts",1),-1, 3, 3);
-            case 10: return createMidPart(new ImageLocation("midParts",2),-1.5, 4, 4);
-            case 11: return createShieldPart(new ImageLocation("midParts", 3), -2, 5, 5);
+            case 8: return createMidPart(new ImageLocation("midParts",0),-0.5, 2, 2, 1);
+            case 9: return createMidPart(new ImageLocation("midParts",1),-1, 3, 3, 1);
+            case 10: return createMidPart(new ImageLocation("midParts",2),-1.5, 4, 4, 1);
+            case 11: return createShieldPart(new ImageLocation("midParts", 3), -2, 5, 2);
             case 12: return createBottomEngine(new ImageLocation("bottomEngines",0), 4, 2, 2);
             case 13: return createBottomEngine(new ImageLocation("bottomEngines",1), 6, 1, 4);
             case 14: return createBottomEngine(new ImageLocation("bottomEngines",2), 8, 1, 6);
@@ -112,13 +111,13 @@ public class ShipPartFactory {
 		return createShipPart(image, extensions, health, price, scannerStr);
 	}
 
-	public ShipPart createMidPart(ImageLocation image, double speed, int health, int price) {
+	public ShipPart createMidPart(ImageLocation image, double speed, int health, int price, int scannerStr) {
 		Set<ExtensionPoint> extensions = new HashSet<ExtensionPoint>();
 		extensions.add(ExtensionPoint.BOTTOM);
 		extensions.add(ExtensionPoint.LEFT);
 		extensions.add(ExtensionPoint.RIGHT);
 		extensions.add(ExtensionPoint.TOP);
-		ShipPart part = createShipPart(image, extensions, health, price);
+		ShipPart part = createShipPart(image, extensions, health, price, scannerStr);
 		part.setSpeed(speed);
 		return part;
 	}

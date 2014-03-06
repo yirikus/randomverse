@@ -23,16 +23,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
+ * TODO same as simple enemy apart from enemyType and size
+ *
  * User: TERRMITh
  * Date: 10.10.13
  * Time: 23:58
  * To change this template use File | Settings | File Templates.
  */
-public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible, Lootable, Solid {
+public class Invader extends SimpleSprite implements CanAttack, Destructible, Lootable, Solid {
     public static final int IMPACT_DAMAGE = 1;
     public static final int SPEED = 2;
-    public static final int SIZE = Tile.DEFAULT_SIZE * 2;
+    public static final int SIZE = Tile.DEFAULT_SIZE;
     private final int totalHealth = 4;
     private int currentHealth = totalHealth;
     private LootSprite lootSprite;
@@ -49,19 +50,18 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
     }
 
     public enum EnemyType {
-        KAMIKAZE, SINGLE, DOUBLE
+        BRAINY, TENTACLES, SAUCER
     }
 
     /**
      * Creates empty multisprites, tiles are expected to be added by calling provided methods
      */
-    public SimpleEnemy(int x, int y, EnemyType enemyType, SpriteCollection spc) {
+    public Invader(int x, int y, EnemyType enemyType, SpriteCollection spc) {
         super(x, y, SIZE, SIZE, null);
-        setSpeed(2);
+        setSpeed(SPEED);
         //image
         Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
-        imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("enemies", enemyType.ordinal()));
-        imageForStatus.put(DefaultSpriteStatus.DAMAGED.name(), new ImageLocation("enemies_damaged", enemyType.ordinal()));
+        imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("invaders", enemyType.ordinal()));
         setImageForStatus(imageForStatus);
         //CanAttack
         this.spriteCreator = new ProjectileCreator(spc, new ProjectileFactory(new Damage(1, Damage.DamageType.PLAYER)));
@@ -69,10 +69,10 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
         //5 seconds
         shootTimer = AnimationEngine.DEFAULT_FPS * 5;
         switch (enemyType) {
-            case SINGLE:
+            case BRAINY:
                 maxShots = 1;
                 break;
-            case DOUBLE:
+            case TENTACLES:
                 maxShots = 2;
                 break;
             default:

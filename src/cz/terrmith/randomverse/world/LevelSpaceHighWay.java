@@ -11,6 +11,7 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
+import cz.terrmith.randomverse.graphics.SpaceBackground;
 import cz.terrmith.randomverse.sprite.InvisibleArea;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.world.events.EventResult;
@@ -26,7 +27,7 @@ import java.util.Random;
  */
 public class LevelSpaceHighWay extends World {
     private final ArtificialIntelligence ai;
-    private final Color lineColor;
+    private final SpaceBackground background;
     private Random random = new Random();
     private boolean created;
     private int lanes;
@@ -34,8 +35,7 @@ public class LevelSpaceHighWay extends World {
     public LevelSpaceHighWay(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
         super(spriteCollection, 1, 1);
         this.ai = ai;
-        this.lineColor = new Color(167, 161, 255);
-
+        this.background = new SpaceBackground(5);
         setWorldEvent(randomEvent(callbacks));
     }
 
@@ -100,12 +100,7 @@ public class LevelSpaceHighWay extends World {
                 (int) position.getY(),
                 size, size);
 
-        g.setColor(lineColor);
-        g.drawLine((int)position.getX(), (int)position.getY() + size/2,
-                   (int)position.getX() + size, (int)position.getY() + size/2);
-
-
+        //stars
+        background.drawBackground(g, position, size);
     }
-
-
 }

@@ -19,6 +19,7 @@ public class Formation {
 
     private List<Position> positions;
     private static Random random = new Random();
+    private int height;
 
     /**
      * Creates precomputed formation
@@ -27,6 +28,15 @@ public class Formation {
      */
     public Formation(List<Position> positions) {
         this.positions = positions;
+        this.height = computeHeight(positions);
+    }
+
+    public static int computeHeight(List<Position> positions) {
+        double minY = Collections.min(positions, Position.yComparator()).getY();
+        double maxY = Collections.max(positions, Position.yComparator()).getY();
+
+        return (int)(maxY - minY);
+
     }
 
     /**
@@ -154,5 +164,14 @@ public class Formation {
             Sprite sprite = sprites.get(i);
             sprite.setPosition(positions.get(i));
         }
+    }
+
+
+    public static int marginToFitSize(int count, int width){
+        return width / count;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

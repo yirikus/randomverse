@@ -10,6 +10,7 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
+import cz.terrmith.randomverse.graphics.SpaceBackground;
 import cz.terrmith.randomverse.sprite.enemy.debris.Debris;
 import cz.terrmith.randomverse.world.events.DebrisFieldEvents;
 import cz.terrmith.randomverse.world.events.EventResult;
@@ -26,9 +27,8 @@ public class LevelDebrisField extends World {
 
     private static Random random = new Random();
     private final Sprite player;
-    private final Color[] starColours;
-    private final Position[] starCoordinates;
     private final ArtificialIntelligence ai;
+    private final SpaceBackground background;
 
     /**
      * @param spriteCollection sprite collection
@@ -38,13 +38,8 @@ public class LevelDebrisField extends World {
         this.player = player;
         this.ai = ai;
 
-        int stars = random.nextInt(3);
-        this.starColours = new Color[stars];
-        this.starCoordinates = new Position[stars];
-        for (int i = 0; i < starColours.length; i++) {
-            starColours[i] = new Color(161,123,0 + random.nextInt(167));
-            starCoordinates[i] = new Position(random.nextDouble(), random.nextDouble());
-        }
+        this.background = new SpaceBackground(5);
+
         setWorldEvent(randomEvent(callbacks));
     }
 
@@ -73,12 +68,7 @@ public class LevelDebrisField extends World {
                 (int) position.getY(),
                 size, size);
         //stars
-        for (int i =0; i < starColours.length; i++) {
-            g.setColor(starColours[i]);
-            int x = (int)position.getX() + (int)(starCoordinates[i].getX() * size);
-            int y = (int)position.getY() + (int)(starCoordinates[i].getY() * size);
-            g.fillRect(x, y, 3, 3);
-        }
+        background.drawBackground(g, position, size);
 
     }
 }

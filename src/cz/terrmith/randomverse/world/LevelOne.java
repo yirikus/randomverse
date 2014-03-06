@@ -16,6 +16,7 @@ import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
+import cz.terrmith.randomverse.graphics.SpaceBackground;
 import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
@@ -40,19 +41,13 @@ import java.util.Set;
  */
 public class LevelOne extends World {
     private final ArtificialIntelligence ai;
-    private final Color[] starColours;
-    private final Position[] starCoordinates;
+    private final SpaceBackground background;
 
     public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
         super(spriteCollection, 7, 0);
         this.ai = ai;
-        int stars = random.nextInt(5);
-        this.starColours = new Color[stars];
-        this.starCoordinates = new Position[stars];
-        for (int i = 0; i < starColours.length; i++) {
-            starColours[i] = new Color(255,255,155 + random.nextInt(100));
-            starCoordinates[i] = new Position(random.nextDouble(), random.nextDouble());
-        }
+
+        this.background = new SpaceBackground(10);
 
         setWorldEvent(randomEvent(callbacks));
     }
@@ -85,12 +80,7 @@ public class LevelOne extends World {
                 (int) position.getY(),
                 size, size);
         //stars
-        for (int i =0; i < starColours.length; i++) {
-            g.setColor(starColours[i]);
-            int x = (int)position.getX() + (int)(starCoordinates[i].getX() * size);
-            int y = (int)position.getY() + (int)(starCoordinates[i].getY() * size);
-            g.drawLine(x, y, x, y);
-        }
+        background.drawBackground(g, position, size);
 
 
     }
