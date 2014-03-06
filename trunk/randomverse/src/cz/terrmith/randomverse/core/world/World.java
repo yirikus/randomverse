@@ -132,7 +132,7 @@ public abstract class World implements SpriteContainerObserver {
     //todo scannerStrength in draw method is probably ugly
     public void drawScannerInfo(Graphics g, Position position, int scannerStrenght) {
         String scannerInfo = worldEvent.getScannerInfo(scannerStrenght);
-        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int) position.getX(), (int) position.getY(), 100);
+        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int) position.getX(), (int) position.getY(), 400);
     }
 
     /**

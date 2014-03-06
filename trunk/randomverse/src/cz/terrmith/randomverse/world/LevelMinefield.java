@@ -1,45 +1,26 @@
 package cz.terrmith.randomverse.world;
 
-import cz.terrmith.randomverse.GameWindow;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
-import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
-import cz.terrmith.randomverse.core.ai.movement.formation.FormationOrder;
 import cz.terrmith.randomverse.core.ai.movement.formation.SimpleSpriteContainer;
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainer;
 import cz.terrmith.randomverse.core.ai.movement.pattern.TrackingMovement;
 import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
-import cz.terrmith.randomverse.core.image.ImageLocation;
-import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.core.sprite.SpriteLayer;
-import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
-import cz.terrmith.randomverse.core.sprite.properties.Damage;
-import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
-import cz.terrmith.randomverse.loot.LootFactory;
+import cz.terrmith.randomverse.graphics.SpaceBackground;
 import cz.terrmith.randomverse.sprite.enemy.Mine;
-import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
-import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
-import cz.terrmith.randomverse.sprite.ship.Ship;
-import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
-import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 import cz.terrmith.randomverse.world.events.EventResult;
 import cz.terrmith.randomverse.world.events.LevelMineFieldEvents;
-import cz.terrmith.randomverse.world.events.LevelOneEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Testing level
@@ -49,22 +30,15 @@ import java.util.Set;
 public class LevelMinefield extends World {
     public static final String ACTIVATION_KEY = "notImportant";
     private final ArtificialIntelligence ai;
-    private final Color[] starColours;
-    private final Position[] starCoordinates;
     private final Sprite playerSprite;
+    private final SpaceBackground background;
 
     public LevelMinefield(final SpriteCollection spriteCollection, Sprite playerSprite, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
         super(spriteCollection, 1, 3);
         this.ai = ai;
         this.playerSprite = playerSprite;
 
-        int stars = 2 + random.nextInt(8);
-        this.starColours = new Color[stars];
-        this.starCoordinates = new Position[stars];
-        for (int i = 0; i < starColours.length; i++) {
-            starColours[i] = new Color(255, 155 + random.nextInt(100), 0);
-            starCoordinates[i] = new Position(random.nextDouble(), random.nextDouble());
-        }
+        this.background = new SpaceBackground(5);
 
         setWorldEvent(randomEvent(callbacks));
     }
@@ -120,12 +94,7 @@ public class LevelMinefield extends World {
                 (int) position.getY(),
                 size, size);
         //stars
-        for (int i =0; i < starColours.length; i++) {
-            g.setColor(starColours[i]);
-            int x = (int)position.getX() + (int)(starCoordinates[i].getX() * size);
-            int y = (int)position.getY() + (int)(starCoordinates[i].getY() * size);
-            g.drawLine(x, y, x, y);
-        }
+        background.drawBackground(g, position, size);
 
 
     }
