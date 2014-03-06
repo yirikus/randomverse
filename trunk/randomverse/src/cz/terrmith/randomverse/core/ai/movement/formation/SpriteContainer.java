@@ -30,4 +30,10 @@ public interface SpriteContainer {
      * @return
      */
     List<Sprite> getSprites();
+
+    /**
+     * Returns true if all sprites are active
+     */
+    public boolean isActive();
+
 }

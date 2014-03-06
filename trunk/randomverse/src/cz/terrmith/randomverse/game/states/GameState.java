@@ -275,6 +275,7 @@ public class GameState implements State {
 
     @Override
     public void deactivate(State newState) {
+        ai.clear();
         world.setPaused(true);
     }
 }

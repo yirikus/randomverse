@@ -60,4 +60,9 @@ public class ArtificialIntelligence {
     public void registerSpriteContainer(SpriteContainer scn) {
         this.spriteContainers.add(scn);
     }
+
+    public void clear() {
+        System.out.println("clearing AI");
+        this.spriteContainers.clear();
+    }
 }
