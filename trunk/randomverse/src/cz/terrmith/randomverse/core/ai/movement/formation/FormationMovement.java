@@ -271,7 +271,7 @@ public class FormationMovement implements SpriteContainer{
 
     @Override
     public boolean isActive() {
-        boolean active = true;
+        boolean active = false;
         for (Sprite s : sprites) {
             active = active || s.isActive();
         }
