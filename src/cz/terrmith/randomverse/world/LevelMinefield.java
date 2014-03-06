@@ -1,5 +1,6 @@
 package cz.terrmith.randomverse.world;
 
+import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.SimpleSpriteContainer;
@@ -30,13 +31,13 @@ import java.util.Map;
 public class LevelMinefield extends World {
     public static final String ACTIVATION_KEY = "notImportant";
     private final ArtificialIntelligence ai;
-    private final Sprite playerSprite;
+    private final Player player;
     private final SpaceBackground background;
 
-    public LevelMinefield(final SpriteCollection spriteCollection, Sprite playerSprite, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
+    public LevelMinefield(final SpriteCollection spriteCollection, Player player, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
         super(spriteCollection, 1, 3);
         this.ai = ai;
-        this.playerSprite = playerSprite;
+        this.player = player;
 
         this.background = new SpaceBackground(5);
 
@@ -79,7 +80,7 @@ public class LevelMinefield extends World {
             }
         });
 
-        SpriteContainer scn = new SimpleSpriteContainer(sprites, new TrackingMovement(playerSprite));
+        SpriteContainer scn = new SimpleSpriteContainer(sprites, new TrackingMovement(player.getSprite()));
         scn.registerObserver(this, ACTIVATION_KEY);
         ai.registerSpriteContainer(scn);
     }

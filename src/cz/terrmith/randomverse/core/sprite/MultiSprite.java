@@ -177,7 +177,7 @@ public class MultiSprite implements Sprite{
     @Override
     public double getXPosn() {
         if (!tiles.isEmpty()) {
-            return Tile.getZeroSpritePosition(tiles.get(0)).getX();
+            return Tile.getZeroSpritePosition(tiles).getX();
         } else {
             return 0;
         }
@@ -186,7 +186,7 @@ public class MultiSprite implements Sprite{
     @Override
     public double getYPosn() {
         if (!tiles.isEmpty()) {
-            return Tile.getZeroSpritePosition(tiles.get(0)).getY();
+            return Tile.getZeroSpritePosition(tiles).getY();
         } else {
             return 0;
         }
@@ -389,7 +389,7 @@ public class MultiSprite implements Sprite{
      * Iterates over tiles and recomputes sprite positions
      */
     public void revalidatePosition() {
-        Position p = Tile.getZeroSpritePosition(tiles.get(0));
+        Position p = Tile.getZeroSpritePosition(tiles);
         setPosition(p.getX(), p.getY());
     }
 }

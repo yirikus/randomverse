@@ -57,16 +57,14 @@ public class SimpleSpriteContainer implements SpriteContainer {
 
     @Override
     public void updateSprites() {
-        boolean inactive = true;
         for (Sprite s : sprites) {
             s.updateSprite();
             if (mp != null && s.isActive()) {
                 Position newPosition = mp.nextPosition(s);
                 s.setPosition(newPosition.getX(), newPosition.getY());
             }
-            inactive &= !s.isActive();
         }
-        if (!notified && inactive) {
+        if (!notified && !isActive()) {
             for (SpriteContainerObserver obs : observers) {
                 obs.waveDestroyedNotification(activationKey);
             }
@@ -78,4 +76,15 @@ public class SimpleSpriteContainer implements SpriteContainer {
     public List<Sprite> getSprites() {
         return Collections.unmodifiableList(sprites);
     }
+
+    @Override
+    public boolean isActive() {
+        boolean active = false;
+        for (Sprite s : sprites) {
+            active = active || s.isActive();
+        }
+        return active;
+    }
+
+
 }

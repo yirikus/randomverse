@@ -80,18 +80,29 @@ public class Tile {
     }
 
     /**
-     * Returns position of sprite on [0,0] from reference tile
-     * @param t tile from which [0,0] sprite position will be computed
+     * Returns position of sprite on [0,0]
+     * @param t tiles
      */
-    public static Position getZeroSpritePosition(Tile t){
-        Position p = new Position(t.getSprite().getXPosn(),
-                                  t.getSprite().getYPosn());
-
-        return new Position(p.getX() - (t.getTileX() * Tile.DEFAULT_SIZE),
-                            p.getY() - (t.getTileY() * Tile.DEFAULT_SIZE));
+    public static Position getZeroSpritePosition(List<Tile> tiles){
+        for (Tile t : tiles) {
+            // faulty if given sprite is inactive, therefore we test if sprite is active
+            if (t.getSprite().isActive()) {
+                return getZeroSpritePosition(t);
+            }
+        }
+        // if no active sprite was found, count in inactive ones
+        return getZeroSpritePosition(tiles.get(0));
     }
 
-	/**
+    private static Position getZeroSpritePosition(Tile t) {
+        Position p = new Position(t.getSprite().getXPosn(),
+                t.getSprite().getYPosn());
+
+        return new Position(p.getX() - (t.getTileX() * Tile.DEFAULT_SIZE),
+                p.getY() - (t.getTileY() * Tile.DEFAULT_SIZE));
+    }
+
+    /**
 	 * Returns tile with given cell coordinates or null
 	 * @param tiles list of tiles to search
 	 * @param x coordinate

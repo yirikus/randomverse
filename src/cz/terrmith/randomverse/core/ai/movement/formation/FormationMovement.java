@@ -219,12 +219,7 @@ public class FormationMovement implements SpriteContainer{
             return;
         }
 
-        boolean inactive = true;
-        for (Sprite s : sprites) {
-            inactive &= !s.isActive();
-        }
-
-        if (inactive) {
+        if (!isActive()) {
             for (SpriteContainerObserver o : observers) {
                 o.waveDestroyedNotification(this.activationKey);
 
@@ -272,6 +267,15 @@ public class FormationMovement implements SpriteContainer{
     @Override
     public List<Sprite> getSprites() {
         return sprites;
+    }
+
+    @Override
+    public boolean isActive() {
+        boolean active = true;
+        for (Sprite s : sprites) {
+            active = active || s.isActive();
+        }
+        return active;
     }
 
     @Override
