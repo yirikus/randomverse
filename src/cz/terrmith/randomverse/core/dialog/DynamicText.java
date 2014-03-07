@@ -6,8 +6,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Represents navigable text
@@ -20,9 +18,8 @@ import java.util.Map;
  */
 public class DynamicText {
 
-    public static final String DEFAULT_KEY = "key";
-    Map<String, NavigableText> textMap;
-    private String currentKey;
+    private NavigableText navigableText;
+    NavigableText root;
     private int currentOption = 0;
 
     /**
@@ -30,22 +27,16 @@ public class DynamicText {
      * @param text
      */
     public DynamicText(String text) {
-        this.textMap = new HashMap<String, NavigableText>();
-        textMap.put(DEFAULT_KEY, new NavigableText(text, new NavigableTextOption[]{}));
-        this.currentKey = DEFAULT_KEY;
+        root = new NavigableTextBranch(text,"", new NavigableTextBranch[]{});
+        this.navigableText = root;
     }
 
-    public DynamicText(Map<String, NavigableText> textMap, String firstKey) {
-        if (textMap == null) {
-            throw new IllegalArgumentException("text map must not be null");
+    public DynamicText(NavigableText root) {
+        if (root == null) {
+            throw new IllegalArgumentException("root must not be null");
         }
-        NavigableText nt = textMap.get(firstKey);
-        if (null == nt) {
-            throw new IllegalArgumentException("No value under key: " + this.currentKey);
-        }
-
-        this.textMap = textMap;
-        this.currentKey = firstKey;
+        this.root = root;
+        this.navigableText = root;
     }
 
     /**
@@ -54,12 +45,9 @@ public class DynamicText {
      */
     public boolean navigate() {
         if (!getNavigableText().getOptions().isEmpty()) {
-            navigate(getNavigableText().getOptions().get(currentOption).getKey());
-            return false;
-        } else {
-            System.out.println("Houston, dynamic text calls back");
-            return getNavigableText().callback();
+            navigableText = getNavigableText().getOptions().get(currentOption);
         }
+        return navigableText.navigate();
     }
 
     public void nextOption(){
@@ -77,24 +65,11 @@ public class DynamicText {
     }
 
     /**
-     * Moves to navigable text under given key
-     * @param key
-     */
-    public void navigate(String key) {
-        if (getNavigableText().containsOption(key)) {
-            currentKey = key;
-            currentOption = 0;
-        } else {
-            throw new IllegalArgumentException ("Cannot navigate to '" + key + "'options: " + getNavigableText().printOptions());
-        }
-    }
-
-    /**
      * Returns current navigableText
      * @return
      */
     public NavigableText getNavigableText() {
-       return textMap.get(this.currentKey);
+       return this.navigableText;
     }
 
     public void draw(Graphics g, int x, int y, int width){
@@ -111,14 +86,15 @@ public class DynamicText {
 
         int nextLineY = StringUtils.drawString(g, getNavigableText().getMessage(), x, y, width);
 
-        int lineSpace = 10;
+        int lineSpace = 5;
+        nextLineY += (2 * lineSpace);
         for (int i = 0; i < getNavigableText().getOptions().size(); i++) {
             if (currentOption == i) {
                 g.setColor(Color.YELLOW);
             } else {
                 g.setColor(Color.WHITE);
             }
-            g.drawString(getNavigableText().getOptions().get(i).getText(), x, nextLineY + i * (metrics.getHeight() + lineSpace));
+            g.drawString(getNavigableText().getOptions().get(i).getDescription(), x, nextLineY + i * (metrics.getHeight() + lineSpace));
         }
     }
 }

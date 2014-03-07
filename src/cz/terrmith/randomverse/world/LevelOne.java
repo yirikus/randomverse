@@ -54,7 +54,6 @@ public class LevelOne extends World {
 
     private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
         switch (random.nextInt(5)) {
-            case 1: return LevelOneEvents.shop(callbacks);
             default: return LevelOneEvents.surrounded(callbacks);
         }
 

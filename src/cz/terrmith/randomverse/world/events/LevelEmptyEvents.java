@@ -1,6 +1,7 @@
 package cz.terrmith.randomverse.world.events;
 
 import cz.terrmith.randomverse.core.dialog.DynamicText;
+import cz.terrmith.randomverse.core.dialog.NavigableText;
 import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.dialog.NavigableTextLeaf;
 import cz.terrmith.randomverse.core.world.ScannerInfo;
@@ -11,22 +12,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Static factory class of event messages for DebrisField level
+ * Created with IntelliJ IDEA.
  * User: TERRMITh
- * Date: 4.3.14
- * Time: 16:52
+ * Date: 7.3.14
+ * Time: 10:07
+ * To change this template use File | Settings | File Templates.
  */
-public final class LevelInvadersEvents {
+public class LevelEmptyEvents {
 
-    private LevelInvadersEvents(){}
+    private LevelEmptyEvents() {
+    }
 
-    public static WorldEvent invaders(Map<EventResult, NavigableTextCallback> callbacks) {
-        NavigableTextLeaf navigableText = new NavigableTextLeaf("It's them! Fucking invaders!",callbacks.get(EventResult.EMBARK));
+    public static WorldEvent shop(Map<EventResult, NavigableTextCallback> callbacks) {
+        NavigableText navigableText = new NavigableTextLeaf("Lets shop!", callbacks.get(EventResult.SHOP));
         DynamicText dynamicText = new DynamicText(navigableText);
 
         List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();
-        scannerInfo.add(new ScannerInfo(1, "Minor activity;"));
-        scannerInfo.add(new ScannerInfo(5, "Minor activy; invaders class ships"));
+        scannerInfo.add(new ScannerInfo(1, "Ad network: 'Visit Atsep Icnu's Intergalactic Spaceparts shop! Best prices in known universe!'"));
 
         return new WorldEvent(dynamicText, scannerInfo);
     }
