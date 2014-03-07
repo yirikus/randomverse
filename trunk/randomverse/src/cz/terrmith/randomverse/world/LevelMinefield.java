@@ -38,6 +38,7 @@ public class LevelMinefield extends World {
         super(spriteCollection, 1, 3);
         this.ai = ai;
         this.player = player;
+        player.getSprite().setPosition(500,400);
 
         this.background = new SpaceBackground(5);
 
@@ -49,7 +50,6 @@ public class LevelMinefield extends World {
             case 1: return LevelMineFieldEvents.minefield(callbacks);
             default: return LevelMineFieldEvents.minefieldAvoidable(callbacks);
         }
-
     }
 
     @Override
@@ -60,7 +60,7 @@ public class LevelMinefield extends World {
     private void deployMines() {
         waitForInactivation(ACTIVATION_KEY);
 
-        Formation formation = Formation.boxFormation(3, 3, new Position(random.nextInt(800), 0), Mine.SIZE * 5, Mine.SIZE * 5);
+        Formation formation = Formation.boxFormation(3, 3, new Position(random.nextInt(700) - 100, 0), Mine.SIZE * 5, Mine.SIZE * 5);
         final Mine.EnemyType enemyType;
         switch (random.nextInt(3)) {
             case 1:
@@ -96,7 +96,5 @@ public class LevelMinefield extends World {
                 size, size);
         //stars
         background.drawBackground(g, position, size);
-
-
     }
 }
