@@ -18,3 +18,4 @@ s enemies.png 3
 s enemies_damaged.png 3
 s mine.png 3
 s invaders.png 3
+s invaders_damaged.png 3

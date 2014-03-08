@@ -32,7 +32,8 @@ import java.util.Map;
 public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible, Lootable, Solid {
     public static final int IMPACT_DAMAGE = 1;
     public static final int SPEED = 2;
-    public static final int SIZE = Tile.DEFAULT_SIZE * 2;
+    //applies only for non -invaders
+    private static final int SIZE = Tile.DEFAULT_SIZE * 2;
     private final int totalHealth = 4;
     private int currentHealth = totalHealth;
     private LootSprite lootSprite;
@@ -49,7 +50,7 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
     }
 
     public enum EnemyType {
-        KAMIKAZE, SINGLE, DOUBLE
+        KAMIKAZE, SINGLE, DOUBLE, INVADER_1, INVADER_2, INVADER_3
     }
 
     /**
@@ -57,12 +58,19 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
      */
     public SimpleEnemy(int x, int y, EnemyType enemyType, SpriteCollection spc) {
         super(x, y, SIZE, SIZE, null);
+
         setSpeed(2);
         //image
         Map<String, ImageLocation> imageForStatus = new HashMap<String, ImageLocation>();
-        imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("enemies", enemyType.ordinal()));
-        imageForStatus.put(DefaultSpriteStatus.DAMAGED.name(), new ImageLocation("enemies_damaged", enemyType.ordinal()));
-        setImageForStatus(imageForStatus);
+        if (enemyType.ordinal() > 2) {
+            imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("invaders", enemyType.ordinal() - 3));
+            imageForStatus.put(DefaultSpriteStatus.DAMAGED.name(), new ImageLocation("invaders_damaged", enemyType.ordinal()  - 3));
+            setImageForStatus(imageForStatus, Tile.DEFAULT_SIZE, Tile.DEFAULT_SIZE);
+        } else {
+            imageForStatus.put(DefaultSpriteStatus.DEFAULT.name(), new ImageLocation("enemies", enemyType.ordinal()));
+            imageForStatus.put(DefaultSpriteStatus.DAMAGED.name(), new ImageLocation("enemies_damaged", enemyType.ordinal()));
+            setImageForStatus(imageForStatus);
+        }
         //CanAttack
         this.spriteCreator = new ProjectileCreator(spc, new ProjectileFactory(new Damage(1, Damage.DamageType.PLAYER)));
         this.spriteCreator.flipVertical();
@@ -70,6 +78,9 @@ public class SimpleEnemy extends SimpleSprite implements CanAttack, Destructible
         shootTimer = AnimationEngine.DEFAULT_FPS * 5;
         switch (enemyType) {
             case SINGLE:
+            case INVADER_1:
+            case INVADER_2:
+            case INVADER_3:
                 maxShots = 1;
                 break;
             case DOUBLE:

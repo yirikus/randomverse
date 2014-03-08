@@ -9,6 +9,7 @@ import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
@@ -28,11 +29,12 @@ import java.util.Map;
  * todo refactor formation movement creation - abstract method
  */
 public class LevelInvaders extends World {
+    public static final String ACTIVATION_KEY = "activationKey";
     private final ArtificialIntelligence ai;
     private final SpaceBackground background;
 
     public LevelInvaders(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
-        super(spriteCollection, 7, 1);
+        super(spriteCollection, 4, waveCount());
         this.ai = ai;
 
         this.background = new SpaceBackground(8);
@@ -40,17 +42,37 @@ public class LevelInvaders extends World {
         setWorldEvent(randomEvent(callbacks));
     }
 
+    private static long waveCount() {
+        return 1 + random.nextInt(2);
+    }
+
     private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
-        switch (random.nextInt(5)) {
-            default: return LevelInvadersEvents.invaders(callbacks);
+        if (getWavesToDefeat() == 2) {
+            switch (random.nextInt(5)) {
+                default: return LevelInvadersEvents.invadersWithUfos(callbacks);
+            }
+        } else {
+            switch (random.nextInt(5)) {
+                default: return LevelInvadersEvents.invaders(callbacks);
+            }
         }
 
     }
 
     @Override
-    protected void createSprites() {
+    protected void updateWorld() {
         if (getUpdateCount() == 1) {
-            boxLeftRightFormation("activationKey");
+            final int columns = 2 + random.nextInt(3);
+            final int rows = 2 + random.nextInt(3);
+            boxLeftRightFormation(rows, columns, ACTIVATION_KEY, null, false);
+            if (getWavesToDefeat() == 1) {
+                waitForInactivation(ACTIVATION_KEY);
+            }
+        }
+
+        if (getUpdateCount() == 2 && getWavesToDefeat() == 2) {
+            waitForInactivation(ACTIVATION_KEY);
+            boxLeftRightFormation(1, 1 + random.nextInt(9), ACTIVATION_KEY, SimpleEnemy.EnemyType.INVADER_3, true);
         }
     }
 
@@ -67,37 +89,55 @@ public class LevelInvaders extends World {
 
     }
 
-    private void boxLeftRightFormation(String name) {
-        waitForInactivation(name);
-        int enemySize = SimpleEnemy.SIZE;
-        int border = enemySize * 2;
-        int columns = 3;
-        int rows = 4;
-        int formationSize = rows * columns;
-        int colMargin = Formation.marginToFitSize(rows, GameWindow.SCREEN_W - border * 2);
+
+    private void boxLeftRightFormation(final int rows, final int columns, String name, final SimpleEnemy.EnemyType enemyType, boolean allTheWay) {
+        final int formationSize = rows * columns;
+        List<Sprite> enemies = createSprites(formationSize, new SpriteFactory() {
+            @Override
+            public Sprite newSprite(int x, int y) {
+                if (enemyType != null) {
+                    return new SimpleEnemy(x, y, enemyType, getSpriteCollection());
+                }
+                if (rows > 3 || columns > 5) {
+                    return new SimpleEnemy(x, y, SimpleEnemy.EnemyType.INVADER_1, getSpriteCollection());
+                } else {
+                    return new SimpleEnemy(x, y, SimpleEnemy.EnemyType.SINGLE, getSpriteCollection());
+                }
+            }
+        });
+
+        int dx = allTheWay ? GameWindow.SCREEN_W : 0;
+
+        final int enemySize = enemies.get(0).getWidth();
+        final int border = enemySize * 2;
+        int colMargin = Formation.marginToFitSize(columns, GameWindow.SCREEN_W - border * 2);
         int rowMargin = enemySize * 2;
-        Formation formation1 = Formation.boxFormation(rows, columns, new Position(border,0), colMargin, rowMargin);
-        Formation formation2 = Formation.boxFormation(rows, columns, new Position(border, formation1.getHeight()), colMargin, rowMargin);
-        Formation formation3 = Formation.boxFormation(rows, columns, new Position(border * 2, formation1.getHeight()), colMargin, rowMargin);
-        Formation formation4 = Formation.boxFormation(rows, columns, new Position(0, formation1.getHeight()), colMargin, rowMargin);
 
         List<Formation> formations = new ArrayList<Formation>();
-        formations.add(formation1);
-        formations.add(formation2);
-        formations.add(formation3);
-        formations.add(formation4);
+        formations.add(Formation.boxFormation(rows, columns, new Position(border - dx,0), colMargin, rowMargin));
+        formations.add(Formation.boxFormation(rows, columns, new Position(border - dx, enemySize + formations.get(0).getHeight()), colMargin, rowMargin));
+        formations.add(Formation.boxFormation(rows, columns, new Position(border * 2 + dx, enemySize +  formations.get(0).getHeight()), colMargin, rowMargin));
+        formations.add(Formation.boxFormation(rows, columns, new Position(0 - dx, enemySize + formations.get(0).getHeight()), colMargin, rowMargin));
 
-        List<Sprite> enemies = createSprites(formationSize);
+        FormationOrder e = randomOrder(columns, formationSize);
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
-        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
-        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
-        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
-        orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
+        for (int i = 0; i < formations.size(); i++) {
+            orders.add(e);
+        }
 
         FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, 2);
         formationMovement.registerObserver(this, name);
         ai.registerSpriteContainer(formationMovement);
     }
 
+    private FormationOrder randomOrder(int columns, int formationSize) {
+        switch (random.nextInt(3)) {
+            case 0:
+                return FormationOrder.groupSequence(columns, formationSize, null);
+            default:
+                return FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null);
+
+        }
+    }
 }

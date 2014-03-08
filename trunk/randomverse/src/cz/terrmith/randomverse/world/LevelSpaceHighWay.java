@@ -62,7 +62,7 @@ public class LevelSpaceHighWay extends World {
     }
 
     @Override
-    protected void createSprites() {
+    protected void updateWorld() {
         if (!this.created) {
             this.created = true;
             addTargetArea();

@@ -53,7 +53,7 @@ public class LevelMinefield extends World {
     }
 
     @Override
-    protected void createSprites() {
+    protected void updateWorld() {
         deployMines();
     }
 
