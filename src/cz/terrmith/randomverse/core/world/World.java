@@ -5,6 +5,7 @@ import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
+import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.util.StringUtils;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class World implements SpriteContainerObserver {
 
-    protected static Random random = new Random();
+    protected final static Random random = new Random();
     private boolean started;
     private long startTime;
     private long period;
@@ -39,6 +40,7 @@ public abstract class World implements SpriteContainerObserver {
      * @param period time to wait between updates in seconds
      */
     public World(SpriteCollection spriteCollection, long period, long wavesToDefeat) {
+        System.out.println("new world, waves to defeat: " + wavesToDefeat);
         this.spriteCollection = spriteCollection;
         this.period = TimeUnit.SECONDS.toMillis(period);
 	    this.wavesToDefeat = wavesToDefeat;
@@ -56,7 +58,7 @@ public abstract class World implements SpriteContainerObserver {
 //            System.out.println("beforeUpdate " + !paused + " | " + !waitForNotification +" | " + (period * updateCount) + " | " + (System.currentTimeMillis() - startTime));
             updateCount++;
             System.out.println("updateCount: " + updateCount);
-            createSprites();
+            updateWorld();
         }
     }
 
@@ -71,7 +73,7 @@ public abstract class World implements SpriteContainerObserver {
     /**
      * Expected to contain logic that adds sprites to sprite collection based on current updateCount
      */
-    protected abstract void createSprites();
+    protected abstract void updateWorld();
 
     public SpriteCollection getSpriteCollection() {
         return spriteCollection;
@@ -140,23 +142,15 @@ public abstract class World implements SpriteContainerObserver {
      * @param formationSize
      * @return
      */
-    protected List<Sprite> createSprites(int formationSize) {
+    protected List<Sprite> createSprites(int formationSize, SpriteFactory sf) {
         List<Sprite> enemies = new ArrayList<Sprite>(formationSize);
         for(int i = 0; i < formationSize; i++) {
             // position has no meaning, it will be repositioned upon FormationMovement creation
-            Sprite sprite = createSimpleEnemy(0, 0, null);
+            Sprite sprite = sf.newSprite(0, 0);
             enemies.add(sprite);
             getSpriteCollection().put(SpriteLayer.NPC, sprite);
         }
         return enemies;
-    }
-
-    private Sprite createSimpleEnemy(int x, int y, SimpleEnemy.EnemyType enemyType) {
-        if (enemyType == null) {
-            enemyType = randomEnemyType();
-        }
-        SimpleEnemy enemy = new SimpleEnemy(x,y, enemyType, getSpriteCollection());
-        return enemy;
     }
 
     private SimpleEnemy.EnemyType randomEnemyType() {

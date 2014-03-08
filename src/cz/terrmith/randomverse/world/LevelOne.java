@@ -12,12 +12,14 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.Tile;
+import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
 import cz.terrmith.randomverse.loot.LootFactory;
+import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
@@ -60,7 +62,7 @@ public class LevelOne extends World {
     }
 
     @Override
-    protected void createSprites() {
+    protected void updateWorld() {
         if (getUpdateCount() == 1) {
 //            randomBoxFormation("1");
 //        } else if (getUpdateCount() == 2){
@@ -95,7 +97,12 @@ public class LevelOne extends World {
         formations.add(formation1);
         formations.add(formation1.translate(0,GameWindow.SCREEN_H * 3));
 
-        List<Sprite> enemies = createSprites(formationSize);
+        List<Sprite> enemies = createSprites(formationSize,new SpriteFactory() {
+            @Override
+            public Sprite newSprite(int x, int y) {
+                return new SimpleEnemy(x,y, SimpleEnemy.EnemyType.KAMIKAZE,getSpriteCollection());
+            }
+        });
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
         orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
@@ -115,7 +122,12 @@ public class LevelOne extends World {
         formations.add(formation1);
         formations.add(formation2);
 
-        List<Sprite> enemies = createSprites(formationSize);
+        List<Sprite> enemies = createSprites(formationSize,new SpriteFactory() {
+            @Override
+            public Sprite newSprite(int x, int y) {
+                return new SimpleEnemy(x,y, SimpleEnemy.EnemyType.KAMIKAZE,getSpriteCollection());
+            }
+        });
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
         orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
@@ -135,7 +147,12 @@ public class LevelOne extends World {
         formations.add(formation1);
         formations.add(formation1.translate(0,GameWindow.SCREEN_H));
 
-        List<Sprite> enemies = createSprites(formationSize);
+        List<Sprite> enemies = createSprites(formationSize,new SpriteFactory() {
+            @Override
+            public Sprite newSprite(int x, int y) {
+                return new SimpleEnemy(x,y, SimpleEnemy.EnemyType.KAMIKAZE,getSpriteCollection());
+            }
+        });
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
         orders.add(FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null));
@@ -178,7 +195,12 @@ public class LevelOne extends World {
         formations.add(formation8);
         formations.add(formation9);
 
-        List<Sprite> enemies = createSprites(formationSize);
+        List<Sprite> enemies = createSprites(formationSize,new SpriteFactory() {
+            @Override
+            public Sprite newSprite(int x, int y) {
+                return new SimpleEnemy(x,y, SimpleEnemy.EnemyType.KAMIKAZE,getSpriteCollection());
+            }
+        });
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
         orders.add(FormationOrder.repeatedSequence(new Integer[]{1, 2, 3, 4, 5}, formationSize, 200L));
@@ -198,11 +220,12 @@ public class LevelOne extends World {
 
     private void formation1(String name) {
         waitForInactivation(name);
-        Formation formation1 = Formation.boxFormation(1, 9, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        Formation formation2 = Formation.boxFormation(1, 9, new Position(0, 150), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        int formationSize = 9;
+        Formation formation1 = Formation.boxFormation(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation2 = Formation.boxFormation(1, formationSize, new Position(0, 150), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         Formation formation3 = Formation.boxFormation(3, 3, new Position(300, 300), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         Formation formation4 = Formation.boxFormation(3, 4, new Position(250, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        Formation formation5 = Formation.boxFormation(1, 9, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation5 = Formation.boxFormation(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
 
 
         List<Formation> formations = new ArrayList<Formation>(3);
@@ -212,7 +235,12 @@ public class LevelOne extends World {
         formations.add(formation4);
         formations.add(formation5);
 
-        List<Sprite> enemies = createSprites(9);
+        List<Sprite> enemies = createSprites(formationSize,new SpriteFactory() {
+            @Override
+            public Sprite newSprite(int x, int y) {
+                return new SimpleEnemy(x,y, SimpleEnemy.EnemyType.KAMIKAZE,getSpriteCollection());
+            }
+        });
 
         List<FormationOrder> orders = new ArrayList<FormationOrder>();
         orders.add(new FormationOrder(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9}));

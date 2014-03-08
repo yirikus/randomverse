@@ -80,7 +80,23 @@ public class SimpleSprite implements Sprite {
         return imageForStatus;
     }
 
+    /**
+     * Sets images for sprite, no changes to width/height
+     * @param imageForStatus images
+     */
     public void setImageForStatus(Map<String, ImageLocation> imageForStatus) {
+        setImageForStatus(imageForStatus, this.width, this.height);
+    }
+
+    /**
+     * sets images for sprite and width/height
+     * @param imageForStatus images
+     * @param w new width
+     * @param h new height
+     */
+    public void setImageForStatus(Map<String, ImageLocation> imageForStatus, int w, int h) {
+        this.width = w;
+        this.height = h;
         this.imageForStatus = imageForStatus;
     }
 

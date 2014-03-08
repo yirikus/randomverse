@@ -51,7 +51,7 @@ public class LevelDebrisField extends World {
     }
 
     @Override
-    protected void createSprites() {
+    protected void updateWorld() {
         Debris enemy = new Debris(random.nextInt() % 600 + 100, -100, getSpriteCollection(), player);
         getSpriteCollection().put(SpriteLayer.NPC, enemy);
         SpriteContainer scn = new SimpleSpriteContainer(enemy);

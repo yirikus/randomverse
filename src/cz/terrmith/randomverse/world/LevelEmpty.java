@@ -39,7 +39,7 @@ public class LevelEmpty extends World {
     }
 
     @Override
-    protected void createSprites() {
+    protected void updateWorld() {
         //nothing
     }
 

@@ -30,4 +30,16 @@ public final class LevelInvadersEvents {
 
         return new WorldEvent(dynamicText, scannerInfo);
     }
+
+    public static WorldEvent invadersWithUfos(Map<EventResult, NavigableTextCallback> callbacks) {
+
+        final NavigableTextLeaf navigableText = new NavigableTextLeaf("It's them! Fucking invaders with something unidentifiable objects behind them!",callbacks.get(EventResult.EMBARK));
+        DynamicText dynamicText = new DynamicText(navigableText);
+
+        List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();
+        scannerInfo.add(new ScannerInfo(1, "Minor activity;"));
+        scannerInfo.add(new ScannerInfo(5, "Minor activy; invaders class ships; unidentifiable objects"));
+
+        return new WorldEvent(dynamicText, scannerInfo);
+    }
 }
