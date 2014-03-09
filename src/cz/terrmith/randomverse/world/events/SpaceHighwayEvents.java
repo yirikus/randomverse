@@ -32,7 +32,7 @@ public class SpaceHighwayEvents {
         List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();
         scannerInfo.add(new ScannerInfo(1, "Galactic channel: space highway, federal property, no scans allowed"));
 
-        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo);
+        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo, "1");
         return ret;
     }
 }

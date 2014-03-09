@@ -28,6 +28,6 @@ public final class LevelOneEvents {
         scannerInfo.add(new ScannerInfo(1, "Minor activity;"));
         scannerInfo.add(new ScannerInfo(5, "Minor activy; Frigate class ships"));
 
-        return new WorldEvent(dynamicText, scannerInfo);
+        return new WorldEvent(dynamicText, scannerInfo, "1");
     }
 }

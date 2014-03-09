@@ -60,7 +60,7 @@ public class LevelMinefield extends World {
     private void deployMines() {
         waitForInactivation(ACTIVATION_KEY);
 
-        Formation formation = Formation.boxFormation(3, 3, new Position(random.nextInt(700) - 100, 0), Mine.SIZE * 5, Mine.SIZE * 5);
+        Formation formation = Formation.rectangle(3, 3, new Position(random.nextInt(700) - 100, 0), Mine.SIZE * 5, Mine.SIZE * 5);
         final Mine.EnemyType enemyType;
         switch (random.nextInt(3)) {
             case 1:

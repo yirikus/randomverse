@@ -64,7 +64,7 @@ public class LevelOne extends World {
     @Override
     protected void updateWorld() {
         if (getUpdateCount() == 1) {
-//            randomBoxFormation("1");
+//            randomRectangle("1");
 //        } else if (getUpdateCount() == 2){
 //            lineFormation("2");
 //        } else if (getUpdateCount() == 3){
@@ -90,9 +90,9 @@ public class LevelOne extends World {
         int formationSize = 18;
         int cellSize = Tile.DEFAULT_SIZE * 3;
         int cols = GameWindow.SCREEN_W / cellSize;
-        Formation formation1 = Formation.randomBoxFormation(formationSize, cols,
-                                                            new Position(0, 0), // -(Tile.DEFAULT_SIZE * 3) * formationSize),
-                                                            cellSize, cellSize);
+        Formation formation1 = Formation.randomRectangle(formationSize, cols,
+                new Position(0, 0), // -(Tile.DEFAULT_SIZE * 3) * formationSize),
+                cellSize, cellSize);
         List<Formation> formations = new ArrayList<Formation>(3);
         formations.add(formation1);
         formations.add(formation1.translate(0,GameWindow.SCREEN_H * 3));
@@ -141,7 +141,7 @@ public class LevelOne extends World {
     private void lineFormation(String name) {
         waitForInactivation(name);
         int formationSize = 9;
-        Formation formation1 = Formation.boxFormation(1,formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 2, Tile.DEFAULT_SIZE * 2);
+        Formation formation1 = Formation.rectangle(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 2, Tile.DEFAULT_SIZE * 2);
 
         List<Formation> formations = new ArrayList<Formation>(2);
         formations.add(formation1);
@@ -168,14 +168,14 @@ public class LevelOne extends World {
     private void formation2(String name) {
         waitForInactivation(name);
         int formationSize = 9;
-        Formation formation1 = Formation.boxFormation(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation1 = Formation.rectangle(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         int amplitude = 100 + random.nextInt(300);
         int frequency = 200;// + random.nextInt(300);
 //            MovementPattern waveMovement = new WaveMovement(amplitude, frequency);
 //            MovementPattern waveMovement = new VectorMovement(new Position(0,1));
 
 //            Formation formation2 = Formation.movementSimulation(formation1, waveMovement, 400);
-        Formation formation2 = Formation.boxFormation(1, formationSize, new Position(0, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation2 = Formation.rectangle(1, formationSize, new Position(0, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
         Formation formation3 = Formation.circle(new Position(400,100), 50, formationSize);
         Formation formation4 = Formation.circle(new Position(400, 100), 100, formationSize, 1);
         Formation formation5 = Formation.circle(new Position(400,200), 100, formationSize, 2);
@@ -221,11 +221,11 @@ public class LevelOne extends World {
     private void formation1(String name) {
         waitForInactivation(name);
         int formationSize = 9;
-        Formation formation1 = Formation.boxFormation(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        Formation formation2 = Formation.boxFormation(1, formationSize, new Position(0, 150), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        Formation formation3 = Formation.boxFormation(3, 3, new Position(300, 300), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        Formation formation4 = Formation.boxFormation(3, 4, new Position(250, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
-        Formation formation5 = Formation.boxFormation(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation1 = Formation.rectangle(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation2 = Formation.rectangle(1, formationSize, new Position(0, 150), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation3 = Formation.rectangle(3, 3, new Position(300, 300), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation4 = Formation.rectangle(3, 4, new Position(250, 400), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
+        Formation formation5 = Formation.rectangle(1, formationSize, new Position(0, 0), Tile.DEFAULT_SIZE * 3, Tile.DEFAULT_SIZE * 3);
 
 
         List<Formation> formations = new ArrayList<Formation>(3);

@@ -18,6 +18,7 @@ public class WorldEvent {
     private final DynamicText dynamicText;
     private Dialog dialog;
     private List<ScannerInfo> scannerInfo;
+    private final String variation;
 //    public enum Progress {IN_PROGRESS, CONCLUDED}
 
 //    private Progress progress = Progress.IN_PROGRESS;
@@ -26,10 +27,12 @@ public class WorldEvent {
      *
      * @param dynamicText text that will appear in dialog
      * @param scannerInfo text that will appear on scanner
+     * @param variation
      */
-    public WorldEvent(DynamicText dynamicText, List<ScannerInfo> scannerInfo) {
+    public WorldEvent(DynamicText dynamicText, List<ScannerInfo> scannerInfo, String variation) {
         this.dynamicText = dynamicText;
         this.scannerInfo = scannerInfo;
+        this.variation = variation;
     }
 
     public Dialog getDialog() {
@@ -77,5 +80,9 @@ public class WorldEvent {
         }
 
         return message;
+    }
+
+    public String getVariation() {
+        return variation;
     }
 }

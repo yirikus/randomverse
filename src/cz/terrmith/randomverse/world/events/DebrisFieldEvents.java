@@ -32,7 +32,7 @@ public final class DebrisFieldEvents {
         scannerInfo.add(new ScannerInfo(1, "Minor activity; huge mass"));
         scannerInfo.add(new ScannerInfo(5, "Minor activy; many particles; low electronics"));
 
-        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo);
+        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo, "1");
         return ret;
     }
 }

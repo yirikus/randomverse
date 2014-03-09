@@ -33,8 +33,11 @@ public class LevelInvaders extends World {
     private final ArtificialIntelligence ai;
     private final SpaceBackground background;
 
+    public enum Variation {CLASSIC, AQUABELLE}
+
     public LevelInvaders(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
         super(spriteCollection, 4, waveCount());
+        //TODO period should be longer for aquabelles
         this.ai = ai;
 
         this.background = new SpaceBackground(8);
@@ -43,36 +46,56 @@ public class LevelInvaders extends World {
     }
 
     private static long waveCount() {
-        return 1 + random.nextInt(2);
+        return 1 + random.nextInt(3);
     }
 
     private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
-        if (getWavesToDefeat() == 2) {
+        if (getWavesToDefeat() == 3){
             switch (random.nextInt(5)) {
-                default: return LevelInvadersEvents.invadersWithUfos(callbacks);
+                default: return LevelInvadersEvents.aquabelles(callbacks);
             }
-        } else {
+        } else if (getWavesToDefeat() == 2) {
             switch (random.nextInt(5)) {
-                default: return LevelInvadersEvents.invaders(callbacks);
+                case 1: return LevelInvadersEvents.invadersWithUfos(callbacks);
+                default: return LevelInvadersEvents.aquabelles(callbacks);
+            }
+        } else if (getWavesToDefeat() == 1){
+            switch (random.nextInt(5)) {
+                case 1: return LevelInvadersEvents.invaders(callbacks);
+                default: return LevelInvadersEvents.aquabelles(callbacks);
             }
         }
-
+        return null;
     }
 
     @Override
     protected void updateWorld() {
-        if (getUpdateCount() == 1) {
-            final int columns = 2 + random.nextInt(3);
-            final int rows = 2 + random.nextInt(3);
-            boxLeftRightFormation(rows, columns, ACTIVATION_KEY, null, false);
-            if (getWavesToDefeat() == 1) {
-                waitForInactivation(ACTIVATION_KEY);
-            }
-        }
+        switch (Variation.valueOf(getWorldEvent().getVariation())) {
+            case CLASSIC:
+                if (getUpdateCount() == 1) {
+                    final int columns = 2 + random.nextInt(3);
+                    final int rows = 2 + random.nextInt(3);
+                    boxLeftRightFormation(rows, columns, ACTIVATION_KEY, null, false);
+                    if (getWavesToDefeat() == 1) {
+                        waitForInactivation(ACTIVATION_KEY);
+                    }
+                }
 
-        if (getUpdateCount() == 2 && getWavesToDefeat() == 2) {
-            waitForInactivation(ACTIVATION_KEY);
-            boxLeftRightFormation(1, 1 + random.nextInt(9), ACTIVATION_KEY, SimpleEnemy.EnemyType.INVADER_3, true);
+                if (getUpdateCount() == 2 && getWavesToDefeat() == 2) {
+                    waitForInactivation(ACTIVATION_KEY);
+                    boxLeftRightFormation(1, 1 + random.nextInt(9), ACTIVATION_KEY, SimpleEnemy.EnemyType.INVADER_3, true);
+                }
+                break;
+
+            case AQUABELLE:
+                if (getUpdateCount() == 1) {
+                    aquabelleFormation(16, 200, ACTIVATION_KEY, SimpleEnemy.EnemyType.INVADER_1, true);
+                } else if (getUpdateCount() == 2) {
+                    aquabelleFormation(8, 130, ACTIVATION_KEY, SimpleEnemy.EnemyType.INVADER_2, false);
+                } else if (getUpdateCount() == 3) {
+                    aquabelleFormation(4, 70, ACTIVATION_KEY, SimpleEnemy.EnemyType.INVADER_3, true);
+                }
+                break;
         }
     }
 
@@ -114,10 +137,10 @@ public class LevelInvaders extends World {
         int rowMargin = enemySize * 2;
 
         List<Formation> formations = new ArrayList<Formation>();
-        formations.add(Formation.boxFormation(rows, columns, new Position(border - dx,0), colMargin, rowMargin));
-        formations.add(Formation.boxFormation(rows, columns, new Position(border - dx, enemySize + formations.get(0).getHeight()), colMargin, rowMargin));
-        formations.add(Formation.boxFormation(rows, columns, new Position(border * 2 + dx, enemySize +  formations.get(0).getHeight()), colMargin, rowMargin));
-        formations.add(Formation.boxFormation(rows, columns, new Position(0 - dx, enemySize + formations.get(0).getHeight()), colMargin, rowMargin));
+        formations.add(Formation.rectangle(rows, columns, new Position(border - dx, 0), colMargin, rowMargin));
+        formations.add(Formation.rectangle(rows, columns, new Position(border - dx, enemySize + formations.get(0).getHeight()), colMargin, rowMargin));
+        formations.add(Formation.rectangle(rows, columns, new Position(border * 2 + dx, enemySize + formations.get(0).getHeight()), colMargin, rowMargin));
+        formations.add(Formation.rectangle(rows, columns, new Position(0 - dx, enemySize + formations.get(0).getHeight()), colMargin, rowMargin));
 
         FormationOrder e = randomOrder(columns, formationSize);
 
@@ -131,6 +154,39 @@ public class LevelInvaders extends World {
         ai.registerSpriteContainer(formationMovement);
     }
 
+    private void aquabelleFormation(int formationSize, int radius, String name, final SimpleEnemy.EnemyType enemyType, boolean clockwise) {
+        List<Sprite> enemies = createSprites(formationSize, new SpriteFactory() {
+            @Override
+            public Sprite newSprite(int x, int y) {
+                return new SimpleEnemy(x, y, enemyType, getSpriteCollection());
+            }
+        });
+
+        List<Formation> formations = new ArrayList<Formation>();
+        formations.add(Formation.circle(new Position(random.nextInt(GameWindow.WIDTH), 0), radius, formationSize, formationSize / 2));
+        Position center = new Position(400, 250);
+        if (clockwise) {
+            for (int i = 0; i < formationSize; i++) {
+                formations.add(Formation.circle(center, radius, formationSize, i));
+            }
+        } else {
+            for (int i = formationSize; i > 0; i--) {
+                formations.add(Formation.circle(center, radius, formationSize, i));
+            }
+        }
+
+        FormationOrder e = FormationOrder.repeatedSequence(new Integer[]{1}, formationSize, null);
+
+        List<FormationOrder> orders = new ArrayList<FormationOrder>();
+        for (Formation formation : formations) {
+            orders.add(e);
+        }
+
+        FormationMovement formationMovement = new FormationMovement(enemies, formations, orders, null, 1);
+        formationMovement.registerObserver(this, name);
+        ai.registerSpriteContainer(formationMovement);
+    }
+
     private FormationOrder randomOrder(int columns, int formationSize) {
         switch (random.nextInt(3)) {
             case 0:
@@ -140,4 +196,6 @@ public class LevelInvaders extends World {
 
         }
     }
+
+
 }
