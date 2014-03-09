@@ -7,7 +7,9 @@ package cz.terrmith.randomverse.core.input;
  */
 public class Command {
 
-	public boolean isAnyKey() {
+    private String keyTyped;
+
+    public boolean isAnyKey() {
 		return anyKey;
 	}
 
@@ -15,7 +17,15 @@ public class Command {
 		this.anyKey = anyKey;
 	}
 
-	public enum State {PRESSED, RELEASED, PRESSED_RELEASED, RELEASED_PRESSED}
+    public void setKeyTyped(String keyTyped) {
+        this.keyTyped = keyTyped;
+    }
+
+    public String getKeyTyped() {
+        return keyTyped;
+    }
+
+    public enum State {PRESSED, RELEASED, PRESSED_RELEASED, RELEASED_PRESSED}
     /**
      * User commands
      */
@@ -157,6 +167,7 @@ public class Command {
         this.action2 = State.RELEASED;
         this.action3 = State.RELEASED;
         this.action4 = State.RELEASED;
+        this.anyKey = false;
     }
 
     private Command.State changeState(Command.State currentState, boolean pressed){

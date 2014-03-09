@@ -15,10 +15,15 @@ public abstract class GameEngine extends StateMachine {
 	private Dialog dialog;
 	private boolean paused;
 
-	/**
+    /**
      * Updates games status
      */
-    public abstract void update();
+    public void update() {
+        if (!isPaused()) {
+            getCurrentState().update();
+        }
+    }
+
 
 	/**
 	 * Does everything that needs to be done before pausing the game

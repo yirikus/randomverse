@@ -163,7 +163,7 @@ public class LevelInvaders extends World {
         });
 
         List<Formation> formations = new ArrayList<Formation>();
-        formations.add(Formation.circle(new Position(random.nextInt(GameWindow.WIDTH), 0), radius, formationSize, formationSize / 2));
+        formations.add(Formation.circle(new Position(random.nextInt(GameWindow.SCREEN_W), 0), radius, formationSize, formationSize / 2));
         Position center = new Position(400, 250);
         if (clockwise) {
             for (int i = 0; i < formationSize; i++) {
