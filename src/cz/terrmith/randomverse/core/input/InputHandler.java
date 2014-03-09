@@ -24,7 +24,8 @@ public class InputHandler implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        System.out.println("key typed! " + e.getKeyChar());
+        ctrl.setKeyTyped(String.valueOf(e.getKeyChar()));
     }
 
     @Override

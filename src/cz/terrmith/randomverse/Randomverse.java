@@ -15,6 +15,7 @@ import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.game.states.CutSceneState;
 import cz.terrmith.randomverse.game.states.GameState;
 import cz.terrmith.randomverse.game.states.InventoryState;
+import cz.terrmith.randomverse.game.states.LadderState;
 import cz.terrmith.randomverse.game.states.MapState;
 import cz.terrmith.randomverse.game.states.MenuState;
 import cz.terrmith.randomverse.game.states.ShopState;
@@ -60,6 +61,7 @@ public class Randomverse extends GameEngine {
         this.callbacks = new HashMap<EventResult, NavigableTextCallback>();
 
         addState(new GameState(this));
+        addState(new LadderState(this));
         addState(new CutSceneState(this));
         addState(new MenuState(this));
         addState(new MapState(this));
@@ -83,13 +85,6 @@ public class Randomverse extends GameEngine {
     }
 
     @Override
-    public void update() {
-	    if (!isPaused()) {
-            getCurrentState().update();
-        }
-    }
-
-    @Override
     public SpriteCollection getSpriteCollection() {
         return this.spriteCollection;
     }
@@ -101,12 +96,15 @@ public class Randomverse extends GameEngine {
 
     @Override
     public void waitForUnpause() {
-        if(command.isAnyKey()) {
+        if((command.isAnyKey() && !getDialog().isInput()) || command.getAction2() == Command.State.PRESSED || command.getAction2() == Command.State.RELEASED_PRESSED) {
             boolean closed = getDialog() == null || closeDialog();
             if (closed) {
                 unpause();
                 command.clear();
             }
+        } else if (getDialog() != null && getDialog().isInput() && command.getKeyTyped() != null) {
+            getDialog().setInputText(getDialog().getInputText() + command.getKeyTyped());
+            command.setKeyTyped(null);
         }
     }
 

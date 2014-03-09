@@ -2,6 +2,7 @@ package cz.terrmith.randomverse.game.states;
 
 import cz.terrmith.randomverse.Randomverse;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
+import cz.terrmith.randomverse.core.dialog.Dialog;
 import cz.terrmith.randomverse.core.dialog.DialogCallback;
 import cz.terrmith.randomverse.core.geometry.Boundary;
 import cz.terrmith.randomverse.core.geometry.Position;
@@ -21,6 +22,7 @@ import cz.terrmith.randomverse.core.sprite.properties.Solid;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
+import cz.terrmith.randomverse.ladder.LadderUtil;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
 import java.awt.Color;
@@ -64,12 +66,12 @@ public class GameState implements State {
             // add modal game over dialog
             DialogCallback callback = new DialogCallback() {
                 @Override
-                public void onClose() {
-                    stateMachine.setCurrentState(StateName.MAIN_MENU.name());
+                public void onClose(Dialog d) {
+                    writeLadder(d.getInputText());
+                    stateMachine.setCurrentState(StateName.LADDER.name());
                 }
             };
-            cz.terrmith.randomverse.core.dialog.Dialog dialog
-                    = new cz.terrmith.randomverse.core.dialog.Dialog("GAME OVER",200,200,400,200,callback);
+            Dialog dialog = Dialog.inputDialog("GAME OVER", 200, 200, 400, 200,callback);
             stateMachine.showDialog(dialog);
             command.clear();
         } else  if (Command.State.PRESSED.equals(command.getInventory())
@@ -83,6 +85,11 @@ public class GameState implements State {
             stateMachine.getPlayer().update();
             updateWorld();
         }
+    }
+
+    private void writeLadder(String name) {
+        System.out.println("name for ladder: " + name + "....." + stateMachine.getPlayer().getMoney());
+        LadderUtil.writeToFile(name, stateMachine.getPlayer());
     }
 
     private void updateItems() {
@@ -109,7 +116,7 @@ public class GameState implements State {
         if (world.completed()) {
             DialogCallback callback = new DialogCallback() {
                 @Override
-                public void onClose() {
+                public void onClose(Dialog d) {
                     stateMachine.setCurrentState(StateName.MAP.name());
                 }
             };

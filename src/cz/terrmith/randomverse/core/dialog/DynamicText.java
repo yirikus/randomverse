@@ -72,7 +72,15 @@ public class DynamicText {
        return this.navigableText;
     }
 
-    public void draw(Graphics g, int x, int y, int width){
+    /**
+     * draws dynamic text
+     * @param g graphics
+     * @param x x of drawing start position
+     * @param y y of drawing start position
+     * @param width width
+     * @return last line y on which was drawn
+     */
+    public int draw(Graphics g, int x, int y, int width){
         Font font = new Font("system", Font.BOLD, 15);
         FontMetrics metrics = g.getFontMetrics();
         g.setFont(font);
@@ -88,13 +96,17 @@ public class DynamicText {
 
         int lineSpace = 5;
         nextLineY += (2 * lineSpace);
+        int lastLineY = nextLineY;
         for (int i = 0; i < getNavigableText().getOptions().size(); i++) {
             if (currentOption == i) {
                 g.setColor(Color.YELLOW);
             } else {
                 g.setColor(Color.WHITE);
             }
-            g.drawString(getNavigableText().getOptions().get(i).getDescription(), x, nextLineY + i * (metrics.getHeight() + lineSpace));
+            lastLineY =  nextLineY + i * (metrics.getHeight() + lineSpace);
+            g.drawString(getNavigableText().getOptions().get(i).getDescription(), x, lastLineY);
         }
+
+        return lastLineY;
     }
 }

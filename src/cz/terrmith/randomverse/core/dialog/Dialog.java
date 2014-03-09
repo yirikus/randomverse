@@ -21,10 +21,12 @@ public class Dialog{
 	private int height;
 	private DialogCallback callback;
 	private long timer;
+    private boolean input;
+    private String inputText = "";
 
-	/**
+    /**
 	 *
-	 * @param text message to write into dialog
+	 * @param text message to writeToFile into dialog
 	 * @param posX x
 	 * @param posY y
 	 * @param width width
@@ -37,7 +39,7 @@ public class Dialog{
 
     /**
      *
-     * @param text message to write into dialog
+     * @param text message to writeToFile into dialog
      * @param posX x
      * @param posY y
      * @param width width
@@ -46,7 +48,6 @@ public class Dialog{
      * @param menu menu with options to choose from
      */
     public Dialog(DynamicText text, int posX, int posY, int width, int height, DialogCallback callback) {
-        System.out.println("new dialog: " + text.getNavigableText().getMessage());
         this.dynamicText = text;
         this.posX = posX;
         this.posY = posY;
@@ -54,6 +55,13 @@ public class Dialog{
         this.height = height;
         this.callback = callback;
         timer = System.currentTimeMillis();
+    }
+
+    public static Dialog inputDialog(String text, int posX, int posY, int width, int height, DialogCallback callback) {
+        Dialog dialog = new Dialog(new DynamicText(text), posX, posY, width, height, callback);
+        dialog.input = true;
+
+        return dialog;
     }
 
 	/**
@@ -66,7 +74,7 @@ public class Dialog{
 			return false;
 		}
 		if (callback != null) {
-			callback.onClose();
+			callback.onClose(this);
 		}
 		return true;
 	}
@@ -88,6 +96,11 @@ public class Dialog{
             command.setAction1(false);
             return dynamicText.navigate();
         }
+        if (input) {
+            String typed = command.getKeyTyped();
+            inputText += typed;
+        }
+
         return false;
     }
 
@@ -101,16 +114,14 @@ public class Dialog{
         //draw string
 		Font font = new Font("system", Font.BOLD, 15);
         g.setFont(font);
-//        FontMetrics metrics = g.getFontMetrics();
-//        int dx = (getWidth() - metrics.stringWidth(text)) / 2;
-//        g.setColor(Color.WHITE);
-//        g.drawString(getText(),
-//                getPosX() + dx,
-//                getPosY() + getHeight() / 2);
 
-        dynamicText.draw(g, getPosX(), getPosY(), getWidth());
+        int y = dynamicText.draw(g, getPosX(), getPosY(), getWidth());
 
-        //draw menu
+        //draw input
+        if (input) {
+            g.setColor(new Color(58, 173, 226));
+            g.drawString(getInputText(), getPosX() + 10, y + 15);
+        }
 	}
 
 
@@ -129,4 +140,16 @@ public class Dialog{
 	public int getPosX() {
 		return posX;
 	}
+
+    public boolean isInput() {
+        return input;
+    }
+
+    public String getInputText() {
+        return inputText;
+    }
+
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
+    }
 }

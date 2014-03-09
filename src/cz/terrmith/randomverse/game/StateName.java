@@ -11,4 +11,6 @@ public enum StateName {MAIN_MENU,
     GAME, MAP,
     SHOP,
     INVENTORY,
-    CUT_SCENE}
+    GAME_OVER,
+    CUT_SCENE,
+    LADDER}
