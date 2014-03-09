@@ -8,21 +8,29 @@ import java.util.List;
  * User: TERRMITh
  * Date: 7.3.14
  * Time: 10:40
- * To change this template use File | Settings | File Templates.
+ *
+ * @param <E> Object that holds results of NavigableTextLeaf selection
+ *
  */
-public class NavigableTextLeaf implements NavigableText {
+public class NavigableTextLeaf<E> implements NavigableText {
 
-    private final NavigableTextCallback callback;
+    private final NavigableTextCallback<E> callback;
     private final String message;
     private final String description;
+    private final E result;
 
-    public NavigableTextLeaf(String description, NavigableTextCallback callback) {
+    public NavigableTextLeaf(String description, NavigableTextCallback<E> callback, E result) {
         if (callback == null) {
             throw new IllegalArgumentException("callback must not be null");
         }
         this.callback = callback;
         this.message = description;
         this.description = description;
+        this.result = result;
+    }
+
+    public NavigableTextLeaf(String description, NavigableTextCallback<E> callback) {
+        this(description, callback, null);
     }
 
     @Override
@@ -32,7 +40,7 @@ public class NavigableTextLeaf implements NavigableText {
 
     @Override
     public boolean navigate() {
-        callback.onSelection();
+        callback.onSelection(result);
         return true;
     }
 

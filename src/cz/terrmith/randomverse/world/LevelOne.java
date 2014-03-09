@@ -16,8 +16,8 @@ import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
@@ -25,7 +25,8 @@ import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
 import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.LevelOneEvents;
+import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.util.LevelOneEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -45,7 +46,7 @@ public class LevelOne extends World {
     private final ArtificialIntelligence ai;
     private final SpaceBackground background;
 
-    public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
+    public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         super(spriteCollection, 7, 0);
         this.ai = ai;
 
@@ -54,7 +55,7 @@ public class LevelOne extends World {
         setWorldEvent(randomEvent(callbacks));
     }
 
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
+    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         switch (random.nextInt(5)) {
             default: return LevelOneEvents.surrounded(callbacks);
         }

@@ -10,12 +10,13 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.sprite.InvisibleArea;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.SpaceHighwayEvents;
+import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.util.SpaceHighwayEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -32,14 +33,14 @@ public class LevelSpaceHighWay extends World {
     private boolean created;
     private int lanes;
 
-    public LevelSpaceHighWay(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
+    public LevelSpaceHighWay(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         super(spriteCollection, 1, 1);
         this.ai = ai;
         this.background = new SpaceBackground(5);
         setWorldEvent(randomEvent(callbacks));
     }
 
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
+    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         switch (random.nextInt(5)) {
             case 1:
                 this.lanes = 4;

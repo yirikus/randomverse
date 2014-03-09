@@ -7,7 +7,10 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -95,6 +98,7 @@ public class GraphicEngine {
         g2.fillRect(0, 0, width, height);
 
         // render sprites
+        //TODO move to GameState ?
         SpriteCollection sprites = gameEngine.getSpriteCollection();
         sprites.drawLayer(SpriteLayer.BACKGROUND, g2, iml);
 	    sprites.drawLayer(SpriteLayer.ITEM, g2, iml);
@@ -103,11 +107,11 @@ public class GraphicEngine {
         sprites.drawLayer(SpriteLayer.PLAYER, g2, iml);
         sprites.drawLayer(SpriteLayer.SHIELD, g2, iml);
 
-	    Dialog dialog = gameEngine.getDialog();
+        gameEngine.drawHUD(g2, iml);
+
+        Dialog dialog = gameEngine.getDialog();
 	    if (dialog != null) {
 		    dialog.drawDialog(g2);
 	    }
-
-        gameEngine.drawHUD(g2, iml);
     }
 }

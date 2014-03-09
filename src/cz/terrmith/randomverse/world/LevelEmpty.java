@@ -4,10 +4,11 @@ import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.LevelEmptyEvents;
+import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.util.LevelEmptyEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,7 +25,7 @@ public class LevelEmpty extends World {
 
     private final SpaceBackground background;
 
-    public LevelEmpty(final SpriteCollection spriteCollection, Map<EventResult, NavigableTextCallback> callbacks) {
+    public LevelEmpty(final SpriteCollection spriteCollection, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         super(spriteCollection, 7, 0);
 
         this.background = new SpaceBackground(10);
@@ -32,9 +33,10 @@ public class LevelEmpty extends World {
         setWorldEvent(randomEvent(callbacks));
     }
 
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
+    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         switch (random.nextInt(5)) {
-            default: return LevelEmptyEvents.shop(callbacks);
+            case 1: return LevelEmptyEvents.shop(callbacks);
+            default: return LevelEmptyEvents.goSomewhere(callbacks);
         }
     }
 

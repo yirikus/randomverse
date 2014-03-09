@@ -36,7 +36,6 @@ public class LadderState implements State {
     @Override
     public void update() {
         if (stateMachine.getCommand().isAnyKey()) {
-            System.out.println("änykey bitch");
             stateMachine.setCurrentState(StateName.MAIN_MENU.name());
             stateMachine.getCommand().clear();
         }
@@ -46,6 +45,7 @@ public class LadderState implements State {
     public void draw(Graphics2D g2, ImageLoader iml) {
         stateMachine.clearScreen(g2, new Color(0,0,0,180));
         if (ladder != null) {
+            System.out.println("Ladder font 25");
             Font font = new Font("system", Font.BOLD, 25);
             g2.setFont(font);
             g2.setColor(Color.GREEN);
@@ -53,7 +53,6 @@ public class LadderState implements State {
             for (LadderEntry entry : ladder) {
                 g2.drawString(entry.getName().trim(), 100, 100 + i * 25);
                 g2.drawString(String.valueOf(entry.getMoney()), GameWindow.SCREEN_W - 200, 100 + i * 25);
-                System.out.println(entry.getName() + ": " + entry.getMoney());
                 i++;
             }
         }
@@ -61,7 +60,6 @@ public class LadderState implements State {
 
     @Override
     public void activate(State prevState) {
-        System.out.println("activating ladder");
         stateMachine.getCommand().clear();
         ladder = LadderUtil.readFromFile();
     }

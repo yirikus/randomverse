@@ -12,11 +12,12 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.sprite.enemy.Mine;
 import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.LevelMineFieldEvents;
+import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.util.LevelMineFieldEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,7 +35,7 @@ public class LevelMinefield extends World {
     private final Player player;
     private final SpaceBackground background;
 
-    public LevelMinefield(final SpriteCollection spriteCollection, Player player, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
+    public LevelMinefield(final SpriteCollection spriteCollection, Player player, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         super(spriteCollection, 1, 3);
         this.ai = ai;
         this.player = player;
@@ -45,7 +46,7 @@ public class LevelMinefield extends World {
         setWorldEvent(randomEvent(callbacks));
     }
 
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
+    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         switch (random.nextInt(5)) {
             case 1: return LevelMineFieldEvents.minefield(callbacks);
             default: return LevelMineFieldEvents.minefieldAvoidable(callbacks);
