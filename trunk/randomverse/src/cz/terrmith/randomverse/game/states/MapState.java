@@ -6,9 +6,10 @@ import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.game.StateName;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.world.events.WorldEvent;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -29,31 +30,35 @@ public class MapState implements State {
     }
 
     private void addCallbacks() {
-        stateMachine.addCallback(EventResult.EMBARK, new NavigableTextCallback() {
+        stateMachine.addCallback(EventResult.EMBARK, new NavigableTextCallback<Mission>() {
             @Override
-            public void onSelection() {
+            public void onSelection(Mission m) {
                 stateMachine.setCurrentState(StateName.GAME.name());
+                stateMachine.getMap().addMission(m);
                 currentEvent = null;
             }
         });
-        stateMachine.addCallback(EventResult.MOVE, new NavigableTextCallback() {
+        stateMachine.addCallback(EventResult.MOVE, new NavigableTextCallback<Mission>() {
             @Override
-            public void onSelection() {
+            public void onSelection(Mission m) {
                 stateMachine.getMap().markExplored();
+                stateMachine.getMap().addMission(m);
                 currentEvent = null;
             }
         });
-        stateMachine.addCallback(EventResult.SHOP, new NavigableTextCallback() {
+        stateMachine.addCallback(EventResult.SHOP, new NavigableTextCallback<Mission>() {
             @Override
-            public void onSelection() {
+            public void onSelection(Mission m) {
                 stateMachine.getMap().markExplored();
+                stateMachine.getMap().addMission(m);
                 stateMachine.setCurrentState(StateName.SHOP.name());
                 currentEvent = null;
             }
         });
-        stateMachine.addCallback(EventResult.NONE, new NavigableTextCallback() {
+        stateMachine.addCallback(EventResult.NONE, new NavigableTextCallback<Mission>() {
             @Override
-            public void onSelection() {
+            public void onSelection(Mission m) {
+                stateMachine.getMap().addMission(m);
                 currentEvent = null;
             }
         });

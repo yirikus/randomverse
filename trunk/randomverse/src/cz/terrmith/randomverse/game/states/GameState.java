@@ -250,6 +250,7 @@ public class GameState implements State {
 
     @Override
     public void draw(Graphics2D g2, ImageLoader iml) {
+        System.out.println("GameState Font 20");
         Font font = new Font("system",Font.BOLD,20);
         g2.setFont(font);
         g2.setColor(Color.WHITE);
@@ -269,14 +270,14 @@ public class GameState implements State {
             //obtain level from map
 	        this.world = stateMachine.getMap().getCurrentWorld();
             command.clear();
-//            DialogCallback callback = new DialogCallback() {
-//                @Override
-//                public void onClose() {
-//                }
-//            };
-//            cz.terrmith.randomverse.core.dialog.Dialog dialog
-//                    = new cz.terrmith.randomverse.core.dialog.Dialog("GAME START",200,200,400,200,callback);
-//            stateMachine.showDialog(dialog);
+            DialogCallback callback = new DialogCallback() {
+                @Override
+                public void onClose(Dialog d) {
+                }
+            };
+            cz.terrmith.randomverse.core.dialog.Dialog dialog
+                    = new cz.terrmith.randomverse.core.dialog.Dialog("GAME START",200,200,400,200,callback);
+            stateMachine.showDialog(dialog);
         }
     }
 

@@ -8,6 +8,7 @@ import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.util.StringUtils;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
+import cz.terrmith.randomverse.world.events.WorldEvent;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -134,7 +135,7 @@ public abstract class World implements SpriteContainerObserver {
     //todo scannerStrength in draw method is probably ugly
     public void drawScannerInfo(Graphics g, Position position, int scannerStrenght) {
         String scannerInfo = worldEvent.getScannerInfo(scannerStrenght);
-        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int) position.getX(), (int) position.getY(), 400);
+        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int) position.getX(), (int) position.getY(), 300);
     }
 
     /**

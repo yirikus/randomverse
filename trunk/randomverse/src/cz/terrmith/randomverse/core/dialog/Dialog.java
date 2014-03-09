@@ -106,7 +106,7 @@ public class Dialog{
 
 	public void drawDialog(Graphics g) {
         //draw box
-		g.setColor(new Color(0, 0, 0, 200));
+		g.setColor(new Color(0, 0, 0, 174));
 		g.fillRect((int) getPosX(), (int) getPosY(), getWidth(), getHeight());
 		g.setColor(Color.WHITE);
 		g.drawRect((int) getPosX(), (int) getPosY(), getWidth(), getHeight());
@@ -114,7 +114,6 @@ public class Dialog{
         //draw string
 		Font font = new Font("system", Font.BOLD, 15);
         g.setFont(font);
-
         int y = dynamicText.draw(g, getPosX(), getPosY(), getWidth());
 
         //draw input

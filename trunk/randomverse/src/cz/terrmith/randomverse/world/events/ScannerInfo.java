@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core.world;
+package cz.terrmith.randomverse.world.events;
 
 /**
  * Created with IntelliJ IDEA.

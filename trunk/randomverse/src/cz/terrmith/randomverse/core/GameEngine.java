@@ -72,18 +72,20 @@ public abstract class GameEngine extends StateMachine {
 	 */
 	public void showDialog(Dialog dialog){
 		pause();
-		if (this.dialog != null) {
-			this.dialog.close();
-		}
-		this.dialog = dialog;
+        if (this.dialog != null) {
+            this.dialog.close();
+        }
+        System.out.println("show dialog ");
+        this.dialog = dialog;
 	}
 
 	/**
 	 * Closes dialog window
 	 */
 	public boolean closeDialog() {
-		boolean closed = this.dialog.close();
+        boolean closed = this.dialog.close();
 		if (closed) {
+            System.out.println("close dialog");
 			this.dialog = null;
 		}
 		return closed;

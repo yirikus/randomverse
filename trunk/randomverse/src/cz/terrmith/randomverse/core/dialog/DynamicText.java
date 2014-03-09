@@ -84,6 +84,7 @@ public class DynamicText {
         Font font = new Font("system", Font.BOLD, 15);
         FontMetrics metrics = g.getFontMetrics();
         g.setFont(font);
+        g.setColor(Color.WHITE);
 
 // centered
 //        int dx = (getWidth() - metrics.stringWidth(text)) / 2;
@@ -93,7 +94,7 @@ public class DynamicText {
 //                getPosY() + getHeight() / 2);
 
         int nextLineY = StringUtils.drawString(g, getNavigableText().getMessage(), x, y, width);
-
+        System.out.println("[" + x + ", " + y +  ": " + width + "] drawing text " + getNavigableText().getMessage());
         int lineSpace = 5;
         nextLineY += (2 * lineSpace);
         int lastLineY = nextLineY;

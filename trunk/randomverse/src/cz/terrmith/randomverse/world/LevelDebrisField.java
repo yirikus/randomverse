@@ -9,11 +9,12 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.sprite.enemy.debris.Debris;
-import cz.terrmith.randomverse.world.events.DebrisFieldEvents;
 import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.util.DebrisFieldEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -33,7 +34,7 @@ public class LevelDebrisField extends World {
     /**
      * @param spriteCollection sprite collection
      */
-    public LevelDebrisField(SpriteCollection spriteCollection, Sprite player, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback > callbacks) {
+    public LevelDebrisField(SpriteCollection spriteCollection, Sprite player, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         super(spriteCollection, 5, 5);
         this.player = player;
         this.ai = ai;
@@ -43,7 +44,7 @@ public class LevelDebrisField extends World {
         setWorldEvent(randomEvent(callbacks));
     }
 
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
+    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         switch (random.nextInt(5)) {
             default: return DebrisFieldEvents.shipwreck(callbacks);
         }

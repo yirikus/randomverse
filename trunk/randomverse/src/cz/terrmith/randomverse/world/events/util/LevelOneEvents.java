@@ -1,10 +1,12 @@
-package cz.terrmith.randomverse.world.events;
+package cz.terrmith.randomverse.world.events.util;
 
 import cz.terrmith.randomverse.core.dialog.DynamicText;
 import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.dialog.NavigableTextLeaf;
-import cz.terrmith.randomverse.core.world.ScannerInfo;
-import cz.terrmith.randomverse.core.world.WorldEvent;
+import cz.terrmith.randomverse.inventory.Mission;
+import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.world.events.ScannerInfo;
+import cz.terrmith.randomverse.world.events.WorldEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,8 @@ public final class LevelOneEvents {
 
     private LevelOneEvents(){}
 
-    public static WorldEvent surrounded(Map<EventResult, NavigableTextCallback> callbacks) {
-        NavigableTextLeaf navigableText = new NavigableTextLeaf("You, sir are surrounded!",callbacks.get(EventResult.EMBARK));
+    public static WorldEvent surrounded(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
+        NavigableTextLeaf navigableText = new NavigableTextLeaf("You, sir are surrounded!",callbacks.get(EventResult.EMBARK), null);
         DynamicText dynamicText = new DynamicText(navigableText);
 
         List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();

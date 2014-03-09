@@ -11,11 +11,12 @@ import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.core.world.WorldEvent;
 import cz.terrmith.randomverse.graphics.SpaceBackground;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.LevelInvadersEvents;
+import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.util.LevelInvadersEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -35,7 +36,7 @@ public class LevelInvaders extends World {
 
     public enum Variation {CLASSIC, AQUABELLE}
 
-    public LevelInvaders(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback> callbacks) {
+    public LevelInvaders(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         super(spriteCollection, 4, waveCount());
         //TODO period should be longer for aquabelles
         this.ai = ai;
@@ -49,7 +50,7 @@ public class LevelInvaders extends World {
         return 1 + random.nextInt(3);
     }
 
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback > callbacks) {
+    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
         if (getWavesToDefeat() == 3){
             switch (random.nextInt(5)) {
                 default: return LevelInvadersEvents.aquabelles(callbacks);

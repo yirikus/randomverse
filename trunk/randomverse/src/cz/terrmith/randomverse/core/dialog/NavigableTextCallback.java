@@ -6,7 +6,12 @@ package cz.terrmith.randomverse.core.dialog;
  * User: TERRMITh
  * Date: 4.3.14
  * Time: 16:33
+ * @param <E>
  */
-public interface NavigableTextCallback {
-    void onSelection();
+public interface NavigableTextCallback<E> {
+    /**
+     * Will be called when event is concluded
+     * @param event additional information about the results
+     */
+    void onSelection(E event);
 }

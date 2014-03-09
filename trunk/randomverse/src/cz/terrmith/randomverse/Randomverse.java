@@ -20,6 +20,7 @@ import cz.terrmith.randomverse.game.states.MapState;
 import cz.terrmith.randomverse.game.states.MenuState;
 import cz.terrmith.randomverse.game.states.ShopState;
 import cz.terrmith.randomverse.inventory.GameMap;
+import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.world.events.EventResult;
 
 import java.awt.Color;
@@ -40,7 +41,7 @@ public class Randomverse extends GameEngine {
 
     private final Command command;
     private final ArtificialIntelligence ai;
-    private final HashMap<EventResult, NavigableTextCallback> callbacks;
+    private final HashMap<EventResult, NavigableTextCallback<Mission>> callbacks;
     private int screenWidth;
     private int screenHeight;
     private final CollisionTester collisionTester;
@@ -58,7 +59,7 @@ public class Randomverse extends GameEngine {
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
         this.ai = new ArtificialIntelligence(new RandomAttackPattern(1000));
-        this.callbacks = new HashMap<EventResult, NavigableTextCallback>();
+        this.callbacks = new HashMap<EventResult, NavigableTextCallback<Mission>>();
 
         addState(new GameState(this));
         addState(new LadderState(this));
@@ -96,6 +97,7 @@ public class Randomverse extends GameEngine {
 
     @Override
     public void waitForUnpause() {
+        System.out.println("paused");
         if((command.isAnyKey() && !getDialog().isInput()) || command.getAction2() == Command.State.PRESSED || command.getAction2() == Command.State.RELEASED_PRESSED) {
             boolean closed = getDialog() == null || closeDialog();
             if (closed) {
@@ -162,7 +164,7 @@ public class Randomverse extends GameEngine {
         return ai;
     }
 
-    public Map<EventResult, NavigableTextCallback> getCallbacks() {
+    public Map<EventResult, NavigableTextCallback<Mission>> getCallbacks() {
         return Collections.unmodifiableMap(callbacks);
     }
 

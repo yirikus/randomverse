@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.core.world;
+package cz.terrmith.randomverse.world.events;
 
 import cz.terrmith.randomverse.core.dialog.Dialog;
 import cz.terrmith.randomverse.core.dialog.DynamicText;
