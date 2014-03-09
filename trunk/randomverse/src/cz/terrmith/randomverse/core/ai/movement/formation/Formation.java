@@ -49,7 +49,7 @@ public class Formation {
      * @param height        space between rows
      * @return
      */
-    public static Formation boxFormation(int rows, int columns, Position startPosition, int width, int height) {
+    public static Formation rectangle(int rows, int columns, Position startPosition, int width, int height) {
         List<Position> formationPositions = new ArrayList<Position>();
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
@@ -60,7 +60,7 @@ public class Formation {
         return new Formation(formationPositions);
     }
 
-    public static Formation randomBoxFormation(int rows, int columns, Position startPosition, int width, int height) {
+    public static Formation randomRectangle(int rows, int columns, Position startPosition, int width, int height) {
         List<Position> formationPositions = new ArrayList<Position>();
         for (int y = 0; y < rows; y++) {
             int chosen = random.nextInt(columns);

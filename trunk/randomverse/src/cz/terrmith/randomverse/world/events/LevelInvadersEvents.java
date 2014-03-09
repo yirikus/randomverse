@@ -5,6 +5,7 @@ import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.dialog.NavigableTextLeaf;
 import cz.terrmith.randomverse.core.world.ScannerInfo;
 import cz.terrmith.randomverse.core.world.WorldEvent;
+import cz.terrmith.randomverse.world.LevelInvaders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public final class LevelInvadersEvents {
         scannerInfo.add(new ScannerInfo(1, "Minor activity;"));
         scannerInfo.add(new ScannerInfo(5, "Minor activy; invaders class ships"));
 
-        return new WorldEvent(dynamicText, scannerInfo);
+        return new WorldEvent(dynamicText, scannerInfo, LevelInvaders.Variation.CLASSIC.name());
     }
 
     public static WorldEvent invadersWithUfos(Map<EventResult, NavigableTextCallback> callbacks) {
@@ -40,6 +41,18 @@ public final class LevelInvadersEvents {
         scannerInfo.add(new ScannerInfo(1, "Minor activity;"));
         scannerInfo.add(new ScannerInfo(5, "Minor activy; invaders class ships; unidentifiable objects"));
 
-        return new WorldEvent(dynamicText, scannerInfo);
+        return new WorldEvent(dynamicText, scannerInfo, LevelInvaders.Variation.CLASSIC.name());
+    }
+
+    public static WorldEvent aquabelles(Map<EventResult, NavigableTextCallback> callbacks) {
+
+        final NavigableTextLeaf navigableText = new NavigableTextLeaf("You were just casually flying around when... wild invaders practicing their AQUABELLE show appeared!",callbacks.get(EventResult.EMBARK));
+        DynamicText dynamicText = new DynamicText(navigableText);
+
+        List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();
+        scannerInfo.add(new ScannerInfo(1, "Minor activity;"));
+        scannerInfo.add(new ScannerInfo(5, "Minor activy; invaders class ships"));
+
+        return new WorldEvent(dynamicText, scannerInfo, LevelInvaders.Variation.AQUABELLE.name());
     }
 }

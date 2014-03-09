@@ -30,6 +30,6 @@ public class LevelEmptyEvents {
         List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();
         scannerInfo.add(new ScannerInfo(1, "Ad network: 'Visit Atsep Icnu's Intergalactic Spaceparts shop! Best prices in known universe!'"));
 
-        return new WorldEvent(dynamicText, scannerInfo);
+        return new WorldEvent(dynamicText, scannerInfo, "1");
     }
 }

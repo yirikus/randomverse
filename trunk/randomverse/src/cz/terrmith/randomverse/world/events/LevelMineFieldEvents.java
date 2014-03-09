@@ -30,7 +30,7 @@ public class LevelMineFieldEvents {
         scannerInfo.add(new ScannerInfo(1, "Noisy signal"));
         scannerInfo.add(new ScannerInfo(5, "Many inactive entities"));
 
-        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo);
+        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo, "1");
         return ret;
     }
 
@@ -42,6 +42,6 @@ public class LevelMineFieldEvents {
         scannerInfo.add(new ScannerInfo(1, "Noisy signal"));
         scannerInfo.add(new ScannerInfo(5, "Many inactive entities"));
 
-        return new WorldEvent(dynamicText, scannerInfo);
+        return new WorldEvent(dynamicText, scannerInfo, "2");
     }
 }
