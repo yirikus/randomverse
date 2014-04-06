@@ -5,24 +5,15 @@ import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationOrder;
-import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.graphics.SpaceBackground;
-import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
-import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.WorldEvent;
-import cz.terrmith.randomverse.world.events.util.LevelInvadersEvents;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Testing level
@@ -32,46 +23,24 @@ import java.util.Map;
 public class LevelInvaders extends World {
     public static final String ACTIVATION_KEY = "activationKey";
     private final ArtificialIntelligence ai;
-    private final SpaceBackground background;
 
+    //TODO obtain this from world event
     public enum Variation {CLASSIC, AQUABELLE}
+    private Variation variation = Variation.CLASSIC;
 
-    public LevelInvaders(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
+    public LevelInvaders(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
         super(spriteCollection, 4, waveCount());
         //TODO period should be longer for aquabelles
         this.ai = ai;
-
-        this.background = new SpaceBackground(8);
-
-        setWorldEvent(randomEvent(callbacks));
     }
 
     private static long waveCount() {
         return 1 + random.nextInt(3);
     }
 
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
-        if (getWavesToDefeat() == 3){
-            switch (random.nextInt(5)) {
-                default: return LevelInvadersEvents.aquabelles(callbacks);
-            }
-        } else if (getWavesToDefeat() == 2) {
-            switch (random.nextInt(5)) {
-                case 1: return LevelInvadersEvents.invadersWithUfos(callbacks);
-                default: return LevelInvadersEvents.aquabelles(callbacks);
-            }
-        } else if (getWavesToDefeat() == 1){
-            switch (random.nextInt(5)) {
-                case 1: return LevelInvadersEvents.invaders(callbacks);
-                default: return LevelInvadersEvents.aquabelles(callbacks);
-            }
-        }
-        return null;
-    }
-
     @Override
     protected void updateWorld() {
-        switch (Variation.valueOf(getWorldEvent().getVariation())) {
+        switch (variation) {
             case CLASSIC:
                 if (getUpdateCount() == 1) {
                     final int columns = 2 + random.nextInt(3);
@@ -99,20 +68,6 @@ public class LevelInvaders extends World {
                 break;
         }
     }
-
-    @Override
-    public void drawMapIcon(Graphics g, Position position, int size) {
-
-        //background
-        g.setColor(Color.BLACK);
-        g.fillRect((int) position.getX(),
-                (int) position.getY(),
-                size, size);
-        //stars
-        background.drawBackground(g, position, size);
-
-    }
-
 
     private void boxLeftRightFormation(final int rows, final int columns, String name, final SimpleEnemy.EnemyType enemyType, boolean allTheWay) {
         final int formationSize = rows * columns;

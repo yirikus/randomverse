@@ -12,22 +12,14 @@ import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.collision.Collision;
-import cz.terrmith.randomverse.core.sprite.properties.Damage;
-import cz.terrmith.randomverse.core.sprite.properties.DamageDealer;
-import cz.terrmith.randomverse.core.sprite.properties.Destructible;
-import cz.terrmith.randomverse.core.sprite.properties.Loot;
-import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
-import cz.terrmith.randomverse.core.sprite.properties.Lootable;
-import cz.terrmith.randomverse.core.sprite.properties.Solid;
+import cz.terrmith.randomverse.core.sprite.properties.*;
 import cz.terrmith.randomverse.core.state.State;
 import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
 import cz.terrmith.randomverse.ladder.LadderUtil;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -268,7 +260,7 @@ public class GameState implements State {
             stateMachine.getPlayer().resetSpritePosition();
             stateMachine.getSpriteCollection().put(SpriteLayer.PLAYER, stateMachine.getPlayer().getSprite());
             //obtain level from map
-	        this.world = stateMachine.getMap().getCurrentWorld();
+	        this.world = stateMachine.getCurrentWorld();
             command.clear();
             DialogCallback callback = new DialogCallback() {
                 @Override

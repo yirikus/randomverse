@@ -2,12 +2,7 @@ package cz.terrmith.randomverse.ladder;
 
 import cz.terrmith.randomverse.Player;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +15,7 @@ import java.util.List;
  */
 public class LadderUtil {
 
-    public static final String FILE_NAME = "C:\\randomverse_ladder.txt";
+    public static final String FILE_NAME = "C:\\dev\\randomverse_ladder.txt";
     public static final String SEPARATOR = "#";
 
     public static void writeToFile(String name, Player player) {

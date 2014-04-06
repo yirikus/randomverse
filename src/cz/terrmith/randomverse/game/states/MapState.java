@@ -5,14 +5,12 @@ import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.image.ImageLoader;
 import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.state.State;
-import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
-import cz.terrmith.randomverse.inventory.Mission;
-import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.world.events.EventCallbackResult;
 import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.WorldEventResult;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 /**
  * State that represent main map on which player travels. Map does not reset and is persistent throughput one game
@@ -30,35 +28,45 @@ public class MapState implements State {
     }
 
     private void addCallbacks() {
-        stateMachine.addCallback(EventResult.EMBARK, new NavigableTextCallback<Mission>() {
+        stateMachine.addCallback(EventCallbackResult.EMBARK, new NavigableTextCallback<WorldEventResult>() {
             @Override
-            public void onSelection(Mission m) {
+            public void onSelection(WorldEventResult w) {
+                if (w == null) {
+                    throw new IllegalArgumentException("For EMBARK callback, eventResult MUST NOT be null!");
+                }
+                stateMachine.getMap().addMission(w.getMission());
+                stateMachine.setCurrentWorld(w.getWorld());
                 stateMachine.setCurrentState(StateName.GAME.name());
-                stateMachine.getMap().addMission(m);
                 currentEvent = null;
             }
         });
-        stateMachine.addCallback(EventResult.MOVE, new NavigableTextCallback<Mission>() {
+        stateMachine.addCallback(EventCallbackResult.MOVE, new NavigableTextCallback<WorldEventResult>() {
             @Override
-            public void onSelection(Mission m) {
+            public void onSelection(WorldEventResult w) {
                 stateMachine.getMap().markExplored();
-                stateMachine.getMap().addMission(m);
+                if (w != null) {
+                    stateMachine.getMap().addMission(w.getMission());
+                }
                 currentEvent = null;
             }
         });
-        stateMachine.addCallback(EventResult.SHOP, new NavigableTextCallback<Mission>() {
+        stateMachine.addCallback(EventCallbackResult.SHOP, new NavigableTextCallback<WorldEventResult>() {
             @Override
-            public void onSelection(Mission m) {
+            public void onSelection(WorldEventResult w) {
                 stateMachine.getMap().markExplored();
-                stateMachine.getMap().addMission(m);
+                if (w != null) {
+                    stateMachine.getMap().addMission(w.getMission());
+                }
                 stateMachine.setCurrentState(StateName.SHOP.name());
                 currentEvent = null;
             }
         });
-        stateMachine.addCallback(EventResult.NONE, new NavigableTextCallback<Mission>() {
+        stateMachine.addCallback(EventCallbackResult.NONE, new NavigableTextCallback<WorldEventResult>() {
             @Override
-            public void onSelection(Mission m) {
-                stateMachine.getMap().addMission(m);
+            public void onSelection(WorldEventResult w) {
+                if (w != null) {
+                    stateMachine.getMap().addMission(w.getMission());
+                }
                 currentEvent = null;
             }
         });
@@ -115,8 +123,7 @@ public class MapState implements State {
     }
 
     private void handleSelection() {
-        World currentWorld = stateMachine.getMap().getCurrentWorld();
-        this.currentEvent = currentWorld.getWorldEvent();
+        this.currentEvent = stateMachine.getMap().getCurrentEvent();
         if (currentEvent == null) {
             stateMachine.setCurrentState(StateName.GAME.name());
         }

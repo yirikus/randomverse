@@ -7,7 +7,7 @@ package cz.terrmith.randomverse.world.events;
  * Time: 17:36
  * To change this template use File | Settings | File Templates.
  */
-public enum EventResult {
+public enum EventCallbackResult {
     MOVE,
     SHOP, NONE, EMBARK
 }

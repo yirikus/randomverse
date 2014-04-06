@@ -1,13 +1,17 @@
 package cz.terrmith.randomverse.world.events.util;
 
+import cz.terrmith.randomverse.Player;
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.dialog.DynamicText;
 import cz.terrmith.randomverse.core.dialog.NavigableTextBranch;
 import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.dialog.NavigableTextLeaf;
-import cz.terrmith.randomverse.inventory.Mission;
-import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.world.LevelMinefield;
+import cz.terrmith.randomverse.world.events.EventCallbackResult;
 import cz.terrmith.randomverse.world.events.ScannerInfo;
 import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.WorldEventResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +24,17 @@ import java.util.Map;
  * Time: 22:06
  * To change this template use File | Settings | File Templates.
  */
-public class LevelMineFieldEvents {
+public class LevelMineFieldEvents extends WorldEventFactory{
 
-    public static WorldEvent minefieldAvoidable(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
+    public LevelMineFieldEvents(Map<EventCallbackResult, NavigableTextCallback<WorldEventResult>> callbacks, ArtificialIntelligence ai, SpriteCollection spc, Player player) {
+        super(callbacks, ai, spc, player);
+    }
+
+    public WorldEvent minefieldAvoidable() {
         NavigableTextBranch navigableText = new NavigableTextBranch("You warped close to a minefield, fortunately their sensors did notice you yet", "");
-        navigableText.addOption(new NavigableTextLeaf("Investigate the minefield", callbacks.get(EventResult.EMBARK), null));
-        navigableText.addOption(new NavigableTextLeaf("It seems too dangerous, you stay in safe distance", callbacks.get(EventResult.MOVE), null));
+        WorldEventResult result = new WorldEventResult(null, new LevelMinefield(getSpc(), getPlayer(), getAi()));
+        navigableText.addOption(new NavigableTextLeaf("Investigate the minefield", getCallbacks().get(EventCallbackResult.EMBARK), result));
+        navigableText.addOption(new NavigableTextLeaf("It seems too dangerous, you stay in safe distance", getCallbacks().get(EventCallbackResult.MOVE), null));
         DynamicText dynamicText = new DynamicText(navigableText);
 
         List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();
@@ -36,8 +45,9 @@ public class LevelMineFieldEvents {
         return ret;
     }
 
-    public static WorldEvent minefield(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
-        NavigableTextLeaf navigableText = new NavigableTextLeaf("You are in the middle of the minefield!",callbacks.get(EventResult.EMBARK), null);
+    public WorldEvent minefield() {
+        WorldEventResult result = new WorldEventResult(null, new LevelMinefield(getSpc(), getPlayer(), getAi()));
+        NavigableTextLeaf navigableText = new NavigableTextLeaf("You are in the middle of the minefield!",getCallbacks().get(EventCallbackResult.EMBARK), result);
         DynamicText dynamicText = new DynamicText(navigableText);
 
         List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();

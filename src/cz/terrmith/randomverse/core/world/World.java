@@ -1,16 +1,12 @@
 package cz.terrmith.randomverse.core.world;
 
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainerObserver;
-import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.SpriteLayer;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
-import cz.terrmith.randomverse.core.util.StringUtils;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
-import cz.terrmith.randomverse.world.events.WorldEvent;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +29,6 @@ public abstract class World implements SpriteContainerObserver {
     private long wavesDefeated = 0;
     private boolean waitForNotification = false;
     private String activationKey;
-    private WorldEvent worldEvent;
 
     /**
      *
@@ -120,22 +115,6 @@ public abstract class World implements SpriteContainerObserver {
     protected void waitForInactivation(String activationKey){
         this.waitForNotification = true;
         this.activationKey = activationKey;
-    }
-
-    public abstract void drawMapIcon(Graphics g, Position position, int size);
-
-    public final WorldEvent getWorldEvent() {
-        return worldEvent;
-    }
-
-    public final void setWorldEvent(WorldEvent worldEvent) {
-        this.worldEvent = worldEvent;
-    }
-
-    //todo scannerStrength in draw method is probably ugly
-    public void drawScannerInfo(Graphics g, Position position, int scannerStrenght) {
-        String scannerInfo = worldEvent.getScannerInfo(scannerStrenght);
-        StringUtils.drawString(g, "SCANNER[" + scannerStrenght + "]: " + scannerInfo, (int) position.getX(), (int) position.getY(), 300);
     }
 
     /**
