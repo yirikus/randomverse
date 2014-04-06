@@ -11,23 +11,14 @@ import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.geometry.RelativePosition;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.util.StringUtils;
-import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.world.LevelDebrisField;
-import cz.terrmith.randomverse.world.LevelEmpty;
-import cz.terrmith.randomverse.world.LevelInvaders;
-import cz.terrmith.randomverse.world.LevelMinefield;
-import cz.terrmith.randomverse.world.LevelOne;
-import cz.terrmith.randomverse.world.LevelSpaceHighWay;
-import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.world.events.EventCallbackResult;
+import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.WorldEventResult;
+import cz.terrmith.randomverse.world.events.util.WorldEventFactoryAggregator;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * Grid that represent global game map
@@ -37,53 +28,36 @@ public class GameMap extends GridMenu {
 //    private final Ship playerSprite;
     private final ArtificialIntelligence ai;
     private final SpriteCollection spriteCollection;
-    private final Map<EventResult, NavigableTextCallback<Mission>> callbacks;
+    private final Map<EventCallbackResult, NavigableTextCallback<WorldEventResult>> callbacks;
     private final Randomverse stateMachine;
     private Set<GridLocation> explored = new HashSet<GridLocation>();
     private GridLocation currentLocation;
-    private World[][] worlds;
+    private WorldEvent[][] worlds;
     private static Random random = new Random();
     private List<Mission> missions = new ArrayList<Mission>();
+    private WorldEventFactoryAggregator eventFactory;
 
     //todo ugly dependency on MapState to init callbacks
     public GameMap(int rows, int columns, int cellSize, Position position, Randomverse stateMachine, ArtificialIntelligence ai,
-                   SpriteCollection spc, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
+                   SpriteCollection spc, Map<EventCallbackResult, NavigableTextCallback<WorldEventResult>> callbacks) {
         super(rows, columns, cellSize, position);
         this.callbacks = callbacks;
         this.spriteCollection = spc;
         this.ai = ai;
         this.stateMachine = stateMachine;
+        this.eventFactory = new WorldEventFactoryAggregator(callbacks, ai, spriteCollection, stateMachine.getPlayer());
 
         reset();
     }
 
-    private World[][] generateGameMap(int rows, int columns) {
-        World[][] worldArray = new World[columns][rows];
+    private WorldEvent[][] generateGameMap(int rows, int columns) {
+        WorldEvent[][] worldArray = new WorldEvent[columns][rows];
         for (int c = 0; c < columns; c++) {
             for (int r = 0; r < rows; r++) {
-                switch (random.nextInt(10)) {
-                    case 0:
-                        worldArray[c][r] = new LevelSpaceHighWay(spriteCollection, ai, callbacks);
-                        break;
-                    case 1:
-                        worldArray[c][r] = new LevelDebrisField(spriteCollection, this.stateMachine.getPlayer().getSprite(), ai, callbacks);
-                        break;
-                    case 2:
-                        worldArray[c][r] = new LevelMinefield(spriteCollection, this.stateMachine.getPlayer(), ai, callbacks);
-                        break;
-                    case 3:
-                        worldArray[c][r] = new LevelOne(spriteCollection, ai, callbacks);
-                        break;
-                    case 4:
-                        worldArray[c][r] = new LevelInvaders(spriteCollection, ai, callbacks);
-                        break;
-                    default:
-                        worldArray[c][r] = new LevelEmpty(spriteCollection, callbacks);
-                        break;
-                }
+                worldArray[c][r] = eventFactory.randomEvent();
             }
         }
-        worldArray[getX()][getY()] = new LevelOne(spriteCollection,ai, callbacks);
+        worldArray[getX()][getY()] = eventFactory.getSurrounded().surrounded();
 
         return worldArray;
     }
@@ -165,7 +139,7 @@ public class GameMap extends GridMenu {
 	 * @return level to be played
 	 * @param spriteCollection sprite collection
 	 */
-	public World getCurrentWorld() {
+	public WorldEvent getCurrentEvent() {
         return worlds[getX()][getY()];
 	}
 
@@ -231,7 +205,7 @@ public class GameMap extends GridMenu {
                    (int) getPosition().getY() + getY() * getCellSize() + 1,
                     getCellSize() - 1, getCellSize() - 1);
 
-        getCurrentWorld().drawScannerInfo(g, new Position(50, GameWindow.SCREEN_H - 100), this.stateMachine.getPlayer().getSprite().getScannerStrength());
+        getCurrentEvent().drawScannerInfo(g, new Position(50, GameWindow.SCREEN_H - 100), this.stateMachine.getPlayer().getSprite().getScannerStrength());
     }
 
     /**
@@ -242,6 +216,7 @@ public class GameMap extends GridMenu {
         missions.clear();
         setX(getColumns() / 2);
         setY(getRows() / 2);
+        eventFactory = new WorldEventFactoryAggregator(callbacks, ai, spriteCollection, stateMachine.getPlayer());
         worlds = generateGameMap(getRows(), getColumns());
         markExplored();
     }

@@ -11,21 +11,15 @@ import cz.terrmith.randomverse.core.input.Command;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.Tile;
 import cz.terrmith.randomverse.core.sprite.properties.CollisionTester;
+import cz.terrmith.randomverse.core.world.World;
 import cz.terrmith.randomverse.game.StateName;
-import cz.terrmith.randomverse.game.states.CutSceneState;
-import cz.terrmith.randomverse.game.states.GameState;
-import cz.terrmith.randomverse.game.states.InventoryState;
-import cz.terrmith.randomverse.game.states.LadderState;
-import cz.terrmith.randomverse.game.states.MapState;
-import cz.terrmith.randomverse.game.states.MenuState;
-import cz.terrmith.randomverse.game.states.ShopState;
+import cz.terrmith.randomverse.game.states.*;
 import cz.terrmith.randomverse.inventory.GameMap;
-import cz.terrmith.randomverse.inventory.Mission;
-import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.world.LevelEmpty;
+import cz.terrmith.randomverse.world.events.EventCallbackResult;
+import cz.terrmith.randomverse.world.events.WorldEventResult;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,13 +35,14 @@ public class Randomverse extends GameEngine {
 
     private final Command command;
     private final ArtificialIntelligence ai;
-    private final HashMap<EventResult, NavigableTextCallback<Mission>> callbacks;
+    private final HashMap<EventCallbackResult, NavigableTextCallback<WorldEventResult>> callbacks;
     private int screenWidth;
     private int screenHeight;
     private final CollisionTester collisionTester;
     private final Player player;
     private final SpriteCollection spriteCollection;
 	private final GameMap map;
+    private World currentWorld;
 
     public Randomverse (Command cmd, int screenWidth, int screenHeight) {
         this.command = cmd;
@@ -59,7 +54,7 @@ public class Randomverse extends GameEngine {
         this.player = new Player(cmd, spriteCollection);
         this.collisionTester = new CollisionTester(this.spriteCollection);
         this.ai = new ArtificialIntelligence(new RandomAttackPattern(1000));
-        this.callbacks = new HashMap<EventResult, NavigableTextCallback<Mission>>();
+        this.callbacks = new HashMap<EventCallbackResult, NavigableTextCallback<WorldEventResult>>();
 
         addState(new GameState(this));
         addState(new LadderState(this));
@@ -71,6 +66,9 @@ public class Randomverse extends GameEngine {
 
         setCurrentState(StateName.MAIN_MENU.name());
 
+        //TODO replace whith surrounded
+        this.currentWorld = new LevelEmpty(spriteCollection);
+        //this.currentWorld = new LevelSurrounded(spriteCollection, ai);
         map = new GameMap(10, 16, Tile.DEFAULT_SIZE, new Position(100,100), this, ai, spriteCollection, this.callbacks);
     }
 
@@ -113,6 +111,9 @@ public class Randomverse extends GameEngine {
     @Override
     public void resetGame() {
         player.reset();
+        //TODO replace whith surrounded
+        this.currentWorld = new LevelEmpty(spriteCollection);
+        //this.currentWorld = new LevelSurrounded(spriteCollection, ai);
         map.reset();
         spriteCollection.clear();
         command.clear();
@@ -164,11 +165,19 @@ public class Randomverse extends GameEngine {
         return ai;
     }
 
-    public Map<EventResult, NavigableTextCallback<Mission>> getCallbacks() {
+    public Map<EventCallbackResult, NavigableTextCallback<WorldEventResult>> getCallbacks() {
         return Collections.unmodifiableMap(callbacks);
     }
 
-    public void addCallback(EventResult key, NavigableTextCallback callback) {
+    public void addCallback(EventCallbackResult key, NavigableTextCallback callback) {
         callbacks.put(key, callback);
+    }
+
+    public World getCurrentWorld() {
+        return currentWorld;
+    }
+
+    public void setCurrentWorld(World currentWorld) {
+        this.currentWorld = currentWorld;
     }
 }

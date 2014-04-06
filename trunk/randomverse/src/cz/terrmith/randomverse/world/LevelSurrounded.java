@@ -5,7 +5,6 @@ import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationMovement;
 import cz.terrmith.randomverse.core.ai.movement.formation.FormationOrder;
-import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.image.ImageLocation;
 import cz.terrmith.randomverse.core.sprite.DefaultSpriteStatus;
@@ -16,50 +15,26 @@ import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.sprite.properties.Damage;
 import cz.terrmith.randomverse.core.sprite.properties.LootSprite;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.graphics.SpaceBackground;
-import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.loot.LootFactory;
 import cz.terrmith.randomverse.sprite.enemy.SimpleEnemy;
 import cz.terrmith.randomverse.sprite.ship.ExtensionPoint;
 import cz.terrmith.randomverse.sprite.ship.Ship;
 import cz.terrmith.randomverse.sprite.ship.part.ShipPart;
 import cz.terrmith.randomverse.sprite.ship.part.gun.SimpleGun;
-import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.WorldEvent;
-import cz.terrmith.randomverse.world.events.util.LevelOneEvents;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Testing level
  *
  * todo refactor formation movement creation - abstract method
  */
-public class LevelOne extends World {
+public class LevelSurrounded extends World {
     private final ArtificialIntelligence ai;
-    private final SpaceBackground background;
 
-    public LevelOne(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
+    public LevelSurrounded(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
         super(spriteCollection, 7, 0);
         this.ai = ai;
-
-        this.background = new SpaceBackground(10);
-
-        setWorldEvent(randomEvent(callbacks));
-    }
-
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
-        switch (random.nextInt(5)) {
-            default: return LevelOneEvents.surrounded(callbacks);
-        }
-
     }
 
     @Override
@@ -71,20 +46,6 @@ public class LevelOne extends World {
 //        } else if (getUpdateCount() == 3){
             surroundedFormation("3");
         }
-    }
-
-    @Override
-    public void drawMapIcon(Graphics g, Position position, int size) {
-
-        //background
-        g.setColor(Color.BLACK);
-        g.fillRect((int) position.getX(),
-                (int) position.getY(),
-                size, size);
-        //stars
-        background.drawBackground(g, position, size);
-
-
     }
 
     private void randomBoxFormation(String name) {

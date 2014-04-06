@@ -1,14 +1,14 @@
 package cz.terrmith.randomverse.world.events.util;
 
-import cz.terrmith.randomverse.core.dialog.DynamicText;
-import cz.terrmith.randomverse.core.dialog.NavigableText;
-import cz.terrmith.randomverse.core.dialog.NavigableTextBranch;
-import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
-import cz.terrmith.randomverse.core.dialog.NavigableTextLeaf;
-import cz.terrmith.randomverse.inventory.Mission;
-import cz.terrmith.randomverse.world.events.EventResult;
+import cz.terrmith.randomverse.Player;
+import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
+import cz.terrmith.randomverse.core.dialog.*;
+import cz.terrmith.randomverse.core.sprite.SpriteCollection;
+import cz.terrmith.randomverse.world.LevelSpaceHighWay;
+import cz.terrmith.randomverse.world.events.EventCallbackResult;
 import cz.terrmith.randomverse.world.events.ScannerInfo;
 import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.WorldEventResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +21,19 @@ import java.util.Map;
  * Time: 17:05
  * To change this template use File | Settings | File Templates.
  */
-public class SpaceHighwayEvents {
-    public static WorldEvent highway(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
+public class SpaceHighwayEvents extends WorldEventFactory{
+
+    public SpaceHighwayEvents(Map<EventCallbackResult, NavigableTextCallback<WorldEventResult>> callbacks, ArtificialIntelligence ai, SpriteCollection spc, Player player) {
+        super(callbacks, ai, spc, player);
+    }
+
+    public WorldEvent highway() {
 
         NavigableTextBranch navigableText = new NavigableTextBranch("A space highway is blocking your way! Since this is 2D space you can not fly over it, you will have to shoot your way through or find some other way..", "");
-        NavigableText attackHighway = new NavigableTextLeaf("...", callbacks.get(EventResult.EMBARK), null);
+        WorldEventResult result = new WorldEventResult(null, new LevelSpaceHighWay(getSpc(), getAi()));
+        NavigableText attackHighway = new NavigableTextLeaf("...", getCallbacks().get(EventCallbackResult.EMBARK), result);
         navigableText.addOption(new NavigableTextBranch("Attack the highway!", "Fuck police, you are going this way!",new NavigableText[]{attackHighway}));
-        navigableText.addOption(new NavigableTextLeaf("Find another way", callbacks.get(EventResult.NONE), null));
+        navigableText.addOption(new NavigableTextLeaf("Find another way", getCallbacks().get(EventCallbackResult.NONE), null));
 
         DynamicText dynamicText = new DynamicText(navigableText);
 

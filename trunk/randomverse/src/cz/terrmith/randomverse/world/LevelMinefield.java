@@ -6,23 +6,14 @@ import cz.terrmith.randomverse.core.ai.movement.formation.Formation;
 import cz.terrmith.randomverse.core.ai.movement.formation.SimpleSpriteContainer;
 import cz.terrmith.randomverse.core.ai.movement.formation.SpriteContainer;
 import cz.terrmith.randomverse.core.ai.movement.pattern.TrackingMovement;
-import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.geometry.Position;
 import cz.terrmith.randomverse.core.sprite.Sprite;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.sprite.factory.SpriteFactory;
 import cz.terrmith.randomverse.core.world.World;
-import cz.terrmith.randomverse.graphics.SpaceBackground;
-import cz.terrmith.randomverse.inventory.Mission;
 import cz.terrmith.randomverse.sprite.enemy.Mine;
-import cz.terrmith.randomverse.world.events.EventResult;
-import cz.terrmith.randomverse.world.events.WorldEvent;
-import cz.terrmith.randomverse.world.events.util.LevelMineFieldEvents;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Testing level
@@ -33,24 +24,12 @@ public class LevelMinefield extends World {
     public static final String ACTIVATION_KEY = "notImportant";
     private final ArtificialIntelligence ai;
     private final Player player;
-    private final SpaceBackground background;
 
-    public LevelMinefield(final SpriteCollection spriteCollection, Player player, ArtificialIntelligence ai, Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
+    public LevelMinefield(final SpriteCollection spriteCollection, Player player, ArtificialIntelligence ai) {
         super(spriteCollection, 1, 3);
         this.ai = ai;
         this.player = player;
         player.getSprite().setPosition(500,400);
-
-        this.background = new SpaceBackground(5);
-
-        setWorldEvent(randomEvent(callbacks));
-    }
-
-    private WorldEvent randomEvent(Map<EventResult, NavigableTextCallback<Mission>> callbacks) {
-        switch (random.nextInt(5)) {
-            case 1: return LevelMineFieldEvents.minefield(callbacks);
-            default: return LevelMineFieldEvents.minefieldAvoidable(callbacks);
-        }
     }
 
     @Override
@@ -84,18 +63,5 @@ public class LevelMinefield extends World {
         SpriteContainer scn = new SimpleSpriteContainer(sprites, new TrackingMovement(player.getSprite()));
         scn.registerObserver(this, ACTIVATION_KEY);
         ai.registerSpriteContainer(scn);
-    }
-
-
-    @Override
-    public void drawMapIcon(Graphics g, Position position, int size) {
-
-        //background
-        g.setColor(Color.BLACK);
-        g.fillRect((int) position.getX(),
-                (int) position.getY(),
-                size, size);
-        //stars
-        background.drawBackground(g, position, size);
     }
 }
