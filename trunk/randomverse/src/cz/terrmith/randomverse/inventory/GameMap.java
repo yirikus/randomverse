@@ -13,8 +13,8 @@ import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.core.util.StringUtils;
 import cz.terrmith.randomverse.world.events.EventCallbackResult;
 import cz.terrmith.randomverse.world.events.WorldEvent;
+import cz.terrmith.randomverse.world.events.WorldEventFactoryAggregator;
 import cz.terrmith.randomverse.world.events.WorldEventResult;
-import cz.terrmith.randomverse.world.events.util.WorldEventFactoryAggregator;
 
 import java.awt.*;
 import java.util.*;

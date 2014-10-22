@@ -20,7 +20,7 @@ import java.util.List;
  *
  * todo refactor formation movement creation - abstract method
  */
-public class LevelInvaders extends World {
+public class MineLayerLevel extends World {
     public static final String ACTIVATION_KEY = "activationKey";
     private final ArtificialIntelligence ai;
 
@@ -28,15 +28,9 @@ public class LevelInvaders extends World {
     public enum Variant {CLASSIC, AQUABELLE}
     private Variant variant = Variant.CLASSIC;
 
-    public LevelInvaders(final SpriteCollection spriteCollection, ArtificialIntelligence ai, Variant variant) {
-        super(spriteCollection, 4, waveCount());
-        //TODO period should be longer for aquabelles
+    public MineLayerLevel(final SpriteCollection spriteCollection, ArtificialIntelligence ai, long period, long wavesToDefeat) {
+        super(spriteCollection, period, wavesToDefeat);
         this.ai = ai;
-        this.variant = variant;
-    }
-
-    private static long waveCount() {
-        return 1 + random.nextInt(3);
     }
 
     @Override

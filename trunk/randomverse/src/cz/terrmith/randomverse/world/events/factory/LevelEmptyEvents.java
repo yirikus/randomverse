@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.world.events.util;
+package cz.terrmith.randomverse.world.events.factory;
 
 import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
@@ -6,10 +6,7 @@ import cz.terrmith.randomverse.core.dialog.*;
 import cz.terrmith.randomverse.core.geometry.GridLocation;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.inventory.Mission;
-import cz.terrmith.randomverse.world.events.EventCallbackResult;
-import cz.terrmith.randomverse.world.events.ScannerInfo;
-import cz.terrmith.randomverse.world.events.WorldEvent;
-import cz.terrmith.randomverse.world.events.WorldEventResult;
+import cz.terrmith.randomverse.world.events.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +20,7 @@ import java.util.Random;
  * Time: 10:07
  * To change this template use File | Settings | File Templates.
  */
-public class LevelEmptyEvents extends WorldEventFactory{
+public class LevelEmptyEvents extends WorldEventFactory {
 
     private static final Random random = new Random();
 
@@ -42,7 +39,7 @@ public class LevelEmptyEvents extends WorldEventFactory{
         scannerInfo.add(new ScannerInfo(1, "Just a small beep"));
         scannerInfo.add(new ScannerInfo(5, "Seems like one lone ship"));
 
-        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo, "1");
+        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo);
         return ret;
     }
 
@@ -53,7 +50,7 @@ public class LevelEmptyEvents extends WorldEventFactory{
         List<ScannerInfo> scannerInfo = new ArrayList<ScannerInfo>();
         scannerInfo.add(new ScannerInfo(1, "Ad network: 'Visit Atsep Icnu's Intergalactic Spaceparts shop! Best prices in known universe!'"));
 
-        return new WorldEvent(dynamicText, scannerInfo, "1");
+        return new WorldEvent(dynamicText, scannerInfo);
     }
 
 

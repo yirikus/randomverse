@@ -1,11 +1,9 @@
-package cz.terrmith.randomverse.world.events.util;
+package cz.terrmith.randomverse.world.events;
 
 import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.world.events.EventCallbackResult;
-import cz.terrmith.randomverse.world.events.WorldEventResult;
 
 import java.util.Map;
 

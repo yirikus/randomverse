@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.world.events.util;
+package cz.terrmith.randomverse.world.events.factory;
 
 import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
@@ -8,10 +8,7 @@ import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.dialog.NavigableTextLeaf;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.world.LevelMinefield;
-import cz.terrmith.randomverse.world.events.EventCallbackResult;
-import cz.terrmith.randomverse.world.events.ScannerInfo;
-import cz.terrmith.randomverse.world.events.WorldEvent;
-import cz.terrmith.randomverse.world.events.WorldEventResult;
+import cz.terrmith.randomverse.world.events.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +21,7 @@ import java.util.Map;
  * Time: 22:06
  * To change this template use File | Settings | File Templates.
  */
-public class LevelMineFieldEvents extends WorldEventFactory{
+public class LevelMineFieldEvents extends WorldEventFactory {
 
     public LevelMineFieldEvents(Map<EventCallbackResult, NavigableTextCallback<WorldEventResult>> callbacks, ArtificialIntelligence ai, SpriteCollection spc, Player player) {
         super(callbacks, ai, spc, player);
@@ -41,7 +38,7 @@ public class LevelMineFieldEvents extends WorldEventFactory{
         scannerInfo.add(new ScannerInfo(1, "Noisy signal"));
         scannerInfo.add(new ScannerInfo(5, "Many inactive entities"));
 
-        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo, "1");
+        WorldEvent ret = new WorldEvent(dynamicText, scannerInfo);
         return ret;
     }
 
@@ -54,6 +51,6 @@ public class LevelMineFieldEvents extends WorldEventFactory{
         scannerInfo.add(new ScannerInfo(1, "Noisy signal"));
         scannerInfo.add(new ScannerInfo(5, "Many inactive entities"));
 
-        return new WorldEvent(dynamicText, scannerInfo, "2");
+        return new WorldEvent(dynamicText, scannerInfo);
     }
 }
