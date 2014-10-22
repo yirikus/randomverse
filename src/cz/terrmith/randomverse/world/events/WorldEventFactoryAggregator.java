@@ -1,12 +1,10 @@
-package cz.terrmith.randomverse.world.events.util;
+package cz.terrmith.randomverse.world.events;
 
 import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
 import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
-import cz.terrmith.randomverse.world.events.EventCallbackResult;
-import cz.terrmith.randomverse.world.events.WorldEvent;
-import cz.terrmith.randomverse.world.events.WorldEventResult;
+import cz.terrmith.randomverse.world.events.factory.*;
 
 import java.util.Map;
 import java.util.Random;
@@ -51,6 +49,10 @@ public class WorldEventFactoryAggregator {
                 return invaders.aquabelles();
             case 5:
                 return empty.shop();
+            case 6:
+                return invaders.invaders();
+            case 7:
+                return invaders.invadersWithUfos();
             default:
                 return empty.goSomewhere();
         }

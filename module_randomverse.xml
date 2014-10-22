@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_randomverse" default="compile.module.randomverse">
+  <dirname property="module.randomverse.basedir" file="${ant.file.module_randomverse}"/>
+  
+  <property name="module.jdk.home.randomverse" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.randomverse" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.randomverse" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.randomverse" value="${compiler.args}"/>
+  
+  <property name="randomverse.output.dir" value="${module.randomverse.basedir}/out/production/randomverse"/>
+  <property name="randomverse.testoutput.dir" value="${module.randomverse.basedir}/out/test/randomverse"/>
+  
+  <path id="randomverse.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="randomverse.module.production.classpath">
+    <path refid="${module.jdk.classpath.randomverse}"/>
+  </path>
+  
+  <path id="randomverse.runtime.production.module.classpath">
+    <pathelement location="${randomverse.output.dir}"/>
+  </path>
+  
+  <path id="randomverse.module.classpath">
+    <path refid="${module.jdk.classpath.randomverse}"/>
+    <pathelement location="${randomverse.output.dir}"/>
+    <pathelement location="${idea.home}/lib/junit-4.10.jar"/>
+  </path>
+  
+  <path id="randomverse.runtime.module.classpath">
+    <pathelement location="${randomverse.testoutput.dir}"/>
+    <pathelement location="${randomverse.output.dir}"/>
+    <pathelement location="${idea.home}/lib/junit-4.10.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.randomverse">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.randomverse">
+    <patternset refid="excluded.from.module.randomverse"/>
+  </patternset>
+  
+  <path id="randomverse.module.sourcepath">
+    <dirset dir="${module.randomverse.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="randomverse.module.test.sourcepath">
+    <dirset dir="${module.randomverse.basedir}">
+      <include name="test"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.randomverse" depends="compile.module.randomverse.production,compile.module.randomverse.tests" description="Compile module randomverse"/>
+  
+  <target name="compile.module.randomverse.production" depends="register.custom.compilers" description="Compile module randomverse; production classes">
+    <mkdir dir="${randomverse.output.dir}"/>
+    <javac2 destdir="${randomverse.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.randomverse}/javac">
+      <compilerarg line="${compiler.args.randomverse}"/>
+      <bootclasspath refid="randomverse.module.bootclasspath"/>
+      <classpath refid="randomverse.module.production.classpath"/>
+      <src refid="randomverse.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.randomverse"/>
+    </javac2>
+    
+    <copy todir="${randomverse.output.dir}">
+      <fileset dir="${module.randomverse.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.randomverse.tests" depends="register.custom.compilers,compile.module.randomverse.production" description="compile module randomverse; test classes" unless="skip.tests">
+    <mkdir dir="${randomverse.testoutput.dir}"/>
+    <javac2 destdir="${randomverse.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.randomverse}/javac">
+      <compilerarg line="${compiler.args.randomverse}"/>
+      <bootclasspath refid="randomverse.module.bootclasspath"/>
+      <classpath refid="randomverse.module.classpath"/>
+      <src refid="randomverse.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.randomverse"/>
+    </javac2>
+    
+    <copy todir="${randomverse.testoutput.dir}">
+      <fileset dir="${module.randomverse.basedir}/test">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.randomverse" description="cleanup module">
+    <delete dir="${randomverse.output.dir}"/>
+    <delete dir="${randomverse.testoutput.dir}"/>
+  </target>
+</project>

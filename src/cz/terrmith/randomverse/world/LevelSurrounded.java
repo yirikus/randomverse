@@ -33,17 +33,13 @@ public class LevelSurrounded extends World {
     private final ArtificialIntelligence ai;
 
     public LevelSurrounded(final SpriteCollection spriteCollection, ArtificialIntelligence ai) {
-        super(spriteCollection, 7, 0);
+        super(spriteCollection, 7, 1);
         this.ai = ai;
     }
 
     @Override
     protected void updateWorld() {
         if (getUpdateCount() == 1) {
-//            randomRectangle("1");
-//        } else if (getUpdateCount() == 2){
-//            lineFormation("2");
-//        } else if (getUpdateCount() == 3){
             surroundedFormation("3");
         }
     }

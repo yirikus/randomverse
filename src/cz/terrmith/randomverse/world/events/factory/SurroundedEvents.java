@@ -1,4 +1,4 @@
-package cz.terrmith.randomverse.world.events.util;
+package cz.terrmith.randomverse.world.events.factory;
 
 import cz.terrmith.randomverse.Player;
 import cz.terrmith.randomverse.core.ai.ArtificialIntelligence;
@@ -7,10 +7,7 @@ import cz.terrmith.randomverse.core.dialog.NavigableTextCallback;
 import cz.terrmith.randomverse.core.dialog.NavigableTextLeaf;
 import cz.terrmith.randomverse.core.sprite.SpriteCollection;
 import cz.terrmith.randomverse.world.LevelSurrounded;
-import cz.terrmith.randomverse.world.events.EventCallbackResult;
-import cz.terrmith.randomverse.world.events.ScannerInfo;
-import cz.terrmith.randomverse.world.events.WorldEvent;
-import cz.terrmith.randomverse.world.events.WorldEventResult;
+import cz.terrmith.randomverse.world.events.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +19,7 @@ import java.util.Map;
  * Date: 4.3.14
  * Time: 16:52
  */
-public final class SurroundedEvents extends WorldEventFactory{
+public final class SurroundedEvents extends WorldEventFactory {
 
     public SurroundedEvents(Map<EventCallbackResult, NavigableTextCallback<WorldEventResult>> callbacks, ArtificialIntelligence ai, SpriteCollection spc, Player player) {
         super(callbacks, ai, spc, player);
@@ -37,6 +34,6 @@ public final class SurroundedEvents extends WorldEventFactory{
         scannerInfo.add(new ScannerInfo(1, "Minor activity;"));
         scannerInfo.add(new ScannerInfo(5, "Minor activy; Frigate class ships"));
 
-        return new WorldEvent(dynamicText, scannerInfo, "1");
+        return new WorldEvent(dynamicText, scannerInfo);
     }
 }
